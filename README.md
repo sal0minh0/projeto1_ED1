@@ -1,3 +1,3 @@
 # projeto1_ED1
-Projeto de implementação de várias estruturas de dados
-/nBasear os Readmes dos projetos passados
+Projeto de implementação de várias estruturas de dados\**
+Basear os Readmes dos projetos passados

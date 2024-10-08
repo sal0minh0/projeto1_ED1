@@ -9,7 +9,7 @@ class ListaEncadeadaSimples:
     def __init__(self):
         self.cabeca = None  # Inicialmente, a lista está vazia
 
-    def lista_vazia(self):
+    def verificar_lista_vazia(self):
         """Verifica se a lista está vazia"""
         return self.cabeca is None
 
@@ -22,7 +22,7 @@ class ListaEncadeadaSimples:
     def inserir_no_fim(self, valor):
         """Insere um novo nó no final da lista"""
         novo_no = No(valor)
-        if self.lista_vazia():
+        if self.verificar_lista_vazia():
             self.cabeca = novo_no  # Se a lista está vazia, o novo nó é o primeiro
         else:
             atual = self.cabeca
@@ -45,7 +45,7 @@ class ListaEncadeadaSimples:
         else:
             anterior.prox = atual.prox  # Remove o nó ligando o anterior ao próximo
 
-    def busca(self, valor):
+    def buscar(self, valor):
         """Busca um nó que contenha o valor especificado"""
         atual = self.cabeca
         while atual is not None:  # Vai alcaçar até o final da lista
@@ -98,6 +98,6 @@ l.imprimir()
 print("")
 
 # Busca
-print(l.busca(1))  # Saída: True
+print(l.buscar(1))  # Saída: True
 print("")
-print(l.busca(9))  # Saída: False
+print(l.buscar(9))  # Saída: False

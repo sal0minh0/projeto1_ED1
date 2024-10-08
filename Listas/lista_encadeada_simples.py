@@ -1,7 +1,7 @@
 class No:
     """Classe que é nó na lista"""
-    def __init__(self, dado):
-        self.dado = dado  # Dado do nó
+    def __init__(self, valor):
+        self.valor = valor  # Valor do nó
         self.prox = None  # Referência para o próximo nó
 
 class ListaEncadeadaSimples:
@@ -13,15 +13,15 @@ class ListaEncadeadaSimples:
         """Verifica se a lista está vazia"""
         return self.cabeca is None
 
-    def inserir_no_começo(self, dado):
+    def inserir_no_começo(self, valor):
         """Insere um novo nó no início da lista"""
-        novo_no = No(dado)  # Cria um novo nó
+        novo_no = No(valor)  # Cria um novo nó
         novo_no.prox = self.cabeca  # O próximo do novo nó é o antigo primeiro nó
         self.cabeca = novo_no  # O novo nó passa a ser o primeiro nó
 
-    def inserir_no_fim(self, dado):
+    def inserir_no_fim(self, valor):
         """Insere um novo nó no final da lista"""
-        novo_no = No(dado)
+        novo_no = No(valor)
         if self.lista_vazia():
             self.cabeca = novo_no  # Se a lista está vazia, o novo nó é o primeiro
         else:
@@ -30,11 +30,11 @@ class ListaEncadeadaSimples:
                 atual = atual.prox
             atual.prox = novo_no  # O último nó aponta para o novo nó
 
-    def remover(self, dado):
-        """Remove o primeiro nó que contém o dado especificado"""
+    def remover(self, valor):
+        """Remove o primeiro nó que contém o valor que queremos"""
         atual = self.cabeca
         anterior = None
-        while atual and atual.dado != dado:
+        while atual and atual.valor != valor:
             anterior = atual
             atual = atual.prox
         if atual is None:
@@ -45,11 +45,11 @@ class ListaEncadeadaSimples:
         else:
             anterior.prox = atual.prox  # Remove o nó ligando o anterior ao próximo
 
-    def busca(self, dado):
-        """Busca um nó que contenha o dado especificado"""
+    def busca(self, valor):
+        """Busca um nó que contenha o valor especificado"""
         atual = self.cabeca
         while atual is not None:  # Vai alcaçar até o final da lista
-            if atual.dado == dado: # Verificar se o no atual tem um dado que procuramos
+            if atual.valor == valor: # Verificar se o no atual tem um valor que procuramos
                 return True
             atual = atual.prox  # Se sim mover para o proximo no
         return False  # Se percorrer toda a lista e não achar
@@ -58,8 +58,8 @@ class ListaEncadeadaSimples:
         """Atualiza o valor de um nó na lista"""
         atual = self.cabeca
         while atual is not None:
-            if atual.dado == anterior:
-                atual.dado = novo_valor
+            if atual.valor == anterior:
+                atual.valor = novo_valor
                 return True
             atual = atual.prox
         return False
@@ -70,11 +70,11 @@ class ListaEncadeadaSimples:
         elementos = []
         atual = self.cabeca
         while atual:
-            elementos.append(atual.dado)
+            elementos.append(atual.valor)
             atual = atual.prox
         print(" - ".join(map(str, elementos)))
 
-# Usagens das funções
+# Exemplo de uso das funções
 
 # Objeto da Classe
 l = ListaEncadeadaSimples()

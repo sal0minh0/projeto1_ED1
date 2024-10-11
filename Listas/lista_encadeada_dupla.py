@@ -42,6 +42,8 @@ class ListaEncadeadaDupla:
                     atual.prox.anterior = atual.anterior
                 else:
                     self.cauda = atual.anterior
+                
+                print(f"O valor {valor} foi removido da lista.")
                 return
             atual = atual.prox
         print("Valor não encontrado na lista.")
@@ -102,6 +104,7 @@ print("")
 
 # Removendo um valor
 l.remover(25)
+print("")
 l.imprimir()
 print("")
 

@@ -1,9 +1,8 @@
-# Comentar mais esse codigo
 class No:
     """A Classe No da estrutura"""
     def __init__(self, valor):
-        self.valor = valor # Valor do nó
-        self.proximo = None # Valor do próximo nó
+        self.valor = valor # Valor do no
+        self.proximo = None # Valor do próximo no
 
 class ListaEncadeadaCircular:
     """Classe da lista circular"""
@@ -18,39 +17,34 @@ class ListaEncadeadaCircular:
         """Insere o no no final da lista"""
         novo_no = No(valor)
         if self.verificar_lista_vazia():
-            # A lista está vazia, o novo nó aponta para ele mesmo
-            self.cauda = novo_no
+            self.cauda = novo_no # Se a lista está vazia, o novo no aponta para ele mesmo
             novo_no.proximo = novo_no
         else:
-            # Inserir o novo nó após a cauda e atualizar a cauda
             novo_no.proximo = self.cauda.proximo
-            self.cauda.proximo = novo_no
+            self.cauda.proximo = novo_no # Se não inserir o novo no apos a cauda e atualizar a cauda
             self.cauda = novo_no
 
     def remover(self, valor):
         """Remover o no da lista"""
         if self.verificar_lista_vazia():
-            print("A lista está vazia.") # Verificar se a lista está vazia
+            print("A lista está vazia.") # Verificar se a lista esta vazia
             return
         atual = self.cauda.proximo
         anterior = self.cauda
         while True:
             if atual.valor == valor:
-                # Se a lista contém apenas um nó
-                if atual == self.cauda and atual.proximo == self.cauda:
+                if atual == self.cauda and atual.proximo == self.cauda: # Se for o único no na lista
                     self.cauda = None
                 else:
                     anterior.proximo = atual.proximo
-                    # Se for o nó da cauda, movemos a cauda
-                    if atual == self.cauda:
+                    if atual == self.cauda: # Se for o no da cauda, movemos o no cauda
                         self.cauda = anterior
                 print(f"O valor {valor} foi removido.")
                 return
             anterior = atual
             atual = atual.proximo
-            # Se completamos um ciclo e não encontramos o valor
             if atual == self.cauda.proximo:
-                print(f"O valor {valor} não foi encontrado.")
+                print(f"O valor {valor} não foi encontrado.") # Caso não encontramos o valor
                 break
 
     def buscar(self, valor):
@@ -82,7 +76,7 @@ class ListaEncadeadaCircular:
             return
         atual = self.cauda.proximo
         while True:
-            print(atual.valor, end="\n") #if atual.prox else "\n" <- tenho que colocar??
+            print(atual.valor, end="\n")
             atual = atual.proximo
             if atual == self.cauda.proximo:
                 break

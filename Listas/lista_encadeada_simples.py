@@ -105,7 +105,7 @@ l.atualizar_lista(3, 5)
 l.imprimir()
 print("")
 
-    # Verificando se a lista está vazia
+# Verificando se a lista está vazia
 print("A lista está vazia?", "Sim" if l.verificar_lista_vazia() else "Não")
 print("")
 

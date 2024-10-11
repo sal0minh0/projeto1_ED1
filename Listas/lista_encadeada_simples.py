@@ -7,8 +7,8 @@ class No:
 class ListaEncadeadaSimples:
     """Classe que representa a lista encadeada"""
     def __init__(self):
-        self.cabeca = None  # Inicialmente, a lista está vazia
-
+        self.cabeca = None  # Elemento cabeça, primeiro nó
+        
     def verificar_lista_vazia(self):
         """Verifica se a lista está vazia"""
         return self.cabeca is None
@@ -48,11 +48,13 @@ class ListaEncadeadaSimples:
     def buscar(self, valor):
         """Busca um nó que contenha o valor que queremos"""
         atual = self.cabeca
+        posicao = 0 # Posicao do no
         while atual is not None:  # Vai alcaçar até o final da lista
             if atual.valor == valor: # Verificar se o no atual tem um valor que procuramos
-                return True
+                return atual, posicao
             atual = atual.prox  # Se sim mover para o proximo no
-        return False  # Se percorrer toda a lista e não achar
+            posicao += 1 
+        return None, -1  # Se percorrer toda a lista e não achar
     
     def atualizar_lista(self, anterior, novo_valor):
         """Atualiza o valor de um nó na lista"""
@@ -72,9 +74,10 @@ class ListaEncadeadaSimples:
         while atual:
             elementos.append(atual.valor)
             atual = atual.prox
-        print(" - ".join(map(str, elementos)))
+        print("\n".join(map(str, elementos)))
         
     def trocar_true_false_sim_nao(valor):
+        """Trocar True or False por Sim e não"""
         return "Sim" if valor else "Não"
     resposta = True
     resposta = False
@@ -98,16 +101,19 @@ l.imprimir()  # Saída: 0 -> 1 -> 3
 print("")
 
 #Atualizar
-l.atualizar_lista(1, 5) # Sabendo o elemento de antes(anterior) e o depois (prox), atualiza a lista
+l.atualizar_lista(3, 5) 
 l.imprimir()
 print("")
 
-# ->>>>>>Criar uma variável busca nó ou deixar assim?
-# Busca
-print("O elemento 1 foi achado?", 
-      "Sim" if l.buscar(1) else "Não")  # Imprime o valor do vetor na posição 1 e Buscou o valor 1, Saída: True = Sim
+    # Verificando se a lista está vazia
+print("A lista está vazia?", "Sim" if l.verificar_lista_vazia() else "Não")
 print("")
-print("O elemento 9 foi achado?", 
-      "Sim" if l.buscar(9) else "Não")  # Imprime o valor do vetor na posição 9 e Buscou o valor 9, Saída: False = Não
 
-# Preciso colocar para ele imprimir apenas um valor, como faço isso?
+# Buscando um valor
+buscar_no, posicao = l.buscar(5) 
+if buscar_no:
+    print(f"Encontramos o valor '{buscar_no.valor}' esta na '{posicao+1}°' lugar da lista.")
+else:
+    print("O valor nao foi encontrado na lista.")
+    
+

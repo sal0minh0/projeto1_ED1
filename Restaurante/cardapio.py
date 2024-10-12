@@ -1,3 +1,8 @@
+import sys
+import os
+
+# Adicionando o diretorio "Restaurante" para a pasta Python
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Listas import lista_encadeada_simples
 
 class Cardapio:
@@ -77,4 +82,3 @@ print("")
 
 # Buscar item
 cardapio.buscar_item("Pizza")
-

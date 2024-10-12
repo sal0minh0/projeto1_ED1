@@ -88,35 +88,3 @@ class ListaEncadeadaSimples:
 
 # Objeto da Classe
 l = ListaEncadeadaSimples()
-
-# Inserir
-l.inserir_no_fim(1)
-l.inserir_no_fim(2)
-l.inserir_no_fim(3)
-l.inserir_no_começo(0)
-l.imprimir()  # Saída: 0 -> 1 -> 2 -> 3
-print("")
-
-#Remover
-l.remover(2)
-print("")
-l.imprimir()  # Saída: 0 -> 1 -> 3
-print("")
-
-#Atualizar
-l.atualizar_lista(3, 5) 
-l.imprimir()
-print("")
-
-# Verificando se a lista está vazia
-print("A lista está vazia?", "Sim" if l.verificar_lista_vazia() else "Não")
-print("")
-
-# Buscando um valor
-buscar_no, posicao = l.buscar(5) 
-if buscar_no:
-    print(f"Encontramos o valor '{buscar_no.valor}' esta na '{posicao+1}°' lugar da lista.")
-else:
-    print("O valor nao foi encontrado na lista.")
-    
-

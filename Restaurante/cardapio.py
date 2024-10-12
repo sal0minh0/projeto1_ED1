@@ -6,33 +6,33 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Listas import lista_encadeada_simples
 
 class Cardapio:
-    """Classe que representa o cardápio usando uma lista encadeada"""
+    """Representa o cardápio usando lista encadeada simples"""
     def __init__(self):
         self.itens = lista_encadeada_simples.ListaEncadeadaSimples()
 
-    def adicionar_item(self, item):
-        """Adiciona um item no final do cardápio"""
-        self.itens.inserir_no_fim(item)
-        print(f"Item '{item}' adicionado ao cardápio.")
+    def adicionar_alimento(self, alimento):
+        """Adiciona um alimento"""
+        self.itens.inserir_no_fim(alimento)
+        print(f"'{alimento}' adicionado ao cardápio.")
 
-    def remover_item(self, item):
-        """Remove um item do cardápio"""
-        self.itens.remover(item)
+    def remover_alimento(self, alimento):
+        """Remove um alimento"""
+        self.itens.remover(alimento)
 
-    def atualizar_item(self, item_atual, novo_item):
-        """Atualiza um item do cardápio"""
-        if self.itens.atualizar_lista(item_atual, novo_item):
-            print(f"Item '{item_atual}' foi atualizado para '{novo_item}'.")
+    def atualizar_alimento(self, alimento_atual, novo_alimento):
+        """Atualiza um alimento do cardápio"""
+        if self.itens.atualizar_lista(alimento_atual, novo_alimento):
+            print(f"'{alimento_atual}' foi atualizado para '{novo_alimento}'.")
         else:
-            print(f"Item '{item_atual}' não encontrado no cardápio.")
+            print(f"'{alimento_atual}' não encontrado no cardápio.")
 
-    def buscar_item(self, item):
-        """Busca um item no cardápio"""
-        _, posicao = self.itens.buscar(item)
+    def buscar_alimento(self, alimento):
+        """Busca um alimento no cardápio"""
+        _, posicao = self.itens.buscar(alimento)
         if posicao != -1:
-            print(f"Item '{item}' encontrado na posição {posicao+1} do cardápio.")
+            print(f"'{alimento}' encontrado na posição {posicao+1} do cardápio.")
         else:
-            print(f"Item '{item}' não encontrado no cardápio.")
+            print(f"'{alimento}' não encontrado no cardápio.")
 
     def exibir_cardapio(self):
         """Exibe os itens do cardápio"""
@@ -50,26 +50,26 @@ class Cardapio:
 # Criar objeto cardápio
 cardapio = Cardapio()
 
-# Adicionar itens
-cardapio.adicionar_item("Pizza")
-cardapio.adicionar_item("Hambúrguer")
-cardapio.adicionar_item("Suco de Laranja")
+# Adicionar Alimentos
+cardapio.adicionar_alimento("Pizza")
+cardapio.adicionar_alimento("Hambúrguer")
+cardapio.adicionar_alimento("Suco de Laranja")
 print("")
 
 # Exibir cardápio
 cardapio.exibir_cardapio()
 print("")
 
-# Remover item
-cardapio.remover_item("Hambúrguer")
+# Remover Alimento
+cardapio.remover_alimento("Hambúrguer")
 print("")
 
 # Exibir cardápio atualizado
 cardapio.exibir_cardapio()
 print("")
 
-# Atualizar item
-cardapio.atualizar_item("Suco de Laranja", "Refrigerante")
+# Atualizar Alimento
+cardapio.atualizar_alimento("Suco de Laranja", "Refrigerante")
 print("")
 
 # Exibir cardápio atualizado
@@ -80,5 +80,5 @@ print("")
 cardapio.verificar_vazio()
 print("")
 
-# Buscar item
-cardapio.buscar_item("Pizza")
+# Buscar Alimento
+cardapio.buscar_alimento("Pizza")

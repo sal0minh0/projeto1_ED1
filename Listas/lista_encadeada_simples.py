@@ -101,15 +101,3 @@ class ListaEncadeadaSimples:
             contador += 1  # Incrementa o contador a cada nó encontrado
             atual = atual.prox  # Move para o próximo nó
         return contador
-
-
-
-# Exemplo de uso das funções
-
-# Objeto da Classe
-l = ListaEncadeadaSimples()
-
-l.inserir_no_fim(10)
-l.inserir_no_fim(20)
-
-l.somar()

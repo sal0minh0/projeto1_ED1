@@ -83,8 +83,33 @@ class ListaEncadeadaSimples:
         return "Sim" if valor else "Não"
     resposta = True
     resposta = False
+    
+    def somar(self):
+        """Soma os valores da lista"""
+        atual = self.cabeca
+        soma = 0
+        while atual:
+            soma += atual.valor
+            atual = atual.prox
+        return soma
+    
+    def contar_elementos(self):
+        """Conta o número de elementos na lista"""
+        atual = self.cabeca
+        contador = 0
+        while atual:
+            contador += 1  # Incrementa o contador a cada nó encontrado
+            atual = atual.prox  # Move para o próximo nó
+        return contador
+
+
 
 # Exemplo de uso das funções
 
 # Objeto da Classe
 l = ListaEncadeadaSimples()
+
+l.inserir_no_fim(10)
+l.inserir_no_fim(20)
+
+l.somar()

@@ -48,37 +48,37 @@ class Cardapio:
 # Exemplo de uso do cardápio
 
 # Criar objeto cardápio
-cardapio = Cardapio()
+c = Cardapio()
 
 # Adicionar Alimentos
-cardapio.adicionar_alimento("Pizza")
-cardapio.adicionar_alimento("Hambúrguer")
-cardapio.adicionar_alimento("Suco de Laranja")
+c.adicionar_alimento("Pizza")
+c.adicionar_alimento("Hambúrguer")
+c.adicionar_alimento("Suco de Laranja")
 print("")
 
 # Exibir cardápio
-cardapio.exibir_cardapio()
+c.exibir_cardapio()
 print("")
 
 # Remover Alimento
-cardapio.remover_alimento("Hambúrguer")
+c.remover_alimento("Hambúrguer")
 print("")
 
 # Exibir cardápio atualizado
-cardapio.exibir_cardapio()
+c.exibir_cardapio()
 print("")
 
 # Atualizar Alimento
-cardapio.atualizar_alimento("Suco de Laranja", "Refrigerante")
+c.atualizar_alimento("Suco de Laranja", "Refrigerante")
 print("")
 
 # Exibir cardápio atualizado
-cardapio.exibir_cardapio()
+c.exibir_cardapio()
 print("")
 
 # Verificar se o cardápio está vazio
-cardapio.verificar_vazio()
+c.verificar_vazio()
 print("")
 
 # Buscar Alimento
-cardapio.buscar_alimento("Pizza")
+c.buscar_alimento("Pizza")

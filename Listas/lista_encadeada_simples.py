@@ -45,7 +45,7 @@ class ListaEncadeadaSimples:
         else:
             anterior.prox = atual.prox  # Remove o nó ligando o anterior ao próximo
 
-        print(f"O valor {valor} foi removido da lista.")
+        print(f"{valor} foi removido da lista.")
 
     def buscar(self, valor):
         """Busca um nó que contenha o valor que queremos"""

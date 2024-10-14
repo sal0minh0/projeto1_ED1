@@ -83,8 +83,16 @@ class ListaEncadeadaDupla:
         return "Sim" if valor else "Não"
     resposta = True
     resposta = False
-            
-
+    
+    def contar_elementos(self):
+        """Conta o número de elementos na lista"""
+        atual = self.cabeca
+        contador = 0
+        while atual:
+            contador += 1  # Incrementa o contador a cada nó encontrado
+            atual = atual.prox  # Move para o próximo nó
+        return contador
+    
 # Exemplo de uso da lista encadeada dupla
 l = ListaEncadeadaDupla()
 
@@ -118,4 +126,7 @@ if buscar_no:
     print(f"Encontramos o valor '{buscar_no.valor}' esta na '{posicao+1}°' lugar da lista.")
 else:
     print("O valor nao foi encontrado na lista.")
+    
+l.contar_elementos()
+print("")
 

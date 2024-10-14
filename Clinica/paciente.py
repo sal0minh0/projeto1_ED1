@@ -82,6 +82,7 @@ print("")
 
 # Buscar um paciente
 p.buscar_um_paciente("John")
+print("")
 
 # Contar quantos pacientes tem na clínica
 p.contar_pacientes()

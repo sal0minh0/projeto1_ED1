@@ -92,41 +92,5 @@ class ListaEncadeadaDupla:
             contador += 1  # Incrementa o contador a cada nó encontrado
             atual = atual.prox  # Move para o próximo nó
         return contador
-    
-# Exemplo de uso da lista encadeada dupla
-l = ListaEncadeadaDupla()
 
-# Inserindo valores
-l.inserir(10)
-l.inserir(20)
-l.inserir(30)
-
-# Imprimindo a lista
-l.imprimir()
-print("")
-
-# Atualizando um valor
-l.atualizar(20, 25)
-l.imprimir()
-print("")
-
-# Removendo um valor
-l.remover(25)
-print("")
-l.imprimir()
-print("")
-
-# Verificando se a lista está vazia
-print("A lista está vazia?", "Sim" if l.verificar_lista_vazia() else "Não")
-print("")
-
-# Buscando um valor
-buscar_no, posicao = l.buscar(30) 
-if buscar_no:
-    print(f"Encontramos o valor '{buscar_no.valor}' esta na '{posicao+1}°' lugar da lista.")
-else:
-    print("O valor nao foi encontrado na lista.")
-    
-l.contar_elementos()
-print("")
 

@@ -87,32 +87,14 @@ class ListaEncadeadaCircular:
         return "Sim" if valor else "Não"
     resposta = True
     resposta = False
-
-# Exemplo de uso da lista encadeada circular
-l= ListaEncadeadaCircular()
-
-# Inserção de valores
-l.inserir(10)
-l.inserir(20)
-l.inserir(30)
-l.imprimir()  # Saída: 10 -> 20 -> 30 ->
-
-# Atualização de um valor
-l.atualizar(20, 25)
-l.imprimir()  # Saída: 10 -> 25 -> 30 ->
-
-# Remoção de um elemento
-l.remover(25)
-print("")
-l.imprimir()  # Saída: 10 -> 30 ->
-
-# Verificando se a lista está vazia
-print("A lista está vazia?", "Sim" if l.verificar_lista_vazia() else "Não")
-print("")
-
-# Buscando um valor
-buscar_no, posicao = l.buscar(10) 
-if buscar_no:
-    print(f"Encontramos o valor '{buscar_no.valor}' esta na '{posicao+1}°' lugar da lista.")
-else:
-    print("O valor nao foi encontrado na lista.")
+    
+    def contar_elementos(self):
+        """Conta o número de elementos na lista"""
+        if self.verificar_lista_vazia(): 
+            return 0
+        atual = self.cauda.proximo  # Começa do nó após a cauda, o primeiro nó
+        contador = 1  # Inicia o contador como 1, pois já estamos contando o primeiro nó
+        while atual != self.cauda:  # Continua até que o nó atual seja novamente a cauda
+            contador += 1
+            atual = atual.proximo  # Move para o próximo nó
+        return contador

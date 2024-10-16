@@ -30,7 +30,7 @@ class Convidado:
         """Busca um convidado na lista de convidados"""
         _, posicao = self.itens.buscar(convidado)
         if posicao != -1:
-            print(f"'{convidado}' encontrado na posição {posicao+1}.")
+            print(f"'{convidado}' está no {posicao+1}° lugar.")
         else:
             print(f"'{convidado}' não está na lista de convidados.")
     

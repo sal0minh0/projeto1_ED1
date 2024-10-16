@@ -44,15 +44,20 @@ class ListaEncadeadaCircular:
                     if atual == self.cauda: 
                         # Se remover o no cauda, atualizamos o no cauda
                         self.cauda = anterior
-                print(f"'{valor}' foi removido.")
+                if isinstance(valor, dict) and 'nome' in valor:
+                    print(f"'{valor['nome']}' foi removido.")
+                else:
+                    print(f"'{valor}' foi removido.")
                 return
             
             anterior = atual
             atual = atual.proximo
             
             if atual == self.cauda.proximo:
-                # Caso percorrermos toda a lista e não encontrarmos o valor
-                print(f"'{valor}' não foi encontrado.") 
+                if isinstance(valor, dict) and 'nome' in valor:
+                    print(f"'{valor['nome']}' não foi encontrado.")
+                else:
+                    print(f"'{valor}' não foi encontrado.")
                 break
 
     def buscar(self, valor):

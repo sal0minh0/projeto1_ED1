@@ -5,5 +5,5 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Listas import lista_encadeada_circular
 
-class Playlist:
+class Convidado:
     

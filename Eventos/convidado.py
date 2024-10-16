@@ -22,7 +22,7 @@ class Convidado:
     def atualizar_convidado(self, convidado_atual, novo_convidado):
         """Atualiza um convidado"""
         if self.itens.atualizar(convidado_atual, novo_convidado):
-            pass
+            print(f"'{convidado_atual}' desistiu da festa, e adicionamos '{novo_convidado}'.")
         else:
             print(f"'{convidado_atual}' não está na lista de convidados.")
     

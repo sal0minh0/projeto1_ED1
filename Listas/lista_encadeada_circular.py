@@ -39,12 +39,12 @@ class ListaEncadeadaCircular:
                     anterior.proximo = atual.proximo
                     if atual == self.cauda: # Se for o no da cauda, movemos o no cauda
                         self.cauda = anterior
-                print(f"O valor {valor} foi removido.")
+                print(f"'{valor}' foi removido.")
                 return
             anterior = atual
             atual = atual.proximo
             if atual == self.cauda.proximo:
-                print(f"O valor {valor} não foi encontrado.") # Caso não encontramos o valor
+                print(f"'{valor}' não foi encontrado.") # Caso não encontramos o valor
                 break
 
     def buscar(self, valor):
@@ -67,7 +67,7 @@ class ListaEncadeadaCircular:
         if no_encontrado:
             no_encontrado.valor = novo_valor
         else:
-            print(f"Valor {valor_atual} não encontrado para atualizar.")
+            print(f"{valor_atual} não foi encontrado para atualizar.")
 
     def imprimir(self):
         """Imprime a lista até o final"""
@@ -76,17 +76,14 @@ class ListaEncadeadaCircular:
             return
         atual = self.cauda.proximo
         while True:
-            print(atual.valor, end="\n")
+            print(atual.valor)  # Print each value on a new line
             atual = atual.proximo
             if atual == self.cauda.proximo:
                 break
-        print()
         
-    def trocar_true_false_sim_nao(valor):
-        """Trocar True or False por Sim e não"""
+    def trocar_true_false_sim_nao(self, valor):
+        """Trocar True ou False por 'Sim' e 'Não'"""
         return "Sim" if valor else "Não"
-    resposta = True
-    resposta = False
     
     def contar_elementos(self):
         """Conta o número de elementos na lista"""

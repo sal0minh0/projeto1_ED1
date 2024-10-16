@@ -68,7 +68,7 @@ class ListaEncadeadaCircular:
             no_encontrado.valor = novo_valor
             return True
         else:
-            print(f"{valor_atual} não foi encontrado para atualizar.")
+            print(f"'{valor_atual}' não foi encontrado para atualizar.")
             print("")
             return False
         

@@ -63,11 +63,15 @@ class ListaEncadeadaCircular:
 
     def atualizar(self, valor_atual, novo_valor):
         """Atualizar um valor na lista"""
-        no_encontrado, posicao = self.buscar(valor_atual)
+        no_encontrado, _ = self.buscar(valor_atual)
         if no_encontrado:
             no_encontrado.valor = novo_valor
+            return True
         else:
             print(f"{valor_atual} não foi encontrado para atualizar.")
+            print("")
+            return False
+        
 
     def imprimir(self):
         """Imprime a lista até o final"""

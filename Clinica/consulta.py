@@ -70,6 +70,7 @@ print("")
 
 # Atualizar uma consulta
 c.atualizar_consulta("Dr. José - 16:30", "Dr. José - 17:00")
+print("")
 
 # Exibir consultas
 c.exibir_consultas()

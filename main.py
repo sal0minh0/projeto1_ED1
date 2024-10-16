@@ -1,20 +1,32 @@
-from Listas import lista_encadeada_simples
-from Listas import lista_encadeada_dupla
-from Listas import lista_encadeada_circular
+"""Reunir todos os códigos em um só lugar para executar tudo de uma vez"""
+"""Rock in Rio 2024"""
 
-ls = lista_encadeada_simples.ListaEncadeadaSimples()
-ld = lista_encadeada_dupla.ListaEncadeadaDupla() 
-lc = lista_encadeada_circular.ListaEncadeadaCircular()
+from Clinica import Consulta, Instrumento, Paciente
+from Eventos import Convidado, Cronograma, Playlist
+from Restaurante import Cardapio, Faturamento, Trabalhador
+from tkinter import *
 
-#Exemplo de main
-print("")
-buscar_valor = input("Digite um valor para eu buscar: ") # Criar uma variavel de input
-buscar_no = l.buscar(buscar_valor) # Buscar esse no
-print("") 
-
-if buscar_no:
-    print(f"Encontramos o valor {buscar_no.valor}.")
-
-else:
-    print("O valor nao foi encontrado.")
-"""
+class Main:
+    def __init__(self):
+        # Cuidar da Saúde das pessoas
+        consulta = Consulta()
+        instrumento = Instrumento()
+        paciente = Paciente()
+        
+        # Planejamento do evento
+        convidado = Convidado()
+        cronograma = Cronograma()
+        playlist = Playlist()
+        
+        # Restaurante do evento
+        cardapio = Cardapio()
+        faturamento = Faturamento()
+        trabalhador = Trabalhador()
+        
+    def run(self):
+        # Aqui você pode chamar métodos ou interagir com os objetos consulta e instrumento
+        pass
+    
+if __name__ == '__main__':
+    app = Main()  # Cria uma instância da classe Main
+    app.run()  # Executa o método run (ou o que você desejar)

@@ -13,7 +13,7 @@ class Consulta:
     def adicionar_consulta(self, consulta):
         """Adiciona uma consulta para visualizar seus horraios em uma lista"""
         self.itens.inserir(consulta)
-        print(f"'{consulta}' adicionado aos horários.")
+        print(f"'{consulta}' adicionado as consultas.")
     
     def remover_consulta(self, consulta):
         """Remove uma consulta"""
@@ -30,7 +30,7 @@ class Consulta:
         """Busca uma consulta na clínica"""
         _, posicao = self.itens.buscar(consulta)
         if posicao != -1:
-            print(f"'{consulta}' encontrado no horário {posicao+1}.")
+            print(f"'{consulta}' encontrado na consulta {posicao+1}.")
         else:
             print(f"'{consulta}' não está marcada.")
             

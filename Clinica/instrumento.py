@@ -84,5 +84,6 @@ print("")
 i.buscar_um_instrumento("Máscara")
 print("")
 
+# Contar quantos instrumentos tem na clínica
 i.contar_instrumentos()
 print("")

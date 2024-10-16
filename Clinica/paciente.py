@@ -71,7 +71,7 @@ class Paciente:
             paciente = atual.valor
             print(f"Nome: {paciente.nome}, Idade: {paciente.idade}, Última Consulta: {paciente.ultima_consulta}")
             print(f"Histórico Médico: {paciente.historico_medico}")
-            print("//////////////////////")
+            print("")
             atual = atual.prox
     
     def verificar_vazio(self):

@@ -1,5 +1,5 @@
 """Reunir todos os códigos em um só lugar para executar tudo de uma vez"""
-"""Rock in Rio 2024
+"""Rock in Rio 2024"""
 
 from Clinica import Consulta, Instrumento, Paciente
 from Eventos import Convidado, Cronograma, Playlist
@@ -31,4 +31,3 @@ class Main:
 if __name__ == '__main__':
     app = Main()  # Cria uma instância da classe Main
     app.run()  # Executa o método run (ou o que você desejar)
-"""

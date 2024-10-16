@@ -1,8 +1,10 @@
-"""
-# Main para teste de entradas
+from Listas import lista_encadeada_simples
 from Listas import lista_encadeada_dupla
-l = lista_encadeada_dupla.ListaEncadeadaDupla() # Instanciar a classe com o objeto "l", se chamamos de outro arquivo
-                                                # vai ser assim
+from Listas import lista_encadeada_circular
+
+ls = lista_encadeada_simples.ListaEncadeadaSimples()
+ld = lista_encadeada_dupla.ListaEncadeadaDupla() 
+lc = lista_encadeada_circular.ListaEncadeadaCircular()
 
 #Exemplo de main
 print("")

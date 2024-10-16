@@ -88,11 +88,6 @@ class ListaEncadeadaDupla:
             print(atual.valor, end = "\n" if atual.prox else "\n")
             atual = atual.prox
                     
-    def trocar_true_false_sim_nao(valor):
-        """Trocar True or False por Sim e não"""
-        return "Sim" if valor else "Não"
-    resposta = True
-    resposta = False
     
     def contar_elementos(self):
         """Conta o número de elementos na lista"""

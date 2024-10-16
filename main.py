@@ -4,6 +4,7 @@
 from Clinica import Consulta, Instrumento, Paciente
 from Eventos import Convidado, Cronograma, Playlist
 from Restaurante import Cardapio, Faturamento, Trabalhador
+import requests
 from tkinter import *
 
 class Main:

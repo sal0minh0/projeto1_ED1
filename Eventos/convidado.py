@@ -25,7 +25,7 @@ class Convidado:
         atual = self.itens.cauda.proximo if self.itens.cauda else None
         while atual:
             if atual.valor['nome'] == nome:
-                self.itens.remover(atual.valor)
+                self.itens.remover(nome)
                 print(f"Convidado '{nome}' removido da lista.")
                 return
             atual = atual.proximo
@@ -96,6 +96,7 @@ if __name__ == "__main__":
     c.adicionar_convidado("Leandro", "001", "Conferência de Python")
     c.adicionar_convidado("Clara", "002", "Workshop de Django")
     c.adicionar_convidado("Vinícius", "003", "Palestra sobre Machine Learning")
+    print("")
 
     # Exibir convidados
     c.exibir_convidados()

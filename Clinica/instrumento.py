@@ -22,7 +22,7 @@ class Instrumento:
     def atualizar_instrumento(self, instrumento_atual, novo_instrumento):
         """Atualiza um instrumento"""
         if self.itens.atualizar(instrumento_atual, novo_instrumento):
-            print(f"'{instrumento_atual}' foi atualizado para '{novo_instrumento}'.")
+            pass
         else:
             print(f"'{instrumento_atual}' não está cadastrado.")
             

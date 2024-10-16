@@ -11,7 +11,7 @@ class Consulta:
         self.itens = lista_encadeada_dupla.ListaEncadeadaDupla()
         
     def adicionar_consulta(self, consulta):
-        """Adiciona uma consulta para visualizar seus horraios em uma lista"""
+        """Adiciona uma consulta para visualizar seus horários em uma lista"""
         self.itens.inserir(consulta)
         print(f"'{consulta}' adicionado as consultas.")
     

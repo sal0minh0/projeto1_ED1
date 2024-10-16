@@ -75,6 +75,7 @@ print("")
 c.atualizar_atividade("Palestra sobre Python - 10:30", "Palestra sobre Java - 10:30")
 print("")
 
+# Atualizar uma atividade de novo
 c.atualizar_atividade("Palestra sobre Django - 13:00", "Palestra sobre Spring - 10:30")
 print("")
 

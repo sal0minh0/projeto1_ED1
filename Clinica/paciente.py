@@ -13,7 +13,7 @@ class Paciente:
     def adicionar_paciente(self, paciente):
         """Adiciona um paciente para visualizar em numa lista"""
         self.itens.inserir(paciente)
-        print(f"'{paciente}' adicionado ao paciente.")
+        print(f"'{paciente}' adicionado a lista.")
     
     def remover_paciente(self, paciente):
         """Remove um paciente"""
@@ -22,7 +22,7 @@ class Paciente:
     def atualizar_paciente(self, paciente_atual, novo_paciente):
         """Atualiza um paciente"""
         if self.itens.atualizar(paciente_atual, novo_paciente):
-            print(f"'{paciente_atual}' foi atualizado para '{novo_paciente}'.")
+            pass
         else:
             print(f"'{paciente_atual}' não é um paciente.")
             

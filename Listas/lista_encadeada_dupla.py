@@ -61,11 +61,14 @@ class ListaEncadeadaDupla:
 
     def atualizar(self, valor_atual, novo_valor):
         """Atualizar um valor na lista"""
-        no_encontrado, posicao = self.buscar(valor_atual)
+        no_encontrado, _ = self.buscar(valor_atual)
         if no_encontrado:
             no_encontrado.valor = novo_valor
+            print(f"'{valor_atual}' foi atualizado para '{novo_valor}'.")
+            return True
         else:
-            print("Valor não encontrado na lista para atualização.")
+            print(f"'{valor_atual}' não foi encontrado na lista para atualização.")
+            return False
 
     def imprimir(self):
         """Imprime a lista até o final"""

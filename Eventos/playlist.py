@@ -8,46 +8,50 @@ from Listas import lista_encadeada_circular
 class Playlist:
     """Representa uma playlist de músicas usando lista encadeada circular"""
     def __init__(self):
-        self.musicas = lista_encadeada_circular.ListaEncadeadaCircular()
+        self.itens = lista_encadeada_circular.ListaEncadeadaCircular()
         
-    def adicionar_musica(self, musica):
+    def adicionar_item(self, musica):
         """Adiciona uma música na playlist"""
-        self.musicas.inserir(musica)
+        self.itens.inserir(musica)
         print(f"'{musica}' adicionado à playlist.")
     
-    def remover_musica(self, musica):
+    def remover_item(self, musica):
         """Remove uma música da playlist"""
-        self.musicas.remover(musica)
+        self.itens.remover(musica)
     
-    def atualizar_musica(self, musica_atual, nova_musica):
+    def atualizar_item(self, musica_atual, nova_musica):
         """Atualiza uma música na playlist"""
-        if self.musicas.atualizar(musica_atual, nova_musica):
+        if self.itens.atualizar(musica_atual, nova_musica):
             print(f"'{musica_atual}' foi atualizado para '{nova_musica}'.")
         else:
             print(f"'{musica_atual}' não está na playlist.")
     
-    def buscar_uma_musica(self, musica):
-        """Busca uma música na playlist"""
-        _, posicao = self.musicas.buscar(musica)
-        if posicao != -1:
-            print(f"'{musica}' está no {posicao+1}° lugar da playlist.")
-        else:
-            print(f"'{musica}' não está na playlist.")
+    def buscar_um_item(self, musica):
+        """Busca um item e retorna uma string com as informações"""
+        atual = self.itens.cauda.proximo if self.itens.cauda else None
+        posicao = 0
+        while atual:
+            if atual.valor == musica: 
+                return f"'{musica}' encontrado na posicao {posicao+1} da lista."
+            atual = atual.proximo
+            posicao += 1
+            if atual == self.itens.cauda.proximo:
+                break
+        return f"'{musica}' não encontrado na lista."
     
-    def exibir_playlist(self):
+    def exibir_itens(self):
         """Exibe a playlist de músicas"""
         print("Playlist de músicas:")
-        self.musicas.imprimir()
+        self.itens.imprimir()
     
-    def verificar_vazio(self):
+    def verificar_lista_vazia(self):
         """Verifica se a playlist está vazia"""
-        vazio = self.musicas.verificar_lista_vazia()
-        print(f"A playlist está vazia? {'Sim' if vazio else 'Não'}")
+        return self.itens.verificar_lista_vazia()
     
-    def contar_musicas(self):
+    def contar_itens(self):
         """Conta quantas músicas tem na playlist"""
-        quantidade_musicas = self.musicas.contar_elementos()
-        print(f"A playlist tem {quantidade_musicas} músicas.")
+        return self.itens.contar_elementos()
+    
 """       
 # Exemplo de uso da playlist
 
@@ -78,7 +82,7 @@ p.exibir_playlist()
 print("")
 
 # Verificar se a playlist está vazia
-p.verificar_vazio()
+p.verificar_lista_vazia()
 print("")
 
 # Buscar uma música

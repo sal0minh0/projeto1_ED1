@@ -10,41 +10,45 @@ class Cronograma:
     def __init__(self):
         self.itens = lista_encadeada_circular.ListaEncadeadaCircular()
         
-    def adicionar_atividade(self, atividade):
+    def adicionar_item(self, atividade):
         """Adiciona uma atividade no cronograma"""
         self.itens.inserir(atividade)
         print(f"'{atividade}' adicionado ao cronograma.")
     
-    def remover_atividade(self, atividade):
+    def remover_item(self, atividade):
         """Remove uma atividade do cronograma"""
         self.itens.remover(atividade)
     
-    def atualizar_atividade(self, atividade_atual, nova_atividade):
+    def atualizar_item(self, atividade_atual, nova_atividade):
         """Atualiza uma atividade no cronograma"""
         if self.itens.atualizar(atividade_atual, nova_atividade):
             print(f"'{atividade_atual}' foi atualizado para '{nova_atividade}'.")
         else:
             print(f"'{atividade_atual}' não está no cronograma.")
     
-    def buscar_uma_atividade(self, atividade):
-        """Busca uma atividade no cronograma"""
-        _, posicao = self.itens.buscar(atividade)
-        if posicao != -1:
-            print(f"'{atividade}' está na atividade {posicao+1}.")
-        else:
-            print(f"'{atividade}' não está no cronograma.")
+    def buscar_um_item(self, atividade):
+        """Busca um item e retorna uma string com as informações"""
+        atual = self.itens.cauda.proximo if self.itens.cauda else None
+        posicao = 0
+        while atual:
+            if atual.valor == atividade: 
+                return f"'{atividade}' encontrado na posicao {posicao+1} da lista."
+            atual = atual.proximo
+            if atual == self.itens.cauda.proximo:
+                break
+        return f"'{atividade}' não encontrado na lista."
     
-    def exibir_cronograma(self):
+    def exibir_itens(self):
         """Exibe o cronograma do evento"""
         print("Cronograma do evento:")
         self.itens.imprimir()
     
-    def verificar_vazio(self):
+    def verificar_lista_vazia(self):
         """Verifica se o cronograma está vazio"""
         vazio = self.itens.verificar_lista_vazia()
         print(f"O cronograma está vazio? {'Sim' if vazio else 'Não'}")
     
-    def contar_atividades(self):
+    def contar_itens(self):
         """Conta quantas atividades tem no cronograma"""
         quantidade_atividades = self.itens.contar_elementos()
         print(f"O cronograma tem {quantidade_atividades} atividades.")

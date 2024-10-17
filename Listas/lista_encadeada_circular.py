@@ -27,38 +27,43 @@ class ListaEncadeadaCircular:
     def remover(self, valor):
         """Remover o no da lista com um valor especificado"""
         if self.verificar_lista_vazia():
-            print("A lista está vazia.") # Verificar se a lista esta vazia
+            print("A lista está vazia.")
             return
         
-        atual = self.cauda.proximo # Começa com o nó após a cauda, o primeiro nó
-        anterior = self.cauda # Acompanha o nó anterior
+        atual = self.cauda.proximo
+        anterior = self.cauda
         
         while True:
-            if atual.valor == valor:
-                if atual == self.cauda and atual.proximo == self.cauda: # Se for o único no na lista
-                    # Se é o unico no na lista
+            # Modified comparison logic to handle both dictionary and simple values
+            encontrou = False
+            if isinstance(atual.valor, dict) and isinstance(valor, str):
+                # If we're searching for a name in a dictionary
+                encontrou = atual.valor.get('nome') == valor
+            else:
+                encontrou = atual.valor == valor
+
+            if encontrou:
+                if atual == self.cauda and atual.proximo == self.cauda:
                     self.cauda = None
                 else:
-                    # Remove o no atualizando o proximo ponteiro do no anterior
                     anterior.proximo = atual.proximo
-                    if atual == self.cauda: 
-                        # Se remover o no cauda, atualizamos o no cauda
+                    if atual == self.cauda:
                         self.cauda = anterior
-                if isinstance(valor, dict) and 'nome' in valor:
-                    print(f"'{valor['nome']}' foi removido.")
+                
+                if isinstance(atual.valor, dict) and 'nome' in atual.valor:
+                    print(f"'{atual.valor['nome']}' foi removido.")
                 else:
                     print(f"'{valor}' foi removido.")
-                return
+                return True
             
             anterior = atual
             atual = atual.proximo
             
             if atual == self.cauda.proximo:
-                if isinstance(valor, dict) and 'nome' in valor:
-                    print(f"'{valor['nome']}' não foi encontrado.")
-                else:
+                if isinstance(valor, str):
                     print(f"'{valor}' não foi encontrado.")
                 break
+        return False
 
     def buscar(self, valor):
         """Busca valores na lista e retorna o no na posicao"""

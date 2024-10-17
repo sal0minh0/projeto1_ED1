@@ -7,7 +7,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Clinica import Consulta, Instrumento, Paciente
 from Clinica.botao_janela import *
 from Eventos import Convidado, Cronograma, Playlist
+from Eventos.botao_janela import *
 from Restaurante import Cardapio, Faturamento, Restaurante
+from Restaurante.botao_janela import *
 from tkinter import *
 
 class Main:
@@ -58,18 +60,13 @@ class Main:
         botao_restaurante.grid(column=2, row=1, padx=5, pady=5)
 
     def botao_clinica(self):
-        # Chama o método botao_clinica da classe Botao
         self.botao.botao_clinica()
     
     def botao_evento(self):
-        # Implementar a lógica para a seção "O Evento"
-        print("Botão 'O Evento' clicado")
-        # Aqui você pode adicionar a lógica para exibir informações sobre o evento
+        self.botao.botao_evento()
     
     def botao_restaurante(self):
-        # Implementar a lógica para a seção "Restaurante"
-        print("Botão 'Restaurante' clicado")
-        # Aqui você pode adicionar a lógica para exibir informações sobre o restaurante
+        self.botao.botao_restaurante()
 
     def run(self):
         self.janela_principal.mainloop()

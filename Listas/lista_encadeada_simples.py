@@ -30,31 +30,21 @@ class ListaEncadeadaSimples:
                 atual = atual.prox
             atual.prox = novo_no  # O último nó aponta para o novo nó
 
-    def remover(self, valor):
-        """Remove o primeiro nó que contém o valor que queremos"""
+    def remover(self, item):
         atual = self.cabeca
         anterior = None
-        encontrado = False # Variável para rastrear se o elemento foi encontrado
-        
-        # Percorre a lista até encontrar o valor ou até o final
         while atual:
-            if atual.valor == valor:  # Verifica se o nó atual contém o valor
-                encontrado = True
-                break  # Sai do loop se o valor for encontrado
+            # Verifica se o item atual tem as mesmas chaves e valores de 'data' e 'valor'
+            if atual.valor.get('data') == item.get('data') and atual.valor.get('valor') == item.get('valor'):
+                if anterior:
+                    anterior.prox = atual.prox
+                else:
+                    self.cabeca = atual.prox
+                return True
             anterior = atual
             atual = atual.prox
-        
-        if not encontrado:  # Se o valor não for encontrado
-            print(f"Elemento '{valor}' não encontrado na lista.")
-            return
-        
-        # Se o nó a ser removido é a cabeça da lista
-        if anterior is None:
-            self.cabeca = atual.prox  # O próximo nó se torna a nova cabeça
-        else:
-            anterior.prox = atual.prox  # Remove o nó ligando o anterior ao próximo
-            
-        print(f"'{valor}' foi removido da lista.")
+        return False  # Retorna False se o item não for encontrado
+
 
     def buscar(self, valor):
         """Busca um nó que contenha o valor que queremos"""

@@ -5,89 +5,59 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Listas import lista_encadeada_simples
 
-class Mesa:
-    def __init__(self, numero):
-        self.numero = numero
-        self.cliente = None
-        self.ocupada = False
-
-    def __str__(self):
-        status = "Ocupada" if self.ocupada else "Livre"
-        cliente_info = f", Cliente: {self.cliente}" if self.cliente else ""
-        return f"Mesa {self.numero}: {status}{cliente_info}"
-
 class Restaurante:
     def __init__(self):
-        self.trabalhadores = lista_encadeada_simples.ListaEncadeadaSimples()
-        self.mesas = lista_encadeada_simples.ListaEncadeadaSimples()
+        self.itens = lista_encadeada_simples.ListaEncadeadaSimples()
         
-    def adicionar_trabalhador(self, trabalhador):
-        self.trabalhadores.inserir_no_fim(trabalhador)
-        print(f"'{trabalhador}' adicionado como trabalhador.")
+    def adicionar_item(self, nome, cargo, salario):
+        trabalhador = {
+            'nome': nome,
+            'cargo': cargo,
+            'salario': salario
+        }
+        self.itens.inserir_no_fim(trabalhador)
+        print(f"Trabalhador {nome} adicionado com sucesso!")
     
-    def remover_trabalhador(self, trabalhador):
-        self.trabalhadores.remover(trabalhador)
+    def remover_item(self, trabalhador):
+        self.itens.remover(trabalhador)
     
-    def atualizar_trabalhador(self, trabalhador_atual, novo_trabalhador):
-        if self.trabalhadores.atualizar_lista(trabalhador_atual, novo_trabalhador):
-            print(f"'{trabalhador_atual}' foi atualizado para '{novo_trabalhador}'.")
-        else:
-            print(f"'{trabalhador_atual}' não trabalha no restaurante.")
+    def atualizar_item(self, nome_atual, novo_nome=None, novo_cargo=None, novo_salario=None):
+        """Atualiza um funcionário com base no nome atual"""
+        atual = self.itens.cabeca
+        while atual:
+            if atual.valor['nome'].lower() == nome_atual.lower():
+                if novo_nome:
+                    atual.valor['nome'] = novo_nome
+                if novo_cargo:
+                    atual.valor['cargo'] = novo_cargo
+                if novo_salario:
+                    atual.valor['salario'] = novo_salario
+                return True  # Funcionário atualizado com sucesso
+            atual = atual.prox
+        return False  # Funcionário não encontrado
             
-    def buscar_um_trabalhador(self, trabalhador):
-        _, posicao = self.trabalhadores.buscar(trabalhador)
-        if posicao != -1:
-            print(f"'{trabalhador}' encontrado na posição {posicao+1} da equipe.")
-        else:
-            print(f"'{trabalhador}' não trabalha no restaurante ou não está cadastrado.")
+    def buscar_um_item(self, nome_funcionario):
+        """Busca um funcionário pelo nome e retorna os dados encontrados"""
+        atual = self.itens.cabeca
+        while atual:
+            if atual.valor['nome'].lower() == nome_funcionario.lower():
+                return f"Nome do Funcionário buscado: {atual.valor['nome']}, Cargo: {atual.valor['cargo']}, Salário: {atual.valor['salario']}"
+            atual = atual.prox
+        return None  # Caso não encontre
             
-    def exibir_trabalhadores(self):
+    def exibir_itens(self):
         print("Trabalhadores do restaurante:")
-        self.trabalhadores.imprimir()
+        self.itens.imprimir()
     
-    def contar_trabalhadores(self):
-        quantidade_trabalhadores = self.trabalhadores.contar_elementos()
+    def contar_itens(self):
+        quantidade_trabalhadores = self.itens.contar_elementos()
         print(f"O restaurante tem {quantidade_trabalhadores} trabalhadores cadastrados.")
-
-    def adicionar_mesa(self, numero):
-        nova_mesa = Mesa(numero)
-        self.mesas.inserir_no_fim(nova_mesa)
-        print(f"Mesa {numero} adicionada ao restaurante.")
-
-    def ocupar_mesa(self, numero_mesa, nome_cliente):
-        atual = self.mesas.cabeca
-        while atual:
-            if atual.valor.numero == numero_mesa:
-                if not atual.valor.ocupada:
-                    atual.valor.ocupada = True
-                    atual.valor.cliente = nome_cliente
-                    print(f"Mesa {numero_mesa} ocupada por {nome_cliente}.")
-                else:
-                    print(f"Mesa {numero_mesa} já está ocupada.")
-                return
-            atual = atual.prox
-        print(f"Mesa {numero_mesa} não encontrada.")
-
-    def liberar_mesa(self, numero_mesa):
-        atual = self.mesas.cabeca
-        while atual:
-            if atual.valor.numero == numero_mesa:
-                if atual.valor.ocupada:
-                    atual.valor.ocupada = False
-                    atual.valor.cliente = None
-                    print(f"Mesa {numero_mesa} liberada.")
-                else:
-                    print(f"Mesa {numero_mesa} já está livre.")
-                return
-            atual = atual.prox
-        print(f"Mesa {numero_mesa} não encontrada.")
-
-    def exibir_status_mesas(self):
-        print("Status das mesas:")
-        atual = self.mesas.cabeca
-        while atual:
-            print(atual.valor)
-            atual = atual.prox
+            
+    def verificar_lista_vazia(self):
+        """Verifica se o faturamento está vazio"""
+        vazio = self.itens.verificar_lista_vazia()
+        print(f"O faturamento está vazio? {'Sim' if vazio else 'Não'}")
+        
 """
 # Exemplo de uso do sistema de gerenciamento do restaurante
 

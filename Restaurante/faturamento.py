@@ -10,46 +10,99 @@ class Faturamento:
     def __init__(self):
         self.itens = lista_encadeada_simples.ListaEncadeadaSimples()
         
-    def adicionar_vendas(self, vendas):
-        """Adiciona um valor de vendas para calcular o faturamento"""
-        self.itens.inserir_no_fim(vendas)
-        print(f"'{vendas}' adicionado ao faturamento.")
+    def adicionar_item(self, item_str):
+        """Adiciona um valor de vendas para calcular o faturamento
+        Espera uma string no formato 'data - valor'"""
+        try:
+            # Split the input string into data and valor
+            partes = item_str.split('-')
+            if len(partes) != 2:
+                raise ValueError("Formato inválido. Use: 'data - valor'")
+            
+            data = partes[0].strip()
+            valor = float(partes[1].strip().replace('R$', '').replace(',', '.'))
+            
+            # Create a dictionary with the parsed values
+            item = {
+                'data': data,
+                'valor': valor
+            }
+            
+            self.itens.inserir_no_fim(item)
+            print(f"Faturamento adicionado: Data {data}, Valor R$ {valor:.2f}")
+            return True
+        except ValueError as e:
+            print(f"Erro ao adicionar faturamento: {str(e)}")
+            raise
         
-    def remover_vendas(self, vendas):
+    def remover_item(self, vendas):
         """Remove um valor de vendas"""
         self.itens.remover(vendas)
         
-    def atualizar_vendas(self, vendas_atual, novo_vendas):
+    def atualizar_item(self, item_atual, novo_item):
         """Atualiza um valor de vendas do faturamento"""
-        if self.itens.atualizar_lista(vendas_atual, novo_vendas):
-            print(f"'{vendas_atual}' foi atualizado para '{novo_vendas}'.")
-        else:
-            print(f"'{vendas_atual}' não encontrado no faturamento.")
+        print(f"Debug: Attempting to update item in Faturamento")
+        print(f"Debug: Current item to update: {item_atual}")
+        print(f"Debug: New item data: {novo_item}")
+        
+        atual = self.itens.cabeca
+        while atual:
+            print(f"Debug: Checking item: {atual.valor}")
+            if atual.valor.get('data') == item_atual['data'] and atual.valor.get('valor') == item_atual['valor']:
+                atual.valor = novo_item
+                print(f"Debug: Item updated successfully")
+                print(f"Faturamento atualizado: Data {novo_item['data']}, Valor R$ {novo_item['valor']:.2f}")
+                return True
+            atual = atual.prox
+        print("Debug: Faturamento não encontrado para atualização.")
+        return False
     
-    def buscar_uma_venda(self, vendas):
+    def buscar_um_item(self, vendas_str):
         """Busca um valor de vendas no faturamento"""
-        _, posicao = self.itens.buscar(vendas)
-        if posicao != -1:
-            print(f"'{vendas}' encontrado na posição {posicao+1} do faturamento.")
-        else:
-            print(f"'{vendas}' não encontrado no faturamento.")
+        print(f"Debug: Searching for item: {vendas_str}")
+        try:
+            data, valor_str = vendas_str.split('-')
+            data = data.strip()
+            valor = float(valor_str.strip().replace('R$', '').replace(',', '.'))
+            
+            item_busca = {'data': data, 'valor': valor}
+            print(f"Debug: Parsed search item: {item_busca}")
+            
+            atual = self.itens.cabeca
+            posicao = 0
+            while atual:
+                print(f"Debug: Checking item at position {posicao}: {atual.valor}")
+                if atual.valor['data'] == item_busca['data'] and atual.valor['valor'] == item_busca['valor']:
+                    print(f"Debug: Item found at position {posicao}")
+                    return atual.valor, posicao
+                atual = atual.prox
+                posicao += 1
+            
+            print("Debug: Item not found")
+            return None, -1
+        except Exception as e:
+            print(f"Debug: Error parsing search string: {str(e)}")
+            return None, -1
     
     def exibir_faturamento(self):
         """Exibe os valores do faturamento"""
         print("Valores do faturamento:")
         self.itens.imprimir()
         
-    def verificar_vazio(self):
+    def verificar_lista_vazia(self):
         """Verifica se o faturamento está vazio"""
         vazio = self.itens.verificar_lista_vazia()
         print(f"O faturamento está vazio? {'Sim' if vazio else 'Não'}")
         
     def somar_e_faturamento(self):
-        """Soma os valores para calcular o faturamento bruto"""
-        soma = self.itens.somar()
-        quantidade_vendas = self.itens.contar_elementos()
-        faturamento = soma * quantidade_vendas
-        print(f"O faturamento total é de R${faturamento: .2f}")
+        """Calcula o faturamento bruto somando todos os valores dos nós."""
+        total = 0.0
+        atual = self.itens.cabeca
+        while atual:
+            if isinstance(atual.valor, dict) and 'valor' in atual.valor:
+                total += atual.valor['valor']
+            atual = atual.prox
+        return total
 """     
 # Exemplo de uso do faturamento
         

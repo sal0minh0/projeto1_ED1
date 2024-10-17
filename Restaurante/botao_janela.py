@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from Restaurante.cardapio import Cardapio
 from Restaurante.faturamento import Faturamento
-from Restaurante.trabalhador import Restaurante
+from Restaurante.restaurante import Restaurante
 
 class BaseInterface:
     """Base class for all interfaces with common functionality"""
@@ -372,49 +372,158 @@ class FaturamentoInterface(BaseInterface):
 
 class RestauranteInterface(BaseInterface):
     def __init__(self, root, restaurante):
+        # Create the total salary frame before calling super().__init__
+        self.total_frame = Frame(root)
+        self.total_frame.pack(pady=5)
+        
+        self.total_salary_label = Label(
+            self.total_frame, 
+            text="Total em Salários: R$ 0.00"
+        )
+        self.total_salary_label.pack()
+        
+        # Call parent's init
         super().__init__(
             root=root,
             data_manager=restaurante,
             title="Funcionário",
             title_plural="funcionários",
-            example_text="(ex: Nome - Cargo - Salário)"
+            example_text="(ex: Nome,Cargo,Salário)"
         )
+
+    def refresh_display(self):
+        """Override refresh_display to show employees and update total salary"""
+        self.output_text.config(state=NORMAL)
+        self.output_text.delete(1.0, END)
+    
+        try:
+            items = self.get_items_list()
+            total_salary = 0
+            
+            if items:
+                for i, item in enumerate(items, 1):
+                    nome = item.get('nome', '')
+                    cargo = item.get('cargo', '')
+                    salario = float(item.get('salario', 0))
+                    total_salary += salario
+                    
+                    formatted_item = f"Nome: {nome}, Cargo: {cargo}, Salário: R$ {salario:.2f}"
+                    self.output_text.insert(END, f"{i}. {formatted_item}\n")
+            else:
+                self.output_text.insert(END, f"Não há {self.title_plural} cadastrados.")
+            
+            # Update total salary label
+            self.total_salary_label.config(
+                text=f"Total em Salários: R$ {total_salary:.2f}"
+            )
         
-        # Add the "Cargo" field
-        self.label_cargo = Label(self.input_frame, text="Cargo:")
-        self.label_cargo.pack(side=LEFT, padx=5)
-        self.entry_cargo = Entry(self.input_frame, width=10)
-        self.entry_cargo.pack(side=LEFT, padx=5)
-        
-        # Add the "Salário" field
-        self.label_salario = Label(self.input_frame, text="Salário:")
-        self.label_salario.pack(side=LEFT, padx=5)
-        self.entry_salario = Entry(self.input_frame, width=10)
-        self.entry_salario.pack(side=LEFT, padx=5)
+        except Exception as e:
+            self.output_text.insert(END, f"Erro ao carregar {self.title_plural}.")
+            print(f"Error: {e}")
+    
+        self.output_text.config(state=DISABLED)
+        self.root.update_idletasks()
+
+    def adicionar_item(self):
+        entrada = self.entry.get().strip()
+        if entrada:
+            try:
+                # Split the input into name, role and salary
+                nome, cargo, salario = entrada.split(',')
+                salario = float(salario.strip())
+                
+                funcionario = {
+                    'nome': nome.strip(),
+                    'cargo': cargo.strip(),
+                    'salario': salario
+                }
+                
+                self.data_manager.adicionar_item(funcionario)
+                self.entry.delete(0, END)
+                self.atualizar_output(f"Funcionário '{nome.strip()}' adicionado com sucesso!")
+                self.refresh_display()
+            except ValueError:
+                messagebox.showerror("Erro", "Formato inválido. Use: Nome,Cargo,Salário")
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao adicionar funcionário: {str(e)}")
+        else:
+            messagebox.showerror("Erro", "Por favor, insira os dados do funcionário.")
+
+    def remover_item(self):
+        entrada = self.entry.get().strip()
+        if entrada:
+            try:
+                nome = entrada.split(',')[0].strip()
+                atual = self.data_manager.itens.cabeca
+                while atual:
+                    if atual.valor.get('nome') == nome:
+                        if self.data_manager.itens.remover(atual.valor):
+                            self.entry.delete(0, END)
+                            self.atualizar_output(f"Funcionário '{nome}' removido com sucesso!")
+                            self.refresh_display()
+                            return
+                    atual = atual.prox
+                messagebox.showerror("Erro", "Funcionário não encontrado.")
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao remover funcionário: {str(e)}")
+        else:
+            messagebox.showerror("Erro", "Por favor, insira o nome do funcionário para remover.")
+
+    def buscar_item(self):
+        entrada = self.entry.get().strip()
+        if entrada:
+            try:
+                nome = entrada.split(',')[0].strip()
+                result, posicao = self.data_manager.buscar_um_item({'nome': nome})
+                if result:
+                    self.atualizar_output(
+                        f"Funcionário encontrado na posição {posicao + 1}:\n"
+                        f"Nome: {result['nome']}\n"
+                        f"Cargo: {result['cargo']}\n"
+                        f"Salário: R$ {float(result['salario']):.2f}"
+                    )
+                else:
+                    self.atualizar_output(f"Funcionário '{nome}' não encontrado.")
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao buscar funcionário: {str(e)}")
+        else:
+            messagebox.showerror("Erro", "Por favor, insira o nome do funcionário para buscar.")
 
     def editar_item(self):
-        """Override edit method specifically for funcionários"""
-        nome_atual = self.entry.get().strip()
-        novo_nome = self.new_value_entry.get().strip()
-        novo_cargo = self.entry_cargo.get().strip()
-        novo_salario = self.entry_salario.get().strip()
-    
-        if nome_atual and (novo_nome or novo_cargo or novo_salario):
+        item_atual = self.entry.get().strip()
+        novo_item = self.new_value_entry.get().strip()
+        
+        if item_atual and novo_item:
             try:
-                if self.data_manager.atualizar_funcionario(nome_atual, novo_nome, novo_cargo, novo_salario):
+                # Parse current item
+                nome_atual = item_atual.split(',')[0].strip()
+                
+                # Parse new item
+                novo_nome, novo_cargo, novo_salario = novo_item.split(',')
+                novo_salario = float(novo_salario.strip())
+                
+                # Create dictionaries for current and new items
+                item_atual_dict = {'nome': nome_atual}
+                novo_item_dict = {
+                    'nome': novo_nome.strip(),
+                    'cargo': novo_cargo.strip(),
+                    'salario': novo_salario
+                }
+                
+                if self.data_manager.atualizar_item(item_atual_dict, novo_item_dict):
                     self.entry.delete(0, END)
                     self.new_value_entry.delete(0, END)
-                    self.entry_cargo.delete(0, END)
-                    self.entry_salario.delete(0, END)
-                    self.atualizar_output(f"Funcionário '{nome_atual}' atualizado com sucesso!")
+                    self.atualizar_output(f"Funcionário atualizado com sucesso!")
                     self.refresh_display()
                 else:
-                    messagebox.showerror("Erro", f"Funcionário '{nome_atual}' não encontrado.")
+                    messagebox.showerror("Erro", "Funcionário não encontrado.")
+            except ValueError:
+                messagebox.showerror("Erro", "Formato inválido. Use: Nome,Cargo,Salário")
             except Exception as e:
                 messagebox.showerror("Erro", f"Erro ao editar funcionário: {str(e)}")
         else:
             messagebox.showerror("Erro", "Por favor, insira valores válidos para atualização.")
-             
+
 class Botao:
     def __init__(self, root):
         self.root = root
@@ -436,9 +545,10 @@ class Botao:
         cardapio_btn.pack(pady=10)
 
     def abrir_restaurante(self):
+        restaurante = Restaurante()
         restaurante_window = Toplevel(self.root)
         restaurante_window.title("Gerenciar Funcionários")
-        RestauranteInterface(restaurante_window, self.restaurante)
+        RestauranteInterface(restaurante_window, restaurante)
 
     def abrir_faturamento(self):
         faturamento_window = Toplevel(self.root)

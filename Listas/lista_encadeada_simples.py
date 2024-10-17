@@ -30,21 +30,21 @@ class ListaEncadeadaSimples:
                 atual = atual.prox
             atual.prox = novo_no  # O último nó aponta para o novo nó
 
-    def remover(self, item):
+    def remover(self, item_nome):
         atual = self.cabeca
         anterior = None
-        while atual:
-            # Verifica se o item atual tem as mesmas chaves e valores de 'data' e 'valor'
-            if atual.valor.get('data') == item.get('data') and atual.valor.get('valor') == item.get('valor'):
-                if anterior:
-                    anterior.prox = atual.prox
+        
+        while atual is not None:
+            if atual.valor.get('nome', '').lower() == item_nome.lower():  # Comparando em minúsculas
+                if anterior is None:
+                    self.cabeca = atual.prox  # Remover o primeiro nó
                 else:
-                    self.cabeca = atual.prox
-                return True
+                    anterior.prox = atual.prox  # Remover o nó do meio ou final
+                return True  # Item encontrado e removido
             anterior = atual
             atual = atual.prox
-        return False  # Retorna False se o item não for encontrado
-
+        
+        return False  # Item não encontrado
 
     def buscar(self, valor):
         """Busca um nó que contenha o valor que queremos"""

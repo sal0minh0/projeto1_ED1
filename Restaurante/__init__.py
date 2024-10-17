@@ -1,3 +1,3 @@
 from .cardapio import Cardapio
 from .faturamento import Faturamento
-from .trabalhador import Trabalhador
+from .trabalhador import Restaurante

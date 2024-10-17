@@ -3,7 +3,7 @@
 
 from Clinica import Consulta, Instrumento, Paciente
 from Eventos import Convidado, Cronograma, Playlist
-from Restaurante import Cardapio, Faturamento, Trabalhador
+from Restaurante import Cardapio, Faturamento, Restaurante
 import requests
 from tkinter import *
 
@@ -22,7 +22,7 @@ class Main:
         # Restaurante do evento
         cardapio = Cardapio()
         faturamento = Faturamento()
-        trabalhador = Trabalhador()
+        restaurante = Restaurante()
         
     def run(self):
         # Aqui você pode chamar métodos ou interagir com os objetos consulta e instrumento

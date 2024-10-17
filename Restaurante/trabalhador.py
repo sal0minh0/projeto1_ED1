@@ -5,87 +5,126 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Listas import lista_encadeada_simples
 
-class Trabalhador:
-    """Representa o trabalhador usando lista encadeada simples"""
+class Mesa:
+    def __init__(self, numero):
+        self.numero = numero
+        self.cliente = None
+        self.ocupada = False
+
+    def __str__(self):
+        status = "Ocupada" if self.ocupada else "Livre"
+        cliente_info = f", Cliente: {self.cliente}" if self.cliente else ""
+        return f"Mesa {self.numero}: {status}{cliente_info}"
+
+class Restaurante:
     def __init__(self):
-        self.itens = lista_encadeada_simples.ListaEncadeadaSimples()
+        self.trabalhadores = lista_encadeada_simples.ListaEncadeadaSimples()
+        self.mesas = lista_encadeada_simples.ListaEncadeadaSimples()
         
     def adicionar_trabalhador(self, trabalhador):
-        """Adiciona um trabalhador para visualizar em numa lista"""
-        self.itens.inserir_no_fim(trabalhador)
-        print(f"'{trabalhador}' adicionado ao trabalhador.")
+        self.trabalhadores.inserir_no_fim(trabalhador)
+        print(f"'{trabalhador}' adicionado como trabalhador.")
     
     def remover_trabalhador(self, trabalhador):
-        """Remove um trabalhador"""
-        self.itens.remover(trabalhador)
+        self.trabalhadores.remover(trabalhador)
     
     def atualizar_trabalhador(self, trabalhador_atual, novo_trabalhador):
-        """Atualiza um trabalhador"""
-        if self.itens.atualizar_lista(trabalhador_atual, novo_trabalhador):
+        if self.trabalhadores.atualizar_lista(trabalhador_atual, novo_trabalhador):
             print(f"'{trabalhador_atual}' foi atualizado para '{novo_trabalhador}'.")
         else:
-            print(f"'{trabalhador_atual}' não trabalha na empresa.")
+            print(f"'{trabalhador_atual}' não trabalha no restaurante.")
             
     def buscar_um_trabalhador(self, trabalhador):
-        """Busca um trabalhador na empresa"""
-        _, posicao = self.itens.buscar(trabalhador)
+        _, posicao = self.trabalhadores.buscar(trabalhador)
         if posicao != -1:
-            print(f"'{trabalhador}' encontrado na posição {posicao+1} da empresa.")
+            print(f"'{trabalhador}' encontrado na posição {posicao+1} da equipe.")
         else:
-            print(f"'{trabalhador}' não trabalha na empresa ou não está cadastrado.")
+            print(f"'{trabalhador}' não trabalha no restaurante ou não está cadastrado.")
             
     def exibir_trabalhadores(self):
-        """Exibe os trabalhadores dessa empresa"""
-        print("Trabalhadores da empresa:")
-        self.itens.imprimir()
+        print("Trabalhadores do restaurante:")
+        self.trabalhadores.imprimir()
     
-    def verificar_vazio(self):
-        """Verifica se a empresa está vazia"""
-        vazio = self.itens.verificar_lista_vazia()
-        print(f"A empresa está sem trabalhadores? {'Sim' if vazio else 'Não'}")
-        
     def contar_trabalhadores(self):
-        """Conta quantos trabalhadores tem na empresa"""
-        quantidade_trabalhadores = self.itens.contar_elementos()
-        print(f"A empresa tem {quantidade_trabalhadores} trabalhadores cadastrados.")
-        
-# Exemplo de uso da lista_de_trabalhadores
+        quantidade_trabalhadores = self.trabalhadores.contar_elementos()
+        print(f"O restaurante tem {quantidade_trabalhadores} trabalhadores cadastrados.")
 
-# Criar objeto trabalhador
-t = Trabalhador()
+    def adicionar_mesa(self, numero):
+        nova_mesa = Mesa(numero)
+        self.mesas.inserir_no_fim(nova_mesa)
+        print(f"Mesa {numero} adicionada ao restaurante.")
 
-# Adicionando trabalhadores a empresa
-t.adicionar_trabalhador("Amor")
-t.adicionar_trabalhador("Sal")
-t.adicionar_trabalhador("Ana")
-t.adicionar_trabalhador("Sem Amor")
-print("")
+    def ocupar_mesa(self, numero_mesa, nome_cliente):
+        atual = self.mesas.cabeca
+        while atual:
+            if atual.valor.numero == numero_mesa:
+                if not atual.valor.ocupada:
+                    atual.valor.ocupada = True
+                    atual.valor.cliente = nome_cliente
+                    print(f"Mesa {numero_mesa} ocupada por {nome_cliente}.")
+                else:
+                    print(f"Mesa {numero_mesa} já está ocupada.")
+                return
+            atual = atual.prox
+        print(f"Mesa {numero_mesa} não encontrada.")
 
-# Demitindo trabalhadores
-t.remover_trabalhador("Sem Amor")
+    def liberar_mesa(self, numero_mesa):
+        atual = self.mesas.cabeca
+        while atual:
+            if atual.valor.numero == numero_mesa:
+                if atual.valor.ocupada:
+                    atual.valor.ocupada = False
+                    atual.valor.cliente = None
+                    print(f"Mesa {numero_mesa} liberada.")
+                else:
+                    print(f"Mesa {numero_mesa} já está livre.")
+                return
+            atual = atual.prox
+        print(f"Mesa {numero_mesa} não encontrada.")
+
+    def exibir_status_mesas(self):
+        print("Status das mesas:")
+        atual = self.mesas.cabeca
+        while atual:
+            print(atual.valor)
+            atual = atual.prox
+
+# Exemplo de uso do sistema de gerenciamento do restaurante
+
+restaurante = Restaurante()
+
+# Adicionando trabalhadores
+restaurante.adicionar_trabalhador("João")
+restaurante.adicionar_trabalhador("Maria")
+restaurante.adicionar_trabalhador("Pedro")
 print("")
 
 # Exibindo trabalhadores
-t.exibir_trabalhadores()
+restaurante.exibir_trabalhadores()
 print("")
 
-# Atualizando trabalhadores
-t.atualizar_trabalhador("Amor", "Amor Eterno")
+# Adicionando mesas
+restaurante.adicionar_mesa(1)
+restaurante.adicionar_mesa(2)
+restaurante.adicionar_mesa(3)
 print("")
 
-# Exibindo trabalhadores de novo
-t.exibir_trabalhadores()
+# Ocupando mesas
+restaurante.ocupar_mesa(1, "Carlos")
+restaurante.ocupar_mesa(2, "Ana")
 print("")
 
-# Verficando se a empresa sem ninguém
-t.verificar_vazio()
+# Exibindo status das mesas
+restaurante.exibir_status_mesas()
 print("")
 
-# Buscar uma venda
-t.buscar_um_trabalhador("Ana")
+# Liberando uma mesa
+restaurante.liberar_mesa(1)
 print("")
 
-# Retornar a quantidade de trabalhadores da empresa
-t.contar_trabalhadores()
+# Exibindo status atualizado das mesas
+restaurante.exibir_status_mesas()
 print("")
 
+# Contando trabalhadores
+restaurante.contar_trabalhadores()

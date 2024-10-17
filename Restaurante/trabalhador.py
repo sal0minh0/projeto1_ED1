@@ -88,7 +88,7 @@ class Restaurante:
         while atual:
             print(atual.valor)
             atual = atual.prox
-
+"""
 # Exemplo de uso do sistema de gerenciamento do restaurante
 
 restaurante = Restaurante()
@@ -128,3 +128,4 @@ print("")
 
 # Contando trabalhadores
 restaurante.contar_trabalhadores()
+"""

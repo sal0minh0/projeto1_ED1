@@ -1,33 +1,79 @@
-"""Reunir todos os códigos em um só lugar para executar tudo de uma vez"""
-"""Rock in Rio 2024"""
+import sys
+import os
+
+# Add the parent directory to sys.path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from Clinica import Consulta, Instrumento, Paciente
+from Clinica.botao_janela import *
 from Eventos import Convidado, Cronograma, Playlist
 from Restaurante import Cardapio, Faturamento, Restaurante
-import requests
 from tkinter import *
 
 class Main:
     def __init__(self):
         # Cuidar da Saúde das pessoas
-        consulta = Consulta()
-        instrumento = Instrumento()
-        paciente = Paciente()
+        self.consulta = Consulta()
+        self.instrumento = Instrumento()
+        self.paciente = Paciente()
         
         # Planejamento do evento
-        convidado = Convidado()
-        cronograma = Cronograma()
-        playlist = Playlist()
+        self.convidado = Convidado()
+        self.cronograma = Cronograma()
+        self.playlist = Playlist()
         
         # Restaurante do evento
-        cardapio = Cardapio()
-        faturamento = Faturamento()
-        restaurante = Restaurante()
+        self.cardapio = Cardapio()
+        self.faturamento = Faturamento()
+        self.restaurante = Restaurante()
         
-    def run(self):
-        # Aqui você pode chamar métodos ou interagir com os objetos consulta e instrumento
-        pass
+        # Criar a janela principal
+        self.janela_principal = Tk()
+        self.janela_principal.title("Rock in Rio 2024")
+        
+        window_width = 275
+        window_height = 75
+        screen_width = self.janela_principal.winfo_screenwidth()
+        screen_height = self.janela_principal.winfo_screenheight()
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+        self.janela_principal.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        
+        # Create Botao instance with the main window as root
+        self.botao = Botao(self.janela_principal)
+        
+        self.criar_interface()
+        
+    def criar_interface(self):
+        texto_orientacao = Label(self.janela_principal, text="Escolha a sua opção desejada:")
+        texto_orientacao.grid(column=0, row=0, columnspan=3, pady=10)
+
+        botao_clinica = Button(self.janela_principal, text="Emergência clínica", command=self.botao_clinica)
+        botao_clinica.grid(column=0, row=1, padx=5, pady=5)
+
+        botao_evento = Button(self.janela_principal, text="O Evento", command=self.botao_evento)
+        botao_evento.grid(column=1, row=1, padx=5, pady=5)
+
+        botao_restaurante = Button(self.janela_principal, text="Restaurante", command=self.botao_restaurante)
+        botao_restaurante.grid(column=2, row=1, padx=5, pady=5)
+
+    def botao_clinica(self):
+        # Chama o método botao_clinica da classe Botao
+        self.botao.botao_clinica()
     
+    def botao_evento(self):
+        # Implementar a lógica para a seção "O Evento"
+        print("Botão 'O Evento' clicado")
+        # Aqui você pode adicionar a lógica para exibir informações sobre o evento
+    
+    def botao_restaurante(self):
+        # Implementar a lógica para a seção "Restaurante"
+        print("Botão 'Restaurante' clicado")
+        # Aqui você pode adicionar a lógica para exibir informações sobre o restaurante
+
+    def run(self):
+        self.janela_principal.mainloop()
+
 if __name__ == '__main__':
-    app = Main()  # Cria uma instância da classe Main
-    app.run()  # Executa o método run (ou o que você desejar)
+    app = Main()
+    app.run()

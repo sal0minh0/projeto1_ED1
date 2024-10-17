@@ -81,14 +81,15 @@ class ListaEncadeadaDupla:
         """Imprime a lista até o final"""
         if self.verificar_lista_vazia():
             print("A lista está vazia.")
-            return
+            return []
         atual = self.cabeca
+        valores = []
         while atual:
             # Imprima cada valor, com uma nova linha no final da lista
-            print(atual.valor, end = "\n" if atual.prox else "\n")
+            valores.append(atual.valor)
             atual = atual.prox
+        return valores
                     
-    
     def contar_elementos(self):
         """Conta o número de elementos na lista"""
         atual = self.cabeca

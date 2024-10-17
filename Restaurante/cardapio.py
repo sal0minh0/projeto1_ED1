@@ -44,7 +44,7 @@ class Cardapio:
         vazio = self.itens.verificar_lista_vazia()
         print(f"O cardápio está vazio? {'Sim' if vazio else 'Não'}")
 
-
+"""
 # Exemplo de uso do cardápio
 
 # Criar objeto cardápio
@@ -82,3 +82,4 @@ print("")
 
 # Buscar Alimento
 c.buscar_alimento("Pizza")
+"""

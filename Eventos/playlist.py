@@ -48,7 +48,7 @@ class Playlist:
         """Conta quantas músicas tem na playlist"""
         quantidade_musicas = self.musicas.contar_elementos()
         print(f"A playlist tem {quantidade_musicas} músicas.")
-        
+"""       
 # Exemplo de uso da playlist
 
 # Criar objeto playlist
@@ -87,3 +87,4 @@ print("")
 
 # Contar músicas
 p.contar_musicas()
+"""

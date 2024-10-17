@@ -87,7 +87,7 @@ class Convidado:
         """Conta quantos convidados tem no evento"""
         quantidade_convidados = self.itens.contar_elementos()
         print(f"O evento tem {quantidade_convidados} convidados.")
-
+"""
 # Exemplo de uso da classe Convidado estendida
 if __name__ == "__main__":
     c = Convidado()
@@ -120,3 +120,4 @@ if __name__ == "__main__":
 
     # Contar convidados
     c.contar_convidados()
+    """

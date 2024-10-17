@@ -49,6 +49,7 @@ class Cronograma:
         quantidade_atividades = self.itens.contar_elementos()
         print(f"O cronograma tem {quantidade_atividades} atividades.")
     
+"""
 # Exemplo de uso do cronograma
 
 # Criar objeto cronograma
@@ -93,4 +94,4 @@ print("")
 
 # Contar quantas atividades tem no cronograma
 c.contar_atividades()
-
+"""

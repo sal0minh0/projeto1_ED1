@@ -50,7 +50,7 @@ class Faturamento:
         quantidade_vendas = self.itens.contar_elementos()
         faturamento = soma * quantidade_vendas
         print(f"O faturamento total é de R${faturamento: .2f}")
-        
+"""     
 # Exemplo de uso do faturamento
         
 # Criar objeto faturamento
@@ -89,7 +89,7 @@ print("")
 #Calcular o faturamento
 f.somar_e_faturamento()
 print("")
-        
+"""       
         
         
         

@@ -17,83 +17,101 @@ class Mesa:
         return f"Mesa {self.numero}: {status}{cliente_info}"
 
 class Cardapio:
-    """Representa o cardápio usando lista encadeada simples"""
     def __init__(self):
         self.itens = lista_encadeada_simples.ListaEncadeadaSimples()
+        self.mesas = lista_encadeada_simples.ListaEncadeadaSimples()
 
-    def adicionar_item(self, alimento):
-        """Adiciona um alimento"""
-        self.itens.inserir_no_fim(alimento)
-        print(f"'{alimento}' adicionado ao cardápio.")
+    def adicionar_item(self, item_string):
+        try:
+            nome, preco = item_string.split('-')
+            nome = nome.strip()
+            preco = float(preco.strip())
+            item = {'nome': nome, 'preco': preco}
+            self.itens.inserir_no_fim(item)
+            return f"'{nome}' adicionado ao cardápio por R${preco:.2f}."
+        except ValueError:
+            return "Formato inválido. Use: Nome do Item - Preço"
 
-    def remover_item(self, alimento):
-        """Remove um alimento"""
-        self.itens.remover(alimento)
+    def remover_item(self, nome_alimento):
+        print(f"Tentando remover item do cardápio: '{nome_alimento}'")
+    
+        def comparar_nome(item):
+            return isinstance(item, dict) and item.get('nome', '').lower() == nome_alimento.lower()
+    
+        if self.itens.remover(comparar_nome):
+            print(f"Item '{nome_alimento}' removido com sucesso")
+            return f"'{nome_alimento}' removido do cardápio."
+        else:
+            print(f"Item '{nome_alimento}' não encontrado")
+            return f"'{nome_alimento}' não encontrado no cardápio."
+
 
     def atualizar_item(self, alimento_atual, novo_alimento):
-        """Atualiza um alimento do cardápio"""
         if self.itens.atualizar_lista(alimento_atual, novo_alimento):
-            print(f"'{alimento_atual}' foi atualizado para '{novo_alimento}'.")
+            return f"'{alimento_atual}' foi atualizado para '{novo_alimento}'."
         else:
-            print(f"'{alimento_atual}' não encontrado no cardápio.")
+            return f"'{alimento_atual}' não encontrado no cardápio."
 
     def buscar_um_item(self, alimento):
-        """Busca um alimento no cardápio"""
         _, posicao = self.itens.buscar(alimento)
         if posicao != -1:
-            print(f"'{alimento}' encontrado na posição {posicao+1} do cardápio.")
+            return f"'{alimento}' encontrado na posição {posicao+1} do cardápio."
         else:
-            print(f"'{alimento}' não encontrado no cardápio.")
+            return f"'{alimento}' não encontrado no cardápio."
 
     def exibir_itens(self):
-        """Exibe os itens do cardápio"""
-        print("Itens do cardápio:")
-        self.itens.imprimir()
+        itens = []
+        atual = self.itens.cabeca
+        while atual:
+            if isinstance(atual.valor, dict):
+                itens.append(f"{atual.valor['nome']} - {atual.valor['preco']}")
+            else:
+                itens.append(str(atual.valor))
+            atual = atual.prox
+        return "\n".join(itens) if itens else "O cardápio está vazio."
+
 
     def verificar_lista_vazia(self):
-        """Verifica se o cardápio está vazio"""
-        vazio = self.itens.verificar_lista_vazia()
-        print(f"O cardápio está vazio? {'Sim' if vazio else 'Não'}")
-        
+        return self.itens.verificar_lista_vazia()
+
     def adicionar_mesa(self, numero):
         nova_mesa = Mesa(numero)
-        self.itens.inserir_no_fim(nova_mesa)
-        print(f"Mesa {numero} adicionada ao restaurante.")
+        self.mesas.inserir_no_fim(nova_mesa)
+        return f"Mesa {numero} adicionada ao restaurante."
 
     def ocupar_mesa(self, numero_mesa, nome_cliente):
-        atual = self.itens.cabeca
+        atual = self.mesas.cabeca
         while atual:
             if atual.valor.numero == numero_mesa:
                 if not atual.valor.ocupada:
                     atual.valor.ocupada = True
                     atual.valor.cliente = nome_cliente
-                    print(f"Mesa {numero_mesa} ocupada por {nome_cliente}.")
+                    return f"Mesa {numero_mesa} ocupada por {nome_cliente}."
                 else:
-                    print(f"Mesa {numero_mesa} já está ocupada.")
-                return
+                    return f"Mesa {numero_mesa} já está ocupada."
             atual = atual.prox
-        print(f"Mesa {numero_mesa} não encontrada.")
+        return f"Mesa {numero_mesa} não encontrada."
 
     def liberar_mesa(self, numero_mesa):
-        atual = self.itens.cabeca
+        atual = self.mesas.cabeca
         while atual:
             if atual.valor.numero == numero_mesa:
                 if atual.valor.ocupada:
                     atual.valor.ocupada = False
                     atual.valor.cliente = None
-                    print(f"Mesa {numero_mesa} liberada.")
+                    return f"Mesa {numero_mesa} liberada."
                 else:
-                    print(f"Mesa {numero_mesa} já está livre.")
-                return
+                    return f"Mesa {numero_mesa} já está livre."
             atual = atual.prox
-        print(f"Mesa {numero_mesa} não encontrada.")
+        return f"Mesa {numero_mesa} não encontrada."
 
     def exibir_status_mesas(self):
-        print("Status das mesas:")
-        atual = self.itens.cabeca
+        status = "Status das mesas:\n"
+        atual = self.mesas.cabeca
         while atual:
-            print(atual.valor)
+            status += str(atual.valor) + "\n"
             atual = atual.prox
+        return status
 
 """
 # Exemplo de uso do cardápio

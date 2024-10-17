@@ -29,22 +29,23 @@ class ListaEncadeadaSimples:
             while atual.prox:  # Percorre até o último nó
                 atual = atual.prox
             atual.prox = novo_no  # O último nó aponta para o novo nó
-
-    def remover(self, item_nome):
+            
+    def remover(self, condicao):
         atual = self.cabeca
         anterior = None
-        
+
         while atual is not None:
-            if atual.valor.get('nome', '').lower() == item_nome.lower():  # Comparando em minúsculas
-                if anterior is None:
-                    self.cabeca = atual.prox  # Remover o primeiro nó
+            if condicao(atual.valor):
+                if anterior:
+                    anterior.prox = atual.prox
                 else:
-                    anterior.prox = atual.prox  # Remover o nó do meio ou final
-                return True  # Item encontrado e removido
+                    self.cabeca = atual.prox
+                return True
             anterior = atual
             atual = atual.prox
-        
-        return False  # Item não encontrado
+
+        return False
+
 
     def buscar(self, valor):
         """Busca um nó que contenha o valor que queremos"""
@@ -56,7 +57,7 @@ class ListaEncadeadaSimples:
             atual = atual.prox  # Se sim mover para o proximo no
             posicao += 1 
         return None, -1  # Se percorrer toda a lista e não achar
-    
+
     def atualizar_lista(self, anterior, novo_valor):
         """Atualiza o valor de um nó na lista"""
         atual = self.cabeca # Começa no início, no no cabeca
@@ -66,7 +67,6 @@ class ListaEncadeadaSimples:
                 return True
             atual = atual.prox # Move para o próximo nó
         return False # Caso não encontrar o valor
-
 
     def imprimir(self):
         """Exibe os elementos da lista encadeada"""
@@ -82,7 +82,7 @@ class ListaEncadeadaSimples:
         return "Sim" if valor else "Não"
     resposta = True
     resposta = False
-    
+
     def somar(self):
         """Soma os valores da lista"""
         atual = self.cabeca 
@@ -91,7 +91,7 @@ class ListaEncadeadaSimples:
             soma += atual.valor # Adiciona o valor do nó atual à soma
             atual = atual.prox 
         return soma
-    
+
     def contar_elementos(self):
         """Conta o número de elementos na lista"""
         atual = self.cabeca 

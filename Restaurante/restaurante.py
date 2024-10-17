@@ -17,7 +17,7 @@ class Restaurante:
 
         if nome and cargo is not None and salario is not None:
             print(f"Adicionando funcionário: {nome}, Cargo: {cargo}, Salário: {salario}")
-            self.itens.inserir_no_fim(funcionario)  # Store the funcionario in the linked list
+            self.itens.inserir_no_fim(funcionario)  # Armazena o funcionário na lista encadeada
         else:
             raise ValueError("Dados incompletos para adicionar o funcionário.")
     
@@ -32,7 +32,7 @@ class Restaurante:
         """Atualiza um funcionário com base no nome atual."""
         atual = self.itens.cabeca
         while atual:
-            if atual.valor['nome'].lower() == nome_atual.lower():
+            if isinstance(atual.valor, dict) and atual.valor.get('nome', '').lower() == nome_atual.lower():
                 if novo_nome:
                     atual.valor['nome'] = novo_nome
                 if novo_cargo:
@@ -46,14 +46,15 @@ class Restaurante:
         return False  # Funcionário não encontrado
             
     def buscar_um_item(self, nome_funcionario):
-        """Busca um funcionário pelo nome e retorna os dados encontrados."""
+        """Busca um funcionário pelo nome e retorna os dados encontrados como um dicionário ou None."""
         atual = self.itens.cabeca
         while atual:
-            if atual.valor['nome'].lower() == nome_funcionario.lower():
-                return (f"Nome do Funcionário buscado: {atual.valor['nome']}, "
-                        f"Cargo: {atual.valor['cargo']}, Salário: {atual.valor['salario']}")
+            # Verifica se o valor atual é um dicionário e se o nome coincide
+            if isinstance(atual.valor, dict) and atual.valor.get('nome', '').lower() == nome_funcionario.lower():
+                return atual.valor  # Retorna o dicionário do funcionário
             atual = atual.prox
         return None  # Caso não encontre
+
             
     def exibir_itens(self):
         """Exibe todos os trabalhadores do restaurante."""

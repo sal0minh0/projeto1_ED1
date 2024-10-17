@@ -11,6 +11,7 @@ from Eventos.botao_janela import *
 from Restaurante import Cardapio, Faturamento, Restaurante
 from Restaurante.botao_janela import *
 from tkinter import *
+from tkinter import Tk, Button
 
 class Main:
     def __init__(self):

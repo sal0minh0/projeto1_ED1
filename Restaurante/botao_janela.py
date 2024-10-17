@@ -1,5 +1,6 @@
 from tkinter import *
-from tkinter import messagebox
+from tkinter import Tk, Entry, Button, END, messagebox, StringVar, OptionMenu
+from typing import Dict, Any
 from Restaurante.cardapio import Cardapio
 from Restaurante.faturamento import Faturamento
 from Restaurante.restaurante import Restaurante
@@ -157,69 +158,89 @@ class BaseInterface:
     def refresh_display(self):
         self.output_text.config(state=NORMAL)
         self.output_text.delete(1.0, END)
-    
+
         try:
-            items = self.get_items_list()
-            if items:
-                for i, item in enumerate(items, 1):
-                    formatted_item = f"Data: {item.get('data', '')}, Valor: R$ {item.get('valor', '')}"
-                    self.output_text.insert(END, f"{i}. {formatted_item}\n")
-            else:
-                self.output_text.insert(END, f"Não há {self.title_plural} cadastrados.")
+            itens = self.data_manager.exibir_itens()
+            self.output_text.insert(END, "Itens do cardápio:\n")
+            for item in itens.split('\n'):
+                if item:
+                    nome, preco = item.split(' - ')
+                    self.output_text.insert(END, f"{nome}: R${float(preco):.2f}\n")
         
+            mesas_status = self.data_manager.exibir_status_mesas()
+            self.output_text.insert(END, "\n\n")
+            self.output_text.insert(END, mesas_status)
         except Exception as e:
-            self.output_text.insert(END, f"Erro ao carregar {self.title_plural}.")
-            print(f"Error: {e}")
-    
+            self.output_text.insert(END, f"Erro ao carregar informações: {str(e)}")
+
         self.output_text.config(state=DISABLED)
         self.root.update_idletasks()
 
     def adicionar_item(self):
-        """Base method for adding an item. To be overridden by subclasses."""
         item = self.entry.get().strip()
         if item:
-            try:
-                self.data_manager.adicionar_item(item)
-                self.entry.delete(0, END)
-                self.atualizar_output(f"{self.title} '{item}' adicionado com sucesso!")
-                self.refresh_display()
-            except Exception as e:
-                messagebox.showerror("Erro", f"Erro ao adicionar {self.title.lower()}: {str(e)}")
+            if '-' not in item:
+                messagebox.showerror("Erro", "Formato inválido. Use: Nome do Item - Preço")
+                return
+            result = self.data_manager.adicionar_item(item)
+            self.entry.delete(0, END)
+            self.atualizar_output(result)
+            self.refresh_display()
         else:
             messagebox.showerror("Erro", f"Por favor, insira um {self.title.lower()} válido.")
 
-
     def remover_item(self):
-        item_texto = self.entry.get().strip().lower()  # Converte para minúsculas para evitar problemas de maiúsculas/minúsculas
+        item_texto = self.entry.get().strip().lower()  # Converte para minúsculas para evitar problemas de
+        print(f"Tentando remover o item: {item_texto}")  # Debug print
+
         if item_texto:
             try:
-            # Verificar se o nome está presente na lista de funcionários
+            # Verificar se o nome está presente na lista de itens (dicionário com chave 'nome')
                 if self.data_manager.itens.remover(item_texto):
+                    print(f"Item '{item_texto}' removido com sucesso!")  # Debug print
                     self.entry.delete(0, END)
                     self.atualizar_output(f"'{item_texto}' removido com sucesso!")
                     self.refresh_display()
                 else:
+                    print(f"Item '{item_texto}' não encontrado.")  # Debug print
                     messagebox.showerror("Erro", f"'{item_texto}' não encontrado.")
             except Exception as e:
-                messagebox.showerror("Erro", f"Erro ao remover : {str(e)}")
+                print(f"Erro ao remover item: {str(e)}")  # Debug print
+                messagebox.showerror("Erro", f"Erro ao remover: {str(e)}")
         else:
             messagebox.showerror("Erro", "Por favor, insira um nome para remover.")
 
+            
+    def imprimir_lista(self):
+        atual = self.cabeca
+        print("Lista de itens:")
+        while atual:
+            if isinstance(atual.valor, dict):
+                print(atual.valor.get('nome', 'Nome não encontrado'))
+            atual = atual.prox                       
+
+
 
     def buscar_item(self):
-        item_texto = self.entry.get().strip()
-        if item_texto:
+        entrada = self.entry.get().strip()
+        if entrada:
             try:
-                result, posicao = self.data_manager.buscar_um_item(item_texto)
-                if result:
-                    self.atualizar_output(f"Faturamento encontrado na posição {posicao + 1}: Data {result['data']}, Valor R$ {result['valor']:.2f}")
+                nome = entrada.split(',')[0].strip()
+                result = self.data_manager.buscar_um_item(nome)  # Passa apenas o nome
+                if result:  # Verifica se o resultado não é None
+                    self.atualizar_output(
+                        f"Funcionário encontrado:\n"
+                        f"Nome: {result['nome']}\n"
+                        f"Cargo: {result['cargo']}\n"
+                        f"Salário: R$ {float(result['salario']):.2f}"
+                    )
                 else:
-                    self.atualizar_output(f"'{item_texto}' não encontrado no faturamento.")
+                    self.atualizar_output(f"Funcionário '{nome}' não encontrado.")
             except Exception as e:
-                messagebox.showerror("Erro", f"Erro ao buscar faturamento: {str(e)}")
+                messagebox.showerror("Erro", f"Erro ao buscar funcionário: {str(e)}")
         else:
-            messagebox.showerror("Erro", "Por favor, insira um faturamento para buscar.")
-
+            messagebox.showerror("Erro", "Por favor, insira o nome do funcionário para buscar.")
+            
     def atualizar_output(self, message):
         self.output_text.config(state=NORMAL)
         self.output_text.insert(END, f"\n{message}\n")
@@ -235,19 +256,174 @@ class CardapioInterface(BaseInterface):
             title_plural="itens",
             example_text="(ex: Nome do Prato - Preço)"
         )
+        self.create_additional_widgets()
+
+    def create_additional_widgets(self):
+        self.mesa_frame = Frame(self.root)
+        self.mesa_frame.pack(pady=10)
+
+        self.mesa_label = Label(self.mesa_frame, text="Número da Mesa:")
+        self.mesa_label.pack(side=LEFT)
+
+        self.mesa_entry = Entry(self.mesa_frame, width=10)
+        self.mesa_entry.pack(side=LEFT, padx=5)
+
+        self.cliente_frame = Frame(self.root)
+        self.cliente_frame.pack(pady=10)
+
+        self.cliente_label = Label(self.cliente_frame, text="Nome do Cliente:")
+        self.cliente_label.pack(side=LEFT)
+
+        self.cliente_entry = Entry(self.cliente_frame, width=30)
+        self.cliente_entry.pack(side=LEFT, padx=5)
+
+        self.mesa_buttons_frame = Frame(self.root)
+        self.mesa_buttons_frame.pack(pady=10)
+
+        self.adicionar_mesa_btn = Button(self.mesa_buttons_frame, text="Adicionar Mesa", command=self.adicionar_mesa)
+        self.adicionar_mesa_btn.pack(side=LEFT, padx=5)
+
+        self.ocupar_mesa_btn = Button(self.mesa_buttons_frame, text="Ocupar Mesa", command=self.ocupar_mesa)
+        self.ocupar_mesa_btn.pack(side=LEFT, padx=5)
+
+        self.liberar_mesa_btn = Button(self.mesa_buttons_frame, text="Liberar Mesa", command=self.liberar_mesa)
+        self.liberar_mesa_btn.pack(side=LEFT, padx=5)
+
+        self.status_mesas_btn = Button(self.mesa_buttons_frame, text="Status das Mesas", command=self.exibir_status_mesas)
+        self.status_mesas_btn.pack(side=LEFT, padx=5)
+
+    def create_button(self, text, command):
+        button = Button(self.mesa_buttons_frame, text=text, command=command)
+        button.pack(side=LEFT, padx=5)
+
+    def clear_example_text(self, event, entry):
+        if entry.get() == "Ex: 1":
+            entry.delete(0, END)
+
+    def restore_example_text(self, event, entry):
+        if not entry.get():
+            entry.insert(0, "Ex: 1")
+            
+    def adicionar_mesa(self):
+        numero_mesa = self.mesa_entry.get().strip()
+        if numero_mesa:
+            result = self.data_manager.adicionar_mesa(numero_mesa)
+            self.atualizar_output(result)
+            self.mesa_entry.delete(0, END)
+        else:
+            messagebox.showerror("Erro", "Por favor, insira um número de mesa.")
+
+    def ocupar_mesa(self):
+        numero_mesa = self.mesa_entry.get().strip()
+        cliente = self.cliente_entry.get().strip()
+        if numero_mesa and cliente:
+            result = self.data_manager.ocupar_mesa(numero_mesa, cliente)
+            self.atualizar_output(result)
+            self.mesa_entry.delete(0, END)
+            self.cliente_entry.delete(0, END)
+        else:
+            messagebox.showerror("Erro", "Por favor, insira o número da mesa e o nome do cliente.")
+
+    def liberar_mesa(self):
+        numero_mesa = self.mesa_entry.get().strip()
+        if numero_mesa:
+            result = self.data_manager.liberar_mesa(numero_mesa)
+            self.atualizar_output(result)
+            self.mesa_entry.delete(0, END)
+        else:
+            messagebox.showerror("Erro", "Por favor, insira o número da mesa.")
+
+    def exibir_status_mesas(self):
+        status = self.data_manager.exibir_status_mesas()
+        self.atualizar_output(status)
+
+    def refresh_display(self):
+        self.output_text.config(state=NORMAL)
+        self.output_text.delete(1.0, END)
+
+        try:
+            itens = self.data_manager.exibir_itens()
+            self.output_text.insert(END, "Itens do cardápio:\n")
+            self.output_text.insert(END, itens)
+            
+            mesas_status = self.data_manager.exibir_status_mesas()
+            self.output_text.insert(END, "\n\n")
+            self.output_text.insert(END, mesas_status)
+        except Exception as e:
+            self.output_text.insert(END, f"Erro ao carregar informações: {str(e)}")
+
+        self.output_text.config(state=DISABLED)
+        self.root.update_idletasks()
 
     def adicionar_item(self):
         item = self.entry.get().strip()
         if item:
-            try:
-                self.data_manager.adicionar_item(item)
-                self.entry.delete(0, END)
-                self.atualizar_output(f"{self.title} '{item}' adicionado ao cardápio com sucesso!")
-                self.refresh_display()
-            except Exception as e:
-                messagebox.showerror("Erro", f"Erro ao adicionar {self.title.lower()}: {str(e)}")
+            result = self.data_manager.adicionar_item(item)
+            self.entry.delete(0, END)
+            self.atualizar_output(result)
+            self.refresh_display()
         else:
             messagebox.showerror("Erro", f"Por favor, insira um {self.title.lower()} válido.")
+
+    def remover_item(self):
+        item_nome = self.entry.get().strip()  # Obtém o nome do item a ser removido
+        if item_nome:
+            print(f"Tentando remover item: '{item_nome}'")  # Debug print
+            
+            # Imprime os itens atuais no cardápio para fins de depuração
+            print("Items no cardápio:")
+            atual = self.data_manager.itens.cabeca
+            item_encontrado = False  # Flag para saber se o item foi encontrado
+            while atual:
+                if isinstance(atual.valor, dict):  # Verifica se é um dicionário
+                    nome_item = atual.valor.get('nome', None)
+                    print(f"- {nome_item if nome_item else 'Nome não encontrado'}")
+                    
+                    # Se o nome do item for encontrado, chama a função para removê-lo
+                    if nome_item == item_nome:
+                        item_encontrado = True
+                        break
+                else:
+                    print(f"- Tipo inesperado: {type(atual.valor)}")
+                atual = atual.prox
+
+            if item_encontrado:
+                result = self.data_manager.remover_item(item_nome)
+                self.entry.delete(0, END)
+                self.atualizar_output(result)
+                self.refresh_display()
+            else:
+                print(f"Item '{item_nome}' não encontrado na lista.")
+                self.atualizar_output(f"Item '{item_nome}' não encontrado")
+        else:
+            messagebox.showerror("Erro", "Por favor, insira o nome do item para remover.")
+
+
+    def buscar_item(self):
+        item = self.entry.get().strip()
+        if item:
+            result = self.data_manager.buscar_um_item(item)
+            self.atualizar_output(result)
+        else:
+            messagebox.showerror("Erro", f"Por favor, insira um {self.title.lower()} para buscar.")
+
+    def editar_item(self):
+        item_atual = self.entry.get().strip()
+        novo_item = self.new_value_entry.get().strip()
+        if item_atual and novo_item:
+            result = self.data_manager.atualizar_item(item_atual, novo_item)
+            self.entry.delete(0, END)
+            self.new_value_entry.delete(0, END)
+            self.atualizar_output(result)
+            self.refresh_display()
+        else:
+            messagebox.showerror("Erro", "Por favor, insira valores válidos para atualização.")
+            
+    def atualizar_output(self, message):
+        self.output_text.config(state=NORMAL)
+        self.output_text.insert(END, f"\n{message}\n")
+        self.output_text.see(END)
+        self.output_text.config(state=DISABLED)
 
 class FaturamentoInterface(BaseInterface):
     def __init__(self, root, faturamento):
@@ -372,7 +548,7 @@ class FaturamentoInterface(BaseInterface):
 
 class RestauranteInterface(BaseInterface):
     def __init__(self, root, restaurante):
-        # Create the total salary frame before calling super().__init__
+        # Cria o quadro de salário total antes de chamar super().__init__
         self.total_frame = Frame(root)
         self.total_frame.pack(pady=5)
         
@@ -382,7 +558,7 @@ class RestauranteInterface(BaseInterface):
         )
         self.total_salary_label.pack()
         
-        # Call parent's init
+        # Chama a inicialização da classe pai
         super().__init__(
             root=root,
             data_manager=restaurante,
@@ -392,7 +568,7 @@ class RestauranteInterface(BaseInterface):
         )
 
     def refresh_display(self):
-        """Override refresh_display to show employees and update total salary"""
+        """Sobrescreve refresh_display para mostrar funcionários e atualizar salário total"""
         self.output_text.config(state=NORMAL)
         self.output_text.delete(1.0, END)
     
@@ -412,7 +588,7 @@ class RestauranteInterface(BaseInterface):
             else:
                 self.output_text.insert(END, f"Não há {self.title_plural} cadastrados.")
             
-            # Update total salary label
+            # Atualiza o rótulo do salário total
             self.total_salary_label.config(
                 text=f"Total em Salários: R$ {total_salary:.2f}"
             )
@@ -428,7 +604,7 @@ class RestauranteInterface(BaseInterface):
         entrada = self.entry.get().strip()
         if entrada:
             try:
-                # Split the input into name, role and salary
+                # Divide a entrada em nome, cargo e salário
                 nome, cargo, salario = entrada.split(',')
                 salario = float(salario.strip())
                 
@@ -454,16 +630,12 @@ class RestauranteInterface(BaseInterface):
         if entrada:
             try:
                 nome = entrada.split(',')[0].strip()
-                atual = self.data_manager.itens.cabeca
-                while atual:
-                    if atual.valor.get('nome') == nome:
-                        if self.data_manager.itens.remover(atual.valor):
-                            self.entry.delete(0, END)
-                            self.atualizar_output(f"Funcionário '{nome}' removido com sucesso!")
-                            self.refresh_display()
-                            return
-                    atual = atual.prox
-                messagebox.showerror("Erro", "Funcionário não encontrado.")
+                if self.data_manager.remover_item(nome):  # Chama o método correto
+                    self.entry.delete(0, END)
+                    self.atualizar_output(f"Funcionário '{nome}' removido com sucesso!")
+                    self.refresh_display()
+                else:
+                    messagebox.showerror("Erro", "Funcionário não encontrado.")
             except Exception as e:
                 messagebox.showerror("Erro", f"Erro ao remover funcionário: {str(e)}")
         else:
@@ -474,10 +646,10 @@ class RestauranteInterface(BaseInterface):
         if entrada:
             try:
                 nome = entrada.split(',')[0].strip()
-                result, posicao = self.data_manager.buscar_um_item({'nome': nome})
+                result = self.data_manager.buscar_um_item(nome)  # Passa apenas o nome
                 if result:
                     self.atualizar_output(
-                        f"Funcionário encontrado na posição {posicao + 1}:\n"
+                        f"Funcionário encontrado:\n"
                         f"Nome: {result['nome']}\n"
                         f"Cargo: {result['cargo']}\n"
                         f"Salário: R$ {float(result['salario']):.2f}"
@@ -495,22 +667,15 @@ class RestauranteInterface(BaseInterface):
         
         if item_atual and novo_item:
             try:
-                # Parse current item
+                # Extrai o nome atual
                 nome_atual = item_atual.split(',')[0].strip()
                 
-                # Parse new item
+                # Extrai os novos valores
                 novo_nome, novo_cargo, novo_salario = novo_item.split(',')
                 novo_salario = float(novo_salario.strip())
                 
-                # Create dictionaries for current and new items
-                item_atual_dict = {'nome': nome_atual}
-                novo_item_dict = {
-                    'nome': novo_nome.strip(),
-                    'cargo': novo_cargo.strip(),
-                    'salario': novo_salario
-                }
-                
-                if self.data_manager.atualizar_item(item_atual_dict, novo_item_dict):
+                # Atualiza o funcionário
+                if self.data_manager.atualizar_item(nome_atual, novo_nome.strip(), novo_cargo.strip(), novo_salario):
                     self.entry.delete(0, END)
                     self.new_value_entry.delete(0, END)
                     self.atualizar_output(f"Funcionário atualizado com sucesso!")
@@ -523,6 +688,7 @@ class RestauranteInterface(BaseInterface):
                 messagebox.showerror("Erro", f"Erro ao editar funcionário: {str(e)}")
         else:
             messagebox.showerror("Erro", "Por favor, insira valores válidos para atualização.")
+
 
 class Botao:
     def __init__(self, root):

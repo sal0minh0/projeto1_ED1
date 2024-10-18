@@ -1,9 +1,21 @@
-# projeto1_ED1
-Projeto de implementação de várias estruturas de dados<br>
-Basear os Readmes dos projetos passados<br>
-Aprimorar esse Readme e deixar bem resumido do que eu fiz<br><br>
+<h1 align="center">
+<img src="./assets/RockInRio_1985.webp"/>
+<p>Rock in Rio 2024 🎸</p>
+</h1>
 
-#####################Revisar o que eu implementei no listas.zip############################################<br><br>
- <s> #####################Colocar sim ou nao na primeira lista?################################################# </s> <br><br>
-#####################Retirar os comentarios desnecessários nos codigos#####################################<br><br>
-#####################Comentar na terceira lista############################################################
+<h2 align="center"><p>📌 Objetivo do programa</p</h2>
+
+#### *Armazenar diversas informações de serviços disponíveis no show*
+###### *O Foco do programa é para os funcionários do evento*
+###### ***Um Projeto de implementação de várias estruturas de dados***
+
+<h2 align="center">⚙️Quais as funções desse programa?</h2>
+
+<h2 align="center">🛠️Quais as ferramentas usadas nesse projeto?</h2>
+
+- [Python](https://docs.python.org/3/)🐍
+- [Tk](https://docs.python.org/pt-br/3/library/tkinter.html) 🪟
+
+<h2 align="center">📂O que tem em cada pasta?</h2> 
+
+<h2 align="center">🧐Como executar?</h2>

@@ -238,6 +238,14 @@ class Botao:
         self.consulta = Consulta()
         self.instrumento = Instrumento()
         self.paciente = Paciente()
+        
+    def center_window(self, window, width, height):
+            window.update_idletasks()  # Ensure window size is up to date
+            screen_width = window.winfo_screenwidth()
+            screen_height = window.winfo_screenheight()
+            x = (screen_width - width) // 2
+            y = (screen_height - height) // 2
+            window.geometry(f"{width}x{height}+{x}+{y}")     
 
     def botao_clinica(self):
         clinica_window = Toplevel(self.root)

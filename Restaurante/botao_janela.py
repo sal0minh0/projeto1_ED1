@@ -1,6 +1,5 @@
 from tkinter import *
-from tkinter import Tk, Entry, Button, END, messagebox, StringVar, OptionMenu
-from typing import Dict, Any
+from tkinter import Entry, Button, END, messagebox
 from Restaurante.cardapio import Cardapio
 from Restaurante.faturamento import Faturamento
 from Restaurante.restaurante import Restaurante
@@ -676,11 +675,19 @@ class Botao:
         self.restaurante = Restaurante()
         self.faturamento = Faturamento()
         self.cardapio = Cardapio()
-
+        
+    def center_window(self, window, width, height):
+        window.update_idletasks()  # Ensure window size is up to date
+        screen_width = window.winfo_screenwidth()
+        screen_height = window.winfo_screenheight()
+        x = (screen_width - width) // 2
+        y = (screen_height - height) // 2
+        window.geometry(f"{width}x{height}+{x}+{y}")
+        
     def botao_restaurante(self):
         restaurante_window = Toplevel(self.root)
         restaurante_window.title("O Restaurante")
-
+        
         restaurante_btn = Button(restaurante_window, text="Funcionários", command=self.abrir_restaurante)
         restaurante_btn.pack(pady=10)
 
@@ -705,4 +712,5 @@ class Botao:
         cardapio_window = Toplevel(self.root)
         cardapio_window.title("Gerenciar Cardápio")
         CardapioInterface(cardapio_window, self.cardapio)
+
         

@@ -199,7 +199,7 @@ class ConvidadoInterface(BaseInterface):
             data_manager=convidado,
             title="Convidado",
             title_plural="convidados",
-            example_text="(ex: Nome - N° de Inscrição - Qual Evento está Inscrito)"
+            example_text="(ex: Nome)"
         )
         
         # Add the "Número de Inscrição" field below "Nome"
@@ -326,6 +326,14 @@ class Botao:
         self.convidado = Convidado()
         self.cronograma = Cronograma()
         self.playlist = Playlist()
+        
+    def center_window(self, window, width, height):
+            window.update_idletasks()  # Ensure window size is up to date
+            screen_width = window.winfo_screenwidth()
+            screen_height = window.winfo_screenheight()
+            x = (screen_width - width) // 2
+            y = (screen_height - height) // 2
+            window.geometry(f"{width}x{height}+{x}+{y}")
 
     def botao_evento(self):
         evento_window = Toplevel(self.root)

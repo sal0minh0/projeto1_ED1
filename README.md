@@ -24,12 +24,13 @@
 
 <div align = center>
 
-[![Gif-Exemplo do Projeto](./assets/videozinho.gif "Gif do Video")]
+![Gif-Exemplo do Projeto](./assets/videozinho.gif "Gif do Video")
+
 </div>
 
 <h6 align="center">
 
-[![Vídeo do Projeto Imagem](./assets/video_do_projeto.png)]
+![Vídeo do Projeto Imagem](./assets/video_do_projeto.png)
 
 </h6>
 

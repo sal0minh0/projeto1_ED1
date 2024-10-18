@@ -35,34 +35,21 @@ class Faturamento:
             print(f"Erro ao adicionar faturamento: {str(e)}")
             raise
         
-    def remover_item(self, item_str):
-        """Remove um valor de vendas do faturamento
-        Espera uma string no formato 'data - valor'"""
+    def remover_item(self, data):
+        """Remove um valor de vendas do faturamento baseado apenas na data"""
         try:
-            # Parse the input string
-            partes = item_str.split('-')
-            if len(partes) != 2:
-                raise ValueError("Formato inválido. Use: 'data - valor'")
-            
-            data = partes[0].strip()
-            valor = float(partes[1].strip().replace('R$', '').replace(',', '.'))
-            
-            # Create a dictionary to match the structure used in adicionar_item
-            item_to_remove = {'data': data, 'valor': valor}
+            data = data.strip()
             
             # Define a custom comparison function for matching items
-            def compare_items(node_item, search_item):
-                return (node_item.get('data') == search_item.get('data') and 
-                       abs(node_item.get('valor', 0) - search_item.get('valor', 0)) < 0.01)
+            def compare_items(node_item, search_data):
+                return node_item.get('data') == search_data
             
             # Try to remove the item
-            if self.itens.remover(item_to_remove, compare_func=compare_items):
-                return f"Faturamento removido: Data {data}, Valor R$ {valor:.2f}"
+            if self.itens.remover(data, compare_func=compare_items):
+                return f"Faturamento removido: Data {data}"
             else:
-                return f"Faturamento não encontrado: Data {data}, Valor R$ {valor:.2f}"
-                
-        except ValueError as e:
-            return f"Erro ao remover faturamento: {str(e)}"
+                return f"Faturamento não encontrado: Data {data}"
+                    
         except Exception as e:
             return f"Erro ao remover faturamento: {str(e)}"
         

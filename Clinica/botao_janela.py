@@ -205,7 +205,7 @@ class PacienteInterface(BaseInterface):
             data_manager=paciente,
             title="Paciente",
             title_plural="pacientes",
-            example_text="(ex: Nome - Idade - Condição - Última Consulta)"
+            example_text="(ex: Nome, Idade, Condição, Última Consulta)"
         )
         self.historico_button = Button(
             self.action_frame, 

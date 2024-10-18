@@ -42,7 +42,7 @@ class Restaurante:
                     atual.valor['nome'] = novo_nome
                 if novo_cargo:
                     atual.valor['cargo'] = novo_cargo
-                if novo_salario:
+                if novo_salario is not None:
                     atual.valor['salario'] = novo_salario
                 print(f"Funcionário '{nome_atual}' atualizado com sucesso.")
                 return True  # Funcionário atualizado com sucesso

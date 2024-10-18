@@ -470,20 +470,22 @@ class FaturamentoInterface(BaseInterface):
             messagebox.showerror("Erro", "Por favor, insira um faturamento válido.")
 
     def remover_item(self):
-        item = self.entry.get().strip()
-        if item:
-            try:
-                # Tenta remover o item usando a função da classe Faturamento
-                if self.data_manager.remover_item(item):
-                    self.entry.delete(0, END)
-                    self.atualizar_output(f"Faturamento removido: {item}")
-                    self.refresh_display()
-                else:
-                    self.atualizar_output(f"Faturamento não encontrado: {item}")
-            except Exception as e:
-                messagebox.showerror("Erro", f"Erro ao remover faturamento: {str(e)}")
-        else:
-            messagebox.showerror("Erro", "Por favor, insira um faturamento para remover.")
+        item_nome = self.entry.get().strip()
+        if not item_nome:  # Check if empty
+            messagebox.showerror("Erro", "Por favor, insira o nome do item para remover.")
+            return
+        
+        try:
+            item_nome = item_nome.split(' - ')[0]  # Get just the name part
+            result = self.data_manager.remover_item(item_nome)
+            if "removido" in result:
+                self.entry.delete(0, END)
+                self.atualizar_output(result)
+                self.refresh_display()
+            else:
+                messagebox.showerror("Erro", result)
+        except Exception as e:
+            messagebox.showerror("Erro", f"Erro ao remover item: {str(e)}")
 
     def buscar_item(self):
         item = self.entry.get().strip()

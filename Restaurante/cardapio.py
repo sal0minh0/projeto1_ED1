@@ -41,72 +41,96 @@ class Cardapio:
             return f"Erro ao adicionar item: {str(e)}"
 
     def remover_item(self, nome_alimento):
-        print(f"Tentando remover item do cardápio: '{nome_alimento}'")
-
-        print("Conteúdo atual do cardápio:")
-        print(self.exibir_itens())
-
-        def comparar_nome(item):
-            if isinstance(item, dict):
-                item_nome = item.get('nome', '').lower()
-                # Remove espaços e hífens, e converte para minúsculas para comparação
-                nome_alimento_limpo = nome_alimento.lower().replace(' ', '').replace('-', '')
-                item_nome_limpo = item_nome.replace(' ', '').replace('-', '')
-                resultado = nome_alimento_limpo == item_nome_limpo
-                print(f"Comparando '{nome_alimento_limpo}' com '{item_nome_limpo}': {resultado}")
-                return resultado
-            return False
-
-        if self.itens.remover(comparar_nome):
-            print(f"Item '{nome_alimento}' removido com sucesso")
-            print("Cardápio após remoção:")
-            print(self.exibir_itens())
-            return f"'{nome_alimento}' removido do cardápio."
-        else:
-            print(f"Item '{nome_alimento}' não encontrado")
-            return f"'{nome_alimento}' não encontrado no cardápio."
+        if not nome_alimento:
+            return "Nome do item não pode estar vazio"
+            
+        atual = self.itens.cabeca
+        anterior = None
+        
+        # Normalize input by removing spaces and converting to lowercase
+        nome_alimento = nome_alimento.strip().lower()
+        
+        while atual is not None:
+            # Check if current node has a valid dictionary with 'nome' key
+            if isinstance(atual.valor, dict) and 'nome' in atual.valor:
+                # Normalize stored name same way as input
+                nome_atual = atual.valor['nome'].strip().lower()
+                
+                if nome_atual == nome_alimento:
+                    # If it's the first node
+                    if anterior is None:
+                        self.itens.cabeca = atual.prox
+                    else:
+                        anterior.prox = atual.prox
+                    return f"'{nome_alimento}' removido do cardápio."
+                    
+            anterior = atual
+            atual = atual.prox
+            
+        return f"'{nome_alimento}' não encontrado no cardápio."
 
 
     def atualizar_item(self, item_atual, novo_item):
-        # Quebra o valor do item atual no formato 'nome - preco'
         try:
-            nome_atual, _ = item_atual.split(' - ')  # Ignora o preço do item atual
-        except ValueError:
-            return "Erro: Formato do item atual inválido. O formato deve ser 'nome - preço'."
-
-        atual = self.itens.cabeca
-        while atual is not None:
-            print(f"Verificando nó com valor: {atual.valor}")  # Log de depuração
-            # Verifica se o nome do item atual corresponde ao 'nome_atual'
-            if atual.valor['nome'] == nome_atual:
-                try:
-                    nome_novo, preco_novo = novo_item.split(' - ')
-                    preco_novo = float(preco_novo)  # Converte o preço para float
-                except ValueError:
-                    return "Erro: Formato inválido. O novo valor deve estar no formato 'nome - preço'."
-                
-                # Atualiza o nome e o preço do item
-                atual.valor['nome'] = nome_novo
-                atual.valor['preco'] = preco_novo
-                return f"'{item_atual}' foi atualizado para '{novo_item}'."
+            # Parse the current item name and new item details
+            nome_atual = item_atual.split(' - ')[0].strip().lower()
+            nome_novo, preco_novo = novo_item.split(' - ')
+            preco_novo = float(preco_novo.strip())
             
-            atual = atual.prox
+            atual = self.itens.cabeca
+            while atual:
+                if isinstance(atual.valor, dict) and 'nome' in atual.valor:
+                    if atual.valor['nome'].lower() == nome_atual:
+                        # Update the item
+                        atual.valor['nome'] = nome_novo.strip()
+                        atual.valor['preco'] = preco_novo
+                        return f"Item atualizado para: {nome_novo} - {preco_novo:.2f}"
+                atual = atual.prox
+                
+            return f"Item '{item_atual}' não encontrado no cardápio."
+            
+        except ValueError:
+            return "Formato inválido. Use: 'Nome - Preço'"
+        except Exception as e:
+            return f"Erro ao atualizar item: {str(e)}"
 
-        return f"'{item_atual}' não encontrado no cardápio."
-
-    def buscar_um_item(self, alimento):
+    def buscar_um_item(self, nome_alimento):
+        """
+        Busca um item no cardápio pelo nome.
+        
+        Args:
+            nome_alimento (str): Nome do alimento a ser buscado
+            
+        Returns:
+            str: Mensagem indicando se o item foi encontrado e seus detalhes
+        """
+        if not nome_alimento:
+            return "Nome do item não pode estar vazio"
+            
+        # Trata o caso onde o usuário pode ter inserido o nome com o preço
+        try:
+            nome_alimento = nome_alimento.split(' - ')[0]
+        except:
+            pass
+            
+        # Normaliza o nome do alimento (remove espaços extras e converte para minúsculo)
+        nome_alimento = nome_alimento.strip().lower()
+        
         atual = self.itens.cabeca
-        posicao = 0
-        alimento_limpo = alimento.strip().lower()  # Limpa e converte o nome do alimento para minúsculas
-        while atual:
-            if isinstance(atual.valor, dict):
-                nome_item = atual.valor['nome'].strip().lower()  # Limpa e converte o nome do item para minúsculas
-                if nome_item == alimento_limpo:
-                    return f"'{alimento}' encontrado na posição {posicao + 1} do cardápio. Preço: R${atual.valor['preco']:.2f}"
-            atual = atual.prox
+        posicao = 1
+        
+        while atual is not None:
+            if isinstance(atual.valor, dict) and 'nome' in atual.valor:
+                # Normaliza o nome do item atual para comparação
+                nome_atual = atual.valor['nome'].strip().lower()
+                
+                if nome_atual == nome_alimento:
+                    return f"'{atual.valor['nome']}' encontrado na posição {posicao} do cardápio. Preço: R${atual.valor['preco']:.2f}"
+                    
             posicao += 1
-        return f"'{alimento}' não encontrado no cardápio."
-
+            atual = atual.prox
+            
+        return f"'{nome_alimento}' não encontrado no cardápio."
 
     def exibir_itens(self):
         itens = []

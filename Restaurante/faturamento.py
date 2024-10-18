@@ -36,29 +36,35 @@ class Faturamento:
             raise
         
     def remover_item(self, item_str):
+        """Remove um valor de vendas do faturamento
+        Espera uma string no formato 'data - valor'"""
         try:
             # Parse the input string
-            data, valor_str = item_str.split('-')
-            data = data.strip()
-            valor = float(valor_str.strip().replace('R$', '').replace(',', '.'))
+            partes = item_str.split('-')
+            if len(partes) != 2:
+                raise ValueError("Formato inválido. Use: 'data - valor'")
+            
+            data = partes[0].strip()
+            valor = float(partes[1].strip().replace('R$', '').replace(',', '.'))
             
             # Create a dictionary to match the structure used in adicionar_item
             item_to_remove = {'data': data, 'valor': valor}
             
-            # Define a custom comparison function
-            def compare_items(node_value, search_value):
-                return (node_value['data'] == search_value['data'] and 
-                        node_value['valor'] == search_value['valor'])
+            # Define a custom comparison function for matching items
+            def compare_items(node_item, search_item):
+                return (node_item.get('data') == search_item.get('data') and 
+                       abs(node_item.get('valor', 0) - search_item.get('valor', 0)) < 0.01)
             
+            # Try to remove the item
             if self.itens.remover(item_to_remove, compare_func=compare_items):
-                print(f"Faturamento removido: Data {data}, Valor R$ {valor:.2f}")
-                return True
+                return f"Faturamento removido: Data {data}, Valor R$ {valor:.2f}"
             else:
-                print(f"Faturamento não encontrado: Data {data}, Valor R$ {valor:.2f}")
-                return False
+                return f"Faturamento não encontrado: Data {data}, Valor R$ {valor:.2f}"
+                
         except ValueError as e:
-            print(f"Erro ao remover faturamento: {str(e)}")
-            return False
+            return f"Erro ao remover faturamento: {str(e)}"
+        except Exception as e:
+            return f"Erro ao remover faturamento: {str(e)}"
         
     def atualizar_item(self, item_atual, novo_item):
         """Atualiza um valor de vendas do faturamento"""

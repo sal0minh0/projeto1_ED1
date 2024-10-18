@@ -1,29 +1,16 @@
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-  <!-- Preconexão e carregamento das fontes -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100&family=Sixtyfour+Convergence&display=swap" rel="stylesheet">
-</head>
-<body>
-  <!-- Div com fonte personalizada -->
-  <div style="text-align: center; font-family: 'Sixtyfour Convergence', sans-serif; font-weight: 100;">
-    <h6>
-      <a href="#️vídeozinho-do-projeto-rodando" style="text-decoration: underline;">
-        <strong>video do projeto</strong>
-      </a>
-    </h6>
-</div>
-
+ <a href="#️vídeozinho-do-projeto-rodando"/>
+  <h1 align="center">
+    <strong>
+      <img src="./assets/video do projeto.png" width= "130" height= "8"/>
+    </strong>
+    </h1>
+  </a>
 
 <h1 align="center">
 <img src="./assets/RockInRio_1985.webp"/>
 <p>Rock in Rio 2024 🎸</p>
 </h1>
+
 <h2 align="center"><p>📌 Objetivo do programa</p</h2>
 <h3>
 

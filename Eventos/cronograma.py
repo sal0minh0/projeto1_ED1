@@ -36,6 +36,7 @@ class Cronograma:
             atual = atual.proximo
             if atual == self.itens.cauda.proximo:
                 break
+            
         return f"'{atividade}' não encontrado na lista."
     
     def exibir_itens(self):

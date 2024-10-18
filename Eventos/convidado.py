@@ -44,6 +44,7 @@ class Convidado:
                     atual.valor['numero_inscricao'] = novo_numero_inscricao
                 if novo_evento:
                     atual.valor['evento'] = novo_evento
+                    
                 print(f"Informações do convidado '{nome_atual}' atualizadas.")
                 return
             atual = atual.proximo

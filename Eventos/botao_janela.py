@@ -229,6 +229,7 @@ class ConvidadoInterface(BaseInterface):
                 self.refresh_display()
             except Exception as e:
                 messagebox.showerror("Erro", f"Erro ao adicionar convidado: {str(e)}")
+                
         else:
             messagebox.showerror("Erro", "Por favor, insira nome, número de inscrição e evento válidos.")
             

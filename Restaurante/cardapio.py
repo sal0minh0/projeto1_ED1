@@ -23,6 +23,7 @@ class Cardapio:
 
     def adicionar_item(self, item_string):
         print(f"Cardapio.adicionar_item chamado com: '{item_string}'")
+        
         try:
             nome, preco = item_string.split('-')
             nome = nome.strip()

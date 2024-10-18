@@ -36,6 +36,7 @@ class Restaurante:
     def atualizar_item(self, nome_atual, novo_nome=None, novo_cargo=None, novo_salario=None):
         """Atualiza um funcionário com base no nome atual."""
         atual = self.itens.cabeca
+        
         while atual:
             if isinstance(atual.valor, dict) and atual.valor.get('nome', '').lower() == nome_atual.lower():
                 if novo_nome:

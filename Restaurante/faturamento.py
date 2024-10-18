@@ -13,6 +13,7 @@ class Faturamento:
     def adicionar_item(self, item_str):
         """Adiciona um valor de vendas para calcular o faturamento
         Espera uma string no formato 'data - valor'"""
+        
         try:
             # Dividir a string de entrada em data e valor
             partes = item_str.split('-')

@@ -239,6 +239,7 @@ class BaseInterface:
             # Compara apenas o nome do item
             if atual.valor['nome'] == nome_item:
                 return f"Item encontrado: {atual.valor['nome']} por R${atual.valor['preco']:.2f}"
+            
             atual = atual.prox
 
         return f"'{item}' não encontrado no cardápio."

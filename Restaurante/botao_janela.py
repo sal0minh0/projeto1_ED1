@@ -218,7 +218,6 @@ class BaseInterface:
         else:
             messagebox.showerror("Erro", "Por favor, insira um nome para remover.")
 
-            
     def imprimir_lista(self):
         atual = self.cabeca
         print("Lista de itens:")

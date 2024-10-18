@@ -81,13 +81,15 @@ class Cardapio:
 
         return f"'{item_atual}' não encontrado no cardápio."
 
-
     def buscar_um_item(self, alimento):
-        _, posicao = self.itens.buscar(alimento)
-        if posicao != -1:
-            return f"'{alimento}' encontrado na posição {posicao+1} do cardápio."
-        else:
-            return f"'{alimento}' não encontrado no cardápio."
+        atual = self.itens.cabeca
+        posicao = 0
+        while atual:
+            if isinstance(atual.valor, dict) and atual.valor['nome'].lower() == alimento.lower():
+                return f"'{alimento}' encontrado na posição {posicao+1} do cardápio. Preço: R${atual.valor['preco']:.2f}"
+            atual = atual.prox
+            posicao += 1
+        return f"'{alimento}' não encontrado no cardápio."
 
     def exibir_itens(self):
         itens = []

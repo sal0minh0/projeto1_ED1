@@ -1,10 +1,8 @@
- <a href="#️vídeozinho-do-projeto-rodando"/>
-  <h1 align="center">
-    <strong>
-      <img src="./assets/video do projeto.png" width= "130" height= "8"/>
-    </strong>
-    </h1>
-  </a>
+<h6 align="center">
+
+[![Texto Alternativo](./assets/video_do_projeto.png)](#videozinho-do-projeto-rodando)
+
+</h6>
 
 <h1 align="center">
 <img src="./assets/RockInRio_1985.webp"/>

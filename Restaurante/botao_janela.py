@@ -177,16 +177,24 @@ class BaseInterface:
         self.root.update_idletasks()
 
     def adicionar_item(self):
+        print("Método adicionar_item chamado")  # Debug print
         item = self.entry.get().strip()
+        print(f"Item a ser adicionado: '{item}'")  # Debug print
         if item:
-            if '-' not in item:
-                messagebox.showerror("Erro", "Formato inválido. Use: Nome do Item - Preço")
-                return
-            result = self.data_manager.adicionar_item(item)
-            self.entry.delete(0, END)
-            self.atualizar_output(result)
-            self.refresh_display()
+            try:
+                print("Chamando self.data_manager.adicionar_item")  # Debug print
+                result = self.data_manager.adicionar_item(item)
+                print(f"Resultado da adição: {result}")  # Debug print
+                self.entry.delete(0, END)
+                print("Chamando self.atualizar_output")  # Debug print
+                self.atualizar_output(result)
+                print("Chamando self.refresh_display")  # Debug print
+                self.refresh_display()
+            except Exception as e:
+                print(f"Erro ao adicionar item: {str(e)}")  # Debug print
+                messagebox.showerror("Erro", f"Erro ao adicionar item: {str(e)}")
         else:
+            print("Item vazio")  # Debug print
             messagebox.showerror("Erro", f"Por favor, insira um {self.title.lower()} válido.")
 
     def remover_item(self):
@@ -242,6 +250,7 @@ class BaseInterface:
             messagebox.showerror("Erro", "Por favor, insira o nome do funcionário para buscar.")
             
     def atualizar_output(self, message):
+        print(f"Atualizando output com: '{message}'")  # Debug print
         self.output_text.config(state=NORMAL)
         self.output_text.insert(END, f"\n{message}\n")
         self.output_text.see(END)
@@ -291,6 +300,7 @@ class CardapioInterface(BaseInterface):
 
         self.status_mesas_btn = Button(self.mesa_buttons_frame, text="Status das Mesas", command=self.exibir_status_mesas)
         self.status_mesas_btn.pack(side=LEFT, padx=5)
+        
 
     def create_button(self, text, command):
         button = Button(self.mesa_buttons_frame, text=text, command=command)
@@ -366,38 +376,18 @@ class CardapioInterface(BaseInterface):
             messagebox.showerror("Erro", f"Por favor, insira um {self.title.lower()} válido.")
 
     def remover_item(self):
-        item_nome = self.entry.get().strip()  # Obtém o nome do item a ser removido
+        item_nome = self.entry.get().strip().split(' - ')[0]  # Remove apenas pelo nome
         if item_nome:
             print(f"Tentando remover item: '{item_nome}'")  # Debug print
-            
-            # Imprime os itens atuais no cardápio para fins de depuração
-            print("Items no cardápio:")
-            atual = self.data_manager.itens.cabeca
-            item_encontrado = False  # Flag para saber se o item foi encontrado
-            while atual:
-                if isinstance(atual.valor, dict):  # Verifica se é um dicionário
-                    nome_item = atual.valor.get('nome', None)
-                    print(f"- {nome_item if nome_item else 'Nome não encontrado'}")
-                    
-                    # Se o nome do item for encontrado, chama a função para removê-lo
-                    if nome_item == item_nome:
-                        item_encontrado = True
-                        break
-                else:
-                    print(f"- Tipo inesperado: {type(atual.valor)}")
-                atual = atual.prox
-
-            if item_encontrado:
-                result = self.data_manager.remover_item(item_nome)
+            result = self.data_manager.remover_item(item_nome)
+            if "removido" in result:
                 self.entry.delete(0, END)
                 self.atualizar_output(result)
-                self.refresh_display()
+                self.refresh_display()  # Atualiza a exibição após remover o item
             else:
-                print(f"Item '{item_nome}' não encontrado na lista.")
-                self.atualizar_output(f"Item '{item_nome}' não encontrado")
+                self.atualizar_output(result)
         else:
             messagebox.showerror("Erro", "Por favor, insira o nome do item para remover.")
-
 
     def buscar_item(self):
         item = self.entry.get().strip()
@@ -410,14 +400,21 @@ class CardapioInterface(BaseInterface):
     def editar_item(self):
         item_atual = self.entry.get().strip()
         novo_item = self.new_value_entry.get().strip()
+
         if item_atual and novo_item:
-            result = self.data_manager.atualizar_item(item_atual, novo_item)
-            self.entry.delete(0, END)
-            self.new_value_entry.delete(0, END)
-            self.atualizar_output(result)
-            self.refresh_display()
+            # Verifique se o item atual existe antes de tentar atualizar
+            item_existe = self.data_manager.buscar_um_item(item_atual)
+            if item_existe:  # Se o item foi encontrado
+                result = self.data_manager.atualizar_item(item_atual, novo_item)
+                self.entry.delete(0, END)
+                self.new_value_entry.delete(0, END)
+                self.atualizar_output(result)
+                self.refresh_display()  # Atualiza a exibição após a edição
+            else:
+                messagebox.showerror("Erro", f"O item '{item_atual}' não existe no cardápio.")
         else:
             messagebox.showerror("Erro", "Por favor, insira valores válidos para atualização.")
+
             
     def atualizar_output(self, message):
         self.output_text.config(state=NORMAL)

@@ -22,15 +22,23 @@ class Cardapio:
         self.mesas = lista_encadeada_simples.ListaEncadeadaSimples()
 
     def adicionar_item(self, item_string):
+        print(f"Cardapio.adicionar_item chamado com: '{item_string}'")  # Debug print
         try:
             nome, preco = item_string.split('-')
             nome = nome.strip()
             preco = float(preco.strip())
             item = {'nome': nome, 'preco': preco}
+            print(f"Item a ser inserido: {item}")  # Debug print
             self.itens.inserir_no_fim(item)
-            return f"'{nome}' adicionado ao cardápio por R${preco:.2f}."
-        except ValueError:
+            resultado = f"'{nome}' adicionado ao cardápio por R${preco:.2f}."
+            print(f"Resultado: {resultado}")  # Debug print
+            return resultado
+        except ValueError as e:
+            print(f"Erro de valor: {str(e)}")  # Debug print
             return "Formato inválido. Use: Nome do Item - Preço"
+        except Exception as e:
+            print(f"Erro inesperado: {str(e)}")  # Debug print
+            return f"Erro ao adicionar item: {str(e)}"
 
     def remover_item(self, nome_alimento):
         print(f"Tentando remover item do cardápio: '{nome_alimento}'")
@@ -46,11 +54,11 @@ class Cardapio:
             return f"'{nome_alimento}' não encontrado no cardápio."
 
 
-    def atualizar_item(self, alimento_atual, novo_alimento):
-        if self.itens.atualizar_lista(alimento_atual, novo_alimento):
-            return f"'{alimento_atual}' foi atualizado para '{novo_alimento}'."
+    def atualizar_item(self, item_atual, novo_item):
+        if self.itens.atualizar_lista(item_atual, novo_item):
+            return f"'{item_atual}' foi atualizado para '{novo_item}'."
         else:
-            return f"'{alimento_atual}' não encontrado no cardápio."
+            return f"'{item_atual}' não encontrado no cardápio."
 
     def buscar_um_item(self, alimento):
         _, posicao = self.itens.buscar(alimento)

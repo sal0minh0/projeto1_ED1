@@ -22,32 +22,45 @@ class Cardapio:
         self.mesas = lista_encadeada_simples.ListaEncadeadaSimples()
 
     def adicionar_item(self, item_string):
-        print(f"Cardapio.adicionar_item chamado com: '{item_string}'")  # Debug print
+        print(f"Cardapio.adicionar_item chamado com: '{item_string}'")
         try:
             nome, preco = item_string.split('-')
             nome = nome.strip()
             preco = float(preco.strip())
             item = {'nome': nome, 'preco': preco}
-            print(f"Item a ser inserido: {item}")  # Debug print
+            print(f"Item a ser inserido: {item}")
             self.itens.inserir_no_fim(item)
             resultado = f"'{nome}' adicionado ao cardápio por R${preco:.2f}."
-            print(f"Resultado: {resultado}")  # Debug print
+            print(f"Resultado: {resultado}")
             return resultado
         except ValueError as e:
-            print(f"Erro de valor: {str(e)}")  # Debug print
+            print(f"Erro de valor: {str(e)}")
             return "Formato inválido. Use: Nome do Item - Preço"
         except Exception as e:
-            print(f"Erro inesperado: {str(e)}")  # Debug print
+            print(f"Erro inesperado: {str(e)}")
             return f"Erro ao adicionar item: {str(e)}"
 
     def remover_item(self, nome_alimento):
         print(f"Tentando remover item do cardápio: '{nome_alimento}'")
-    
+
+        print("Conteúdo atual do cardápio:")
+        print(self.exibir_itens())
+
         def comparar_nome(item):
-            return isinstance(item, dict) and item.get('nome', '').lower() == nome_alimento.lower()
-    
+            if isinstance(item, dict):
+                item_nome = item.get('nome', '').lower()
+                # Remove espaços e hífens, e converte para minúsculas para comparação
+                nome_alimento_limpo = nome_alimento.lower().replace(' ', '').replace('-', '')
+                item_nome_limpo = item_nome.replace(' ', '').replace('-', '')
+                resultado = nome_alimento_limpo == item_nome_limpo
+                print(f"Comparando '{nome_alimento_limpo}' com '{item_nome_limpo}': {resultado}")
+                return resultado
+            return False
+
         if self.itens.remover(comparar_nome):
             print(f"Item '{nome_alimento}' removido com sucesso")
+            print("Cardápio após remoção:")
+            print(self.exibir_itens())
             return f"'{nome_alimento}' removido do cardápio."
         else:
             print(f"Item '{nome_alimento}' não encontrado")
@@ -84,12 +97,16 @@ class Cardapio:
     def buscar_um_item(self, alimento):
         atual = self.itens.cabeca
         posicao = 0
+        alimento_limpo = alimento.strip().lower()  # Limpa e converte o nome do alimento para minúsculas
         while atual:
-            if isinstance(atual.valor, dict) and atual.valor['nome'].lower() == alimento.lower():
-                return f"'{alimento}' encontrado na posição {posicao+1} do cardápio. Preço: R${atual.valor['preco']:.2f}"
+            if isinstance(atual.valor, dict):
+                nome_item = atual.valor['nome'].strip().lower()  # Limpa e converte o nome do item para minúsculas
+                if nome_item == alimento_limpo:
+                    return f"'{alimento}' encontrado na posição {posicao + 1} do cardápio. Preço: R${atual.valor['preco']:.2f}"
             atual = atual.prox
             posicao += 1
         return f"'{alimento}' não encontrado no cardápio."
+
 
     def exibir_itens(self):
         itens = []

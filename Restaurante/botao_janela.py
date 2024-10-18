@@ -421,7 +421,6 @@ class CardapioInterface(BaseInterface):
 
 class FaturamentoInterface(BaseInterface):
     def __init__(self, root, faturamento):
-        # Create the label before calling super().__init__
         self.total_frame = Frame(root)
         self.total_frame.pack(pady=5)
         
@@ -431,113 +430,103 @@ class FaturamentoInterface(BaseInterface):
         )
         self.faturamento_total_label.pack()
         
-        # Now call the parent's init
         super().__init__(
             root=root,
             data_manager=faturamento,
             title="Faturamento",
             title_plural="faturamentos",
-            example_text="(ex: XX/XX/XX - XX.X)"
+            example_text="(ex: DD/MM/AA - XX.XX)"
         )
 
     def refresh_display(self):
-        """Override refresh_display to update total"""
-        super().refresh_display()
-        # Use the existing somar_e_faturamento method
-        total = self.data_manager.somar_e_faturamento()
-        self.faturamento_total_label.config(
-            text=f"Faturamento Total Bruto: R$ {total:.2f}"
-        )
+        self.output_text.config(state=NORMAL)
+        self.output_text.delete(1.0, END)
+
+        try:
+            itens = self.data_manager.exibir_itens()
+            self.output_text.insert(END, itens)
+            
+            total = self.data_manager.somar_e_faturamento()
+            self.faturamento_total_label.config(
+                text=f"Faturamento Total Bruto: R$ {total:.2f}"
+            )
+        except Exception as e:
+            self.output_text.insert(END, f"Erro ao carregar informações: {str(e)}")
+
+        self.output_text.config(state=DISABLED)
+        self.root.update_idletasks()
 
     def adicionar_item(self):
-        """Override adicionar_item to update total after adding"""
-        super().adicionar_item()
-        total = self.data_manager.somar_e_faturamento()
-        self.faturamento_total_label.config(
-            text=f"Faturamento Total Bruto: R$ {total:.2f}"
-        )
+        item = self.entry.get().strip()
+        if item:
+            try:
+                result = self.data_manager.adicionar_item(item)
+                self.entry.delete(0, END)
+                self.atualizar_output(f"Faturamento adicionado: {item}")
+                self.refresh_display()
+            except ValueError as e:
+                messagebox.showerror("Erro", str(e))
+        else:
+            messagebox.showerror("Erro", "Por favor, insira um faturamento válido.")
 
     def remover_item(self):
-        entrada = self.entry.get().strip()
-        if entrada:
+        item = self.entry.get().strip()
+        if item:
             try:
-                # Split the input into date and value
-                partes = entrada.split('-')
-                if len(partes) == 2:
-                    data = partes[0].strip()
-                    valor = float(partes[1].strip())
-                    
-                    # Create the item dictionary in the same format it was added
-                    item = {'data': data, 'valor': valor}
-                    
-                    # Debugging step: print item to ensure it's correct
-                    print(f"Tentando remover item: {item}")
-                    
-                    if self.data_manager.itens.remover(item):
-                        self.entry.delete(0, END)
-                        self.atualizar_output(f"Faturamento de {data} removido com sucesso!")
-                        self.refresh_display()
-                        
-                        # Update the total after removal
-                        total = self.data_manager.somar_e_faturamento()
-                        self.faturamento_total_label.config(
-                            text=f"Faturamento Total Bruto: R$ {total:.2f}"
-                        )
-                    else:
-                        messagebox.showerror("Erro", "Faturamento não encontrado.")
+                # Tenta remover o item usando a função da classe Faturamento
+                if self.data_manager.remover_item(item):
+                    self.entry.delete(0, END)
+                    self.atualizar_output(f"Faturamento removido: {item}")
+                    self.refresh_display()
                 else:
-                    messagebox.showerror("Erro", "Formato inválido. Use: DD/MM/AA - XX.X")
-            except ValueError:
-                messagebox.showerror("Erro", "Valor inválido. Use números para o valor.")
+                    self.atualizar_output(f"Faturamento não encontrado: {item}")
             except Exception as e:
                 messagebox.showerror("Erro", f"Erro ao remover faturamento: {str(e)}")
         else:
             messagebox.showerror("Erro", "Por favor, insira um faturamento para remover.")
-            
+
+    def buscar_item(self):
+        item = self.entry.get().strip()
+        if item:
+            try:
+                result, posicao = self.data_manager.buscar_um_item(item)
+                if result:
+                    self.atualizar_output(f"Faturamento encontrado na posição {posicao + 1}:\n"
+                                          f"Data: {result['data']}, Valor: R$ {result['valor']:.2f}")
+                else:
+                    self.atualizar_output(f"Faturamento não encontrado: {item}")
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao buscar faturamento: {str(e)}")
+        else:
+            messagebox.showerror("Erro", "Por favor, insira um faturamento para buscar.")
+
     def editar_item(self):
         item_atual = self.entry.get().strip()
         novo_item = self.new_value_entry.get().strip()
         
-        print(f"Tentando editar faturamento")
-        print(f"Item atual: {item_atual}")
-        print(f"Novo item: {novo_item}")
-        
         if item_atual and novo_item:
             try:
-                # Parse the current item
-                data_atual, valor_atual = item_atual.split('-')
-                data_atual = data_atual.strip()
-                valor_atual = float(valor_atual.strip().replace('R$', '').replace(',', '.'))
-                
-                # Parse the new item
-                nova_data, novo_valor = novo_item.split('-')
-                nova_data = nova_data.strip()
-                novo_valor = float(novo_valor.strip().replace('R$', '').replace(',', '.'))
-                
-                # Create dictionaries for current and new items
-                item_atual_dict = {'data': data_atual, 'valor': valor_atual}
-                novo_item_dict = {'data': nova_data, 'valor': novo_valor}
-                
-                print(f"Item atual analisado: {item_atual_dict}")
-                print(f"Novo item analisado: {novo_item_dict}")
-                
-                if self.data_manager.atualizar_item(item_atual_dict, novo_item_dict):
-                    print("Item atualizado com sucesso")
-                    self.entry.delete(0, END)
-                    self.new_value_entry.delete(0, END)
-                    self.atualizar_output(f"Faturamento atualizado com sucesso!")
-                    self.refresh_display()
+                item_atual_dict, _ = self.data_manager.buscar_um_item(item_atual)
+                if item_atual_dict:
+                    nova_data, novo_valor = novo_item.split('-')
+                    novo_item_dict = {
+                        'data': nova_data.strip(),
+                        'valor': float(novo_valor.strip())
+                    }
+                    if self.data_manager.atualizar_item(item_atual_dict, novo_item_dict):
+                        self.entry.delete(0, END)
+                        self.new_value_entry.delete(0, END)
+                        self.atualizar_output(f"Faturamento atualizado com sucesso!")
+                        self.refresh_display()
+                    else:
+                        messagebox.showerror("Erro", "Falha ao atualizar o faturamento.")
                 else:
-                    print("Item não encontrado para atualização")
                     messagebox.showerror("Erro", "Faturamento não encontrado.")
-            except ValueError as e:
-                print(f"Ocorreu um ValueError: {str(e)}")
+            except ValueError:
                 messagebox.showerror("Erro", "Formato inválido. Use: DD/MM/AA - XX.XX")
             except Exception as e:
-                print(f"Ocorreu um erro inesperado: {str(e)}")
                 messagebox.showerror("Erro", f"Erro ao editar faturamento: {str(e)}")
         else:
-            print("Campos de entrada vazios")
             messagebox.showerror("Erro", "Por favor, insira valores válidos para atualização.")
 
 class RestauranteInterface(BaseInterface):
@@ -624,7 +613,7 @@ class RestauranteInterface(BaseInterface):
         if entrada:
             try:
                 nome = entrada.split(',')[0].strip()
-                if self.data_manager.remover_item(nome):  # Chama o método correto
+                if self.data_manager.itens.remover(nome, chave_comparacao='nome'):
                     self.entry.delete(0, END)
                     self.atualizar_output(f"Funcionário '{nome}' removido com sucesso!")
                     self.refresh_display()

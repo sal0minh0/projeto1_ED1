@@ -30,12 +30,37 @@ class ListaEncadeadaSimples:
                 atual = atual.prox
             atual.prox = novo_no  # O último nó aponta para o novo nó
             
-    def remover(self, condicao):
+    def remover(self, valor_alvo, chave_comparacao=None, compare_func=None):
         atual = self.cabeca
         anterior = None
 
         while atual is not None:
-            if condicao(atual.valor):
+            if compare_func:
+                # Use a função de comparação personalizada se fornecida
+                if compare_func(atual.valor, valor_alvo):
+                    if anterior:
+                        anterior.prox = atual.prox
+                    else:
+                        self.cabeca = atual.prox
+                    return True
+            elif isinstance(atual.valor, dict) and isinstance(valor_alvo, dict):
+                # Compare dictionaries
+                if all(atual.valor.get(k) == v for k, v in valor_alvo.items()):
+                    if anterior:
+                        anterior.prox = atual.prox
+                    else:
+                        self.cabeca = atual.prox
+                    return True
+            elif isinstance(atual.valor, dict) and chave_comparacao:
+                # Compare dictionary value with a specific key
+                if atual.valor.get(chave_comparacao) == valor_alvo:
+                    if anterior:
+                        anterior.prox = atual.prox
+                    else:
+                        self.cabeca = atual.prox
+                    return True
+            elif atual.valor == valor_alvo:
+                # Direct comparison for non-dictionary values
                 if anterior:
                     anterior.prox = atual.prox
                 else:
@@ -45,7 +70,6 @@ class ListaEncadeadaSimples:
             atual = atual.prox
 
         return False
-
 
     def buscar(self, valor):
         """Busca um nó que contenha o valor que queremos"""

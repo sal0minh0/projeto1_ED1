@@ -23,10 +23,15 @@ class Restaurante:
     
     def remover_item(self, nome_funcionario):
         """Remove um funcionário pelo nome."""
-        if self.itens.remover(nome_funcionario):
+        def comparar_nome(item):
+            return isinstance(item, dict) and item.get('nome', '').lower() == nome_funcionario.lower()
+        
+        if self.itens.remover(comparar_nome):
             print(f"Funcionário '{nome_funcionario}' removido com sucesso.")
+            return True
         else:
             print(f"Funcionário '{nome_funcionario}' não encontrado.")
+            return False
 
     def atualizar_item(self, nome_atual, novo_nome=None, novo_cargo=None, novo_salario=None):
         """Atualiza um funcionário com base no nome atual."""

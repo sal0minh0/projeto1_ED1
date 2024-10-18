@@ -35,9 +35,30 @@ class Faturamento:
             print(f"Erro ao adicionar faturamento: {str(e)}")
             raise
         
-    def remover_item(self, vendas):
-        """Remove um valor de vendas"""
-        self.itens.remover(vendas)
+    def remover_item(self, item_str):
+        try:
+            # Parse the input string
+            data, valor_str = item_str.split('-')
+            data = data.strip()
+            valor = float(valor_str.strip().replace('R$', '').replace(',', '.'))
+            
+            # Create a dictionary to match the structure used in adicionar_item
+            item_to_remove = {'data': data, 'valor': valor}
+            
+            # Define a custom comparison function
+            def compare_items(node_value, search_value):
+                return (node_value['data'] == search_value['data'] and 
+                        node_value['valor'] == search_value['valor'])
+            
+            if self.itens.remover(item_to_remove, compare_func=compare_items):
+                print(f"Faturamento removido: Data {data}, Valor R$ {valor:.2f}")
+                return True
+            else:
+                print(f"Faturamento não encontrado: Data {data}, Valor R$ {valor:.2f}")
+                return False
+        except ValueError as e:
+            print(f"Erro ao remover faturamento: {str(e)}")
+            return False
         
     def atualizar_item(self, item_atual, novo_item):
         """Atualiza um valor de vendas do faturamento"""
@@ -85,10 +106,18 @@ class Faturamento:
             print(f"Erro ao analisar a string de busca: {str(e)}")
             return None, -1
     
-    def exibir_faturamento(self):
-        """Exibe os valores do faturamento"""
-        print("Valores do faturamento:")
-        self.itens.imprimir()
+    def exibir_itens(self):
+        """Retorna uma string formatada com os valores do faturamento"""
+        if self.itens.verificar_lista_vazia():
+            return "Não há itens de faturamento registrados."
+        
+        resultado = "Valores do faturamento:\n"
+        atual = self.itens.cabeca
+        while atual:
+            item = atual.valor
+            resultado += f"Data: {item['data']}, Valor: R$ {item['valor']:.2f}\n"
+            atual = atual.prox
+        return resultado
         
     def verificar_lista_vazia(self):
         """Verifica se o faturamento está vazio"""

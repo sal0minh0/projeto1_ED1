@@ -110,8 +110,7 @@ class ListaEncadeadaSimples:
                 atual.valor['nome'] = nome_novo
                 atual.valor['preco'] = preco_novo
                 return True
-
-            atual = atual.prox  # Move para o próximo nó
+            atual = atual.prox  # Move para o próximo no
 
         print(f"Valor '{anterior}' não encontrado na lista.")  # Log se o valor não for encontrado
         return False

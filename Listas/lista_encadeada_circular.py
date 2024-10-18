@@ -69,9 +69,8 @@ class ListaEncadeadaCircular:
         """Busca valores na lista e retorna o no na posicao"""
         if self.verificar_lista_vazia():
             return None
-        
         posicao = 0
-        atual = self.cauda.proximo # Começa com o nó após a cauda
+        atual = self.cauda.proximo # Começa com o nó apos a cauda
         
         while True:
             if atual.valor == valor:

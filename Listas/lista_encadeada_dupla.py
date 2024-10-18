@@ -73,6 +73,7 @@ class ListaEncadeadaDupla:
             no_encontrado.valor = novo_valor
             print(f"'{valor_atual}' foi atualizado para '{novo_valor}'.")
             return True
+        
         else:
             print(f"'{valor_atual}' não foi encontrado na lista para atualização.")
             return False

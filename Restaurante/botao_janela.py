@@ -227,27 +227,25 @@ class BaseInterface:
                 print(atual.valor.get('nome', 'Nome não encontrado'))
             atual = atual.prox                       
 
+    def buscar_um_item(self, item):
+        # Extrai apenas o nome do item, ignorando o preço
+        try:
+            nome_item, _ = item.split(' - ')  # Ignora o preço no split
+        except ValueError:
+            return "Erro: Formato de busca inválido. O formato deve ser 'nome - preço'."
+
+        atual = self.cabeca
+        while atual is not None:
+            print(f"Verificando nó com valor: {atual.valor}")  # Log de depuração
+
+            # Compara apenas o nome do item
+            if atual.valor['nome'] == nome_item:
+                return f"Item encontrado: {atual.valor['nome']} por R${atual.valor['preco']:.2f}"
+            atual = atual.prox
+
+        return f"'{item}' não encontrado no cardápio."
 
 
-    def buscar_item(self):
-        entrada = self.entry.get().strip()
-        if entrada:
-            try:
-                nome = entrada.split(',')[0].strip()
-                result = self.data_manager.buscar_um_item(nome)  # Passa apenas o nome
-                if result:  # Verifica se o resultado não é None
-                    self.atualizar_output(
-                        f"Funcionário encontrado:\n"
-                        f"Nome: {result['nome']}\n"
-                        f"Cargo: {result['cargo']}\n"
-                        f"Salário: R$ {float(result['salario']):.2f}"
-                    )
-                else:
-                    self.atualizar_output(f"Funcionário '{nome}' não encontrado.")
-            except Exception as e:
-                messagebox.showerror("Erro", f"Erro ao buscar funcionário: {str(e)}")
-        else:
-            messagebox.showerror("Erro", "Por favor, insira o nome do funcionário para buscar.")
             
     def atualizar_output(self, message):
         print(f"Atualizando output com: '{message}'")  # Debug print

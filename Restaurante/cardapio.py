@@ -55,10 +55,32 @@ class Cardapio:
 
 
     def atualizar_item(self, item_atual, novo_item):
-        if self.itens.atualizar_lista(item_atual, novo_item):
-            return f"'{item_atual}' foi atualizado para '{novo_item}'."
-        else:
-            return f"'{item_atual}' não encontrado no cardápio."
+        # Quebra o valor do item atual no formato 'nome - preco'
+        try:
+            nome_atual, _ = item_atual.split(' - ')  # Ignora o preço do item atual
+        except ValueError:
+            return "Erro: Formato do item atual inválido. O formato deve ser 'nome - preço'."
+
+        atual = self.itens.cabeca
+        while atual is not None:
+            print(f"Verificando nó com valor: {atual.valor}")  # Log de depuração
+            # Verifica se o nome do item atual corresponde ao 'nome_atual'
+            if atual.valor['nome'] == nome_atual:
+                try:
+                    nome_novo, preco_novo = novo_item.split(' - ')
+                    preco_novo = float(preco_novo)  # Converte o preço para float
+                except ValueError:
+                    return "Erro: Formato inválido. O novo valor deve estar no formato 'nome - preço'."
+                
+                # Atualiza o nome e o preço do item
+                atual.valor['nome'] = nome_novo
+                atual.valor['preco'] = preco_novo
+                return f"'{item_atual}' foi atualizado para '{novo_item}'."
+            
+            atual = atual.prox
+
+        return f"'{item_atual}' não encontrado no cardápio."
+
 
     def buscar_um_item(self, alimento):
         _, posicao = self.itens.buscar(alimento)

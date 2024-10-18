@@ -59,14 +59,39 @@ class ListaEncadeadaSimples:
         return None, -1  # Se percorrer toda a lista e não achar
 
     def atualizar_lista(self, anterior, novo_valor):
-        """Atualiza o valor de um nó na lista"""
-        atual = self.cabeca # Começa no início, no no cabeca
-        while atual is not None: # Percorre a lista até o final
-            if atual.valor == anterior: # Se o valor atual é o que queremos atualizar
-                atual.valor = novo_valor # Atualiza o valor
+        """Atualiza o valor de um nó na lista, baseado no nome"""
+        atual = self.cabeca  # Começa no início da lista
+
+        # Quebra o valor anterior no formato 'nome - preco'
+        try:
+            nome_anterior, _ = anterior.split(' - ')  # Ignora o preço na busca
+        except ValueError:
+            return "Erro: Formato inválido. O formato deve ser 'nome - preço'."
+
+        while atual is not None:
+            print(f"Verificando nó com valor: {atual.valor}")  # Log de depuração
+
+            # Verifica se o nome do item atual corresponde ao 'nome_anterior'
+            if atual.valor['nome'] == nome_anterior:
+                print(f"Encontrado! Atualizando '{anterior}' para '{novo_valor}'")
+
+                # Quebra o novo valor no formato 'nome - preco'
+                try:
+                    nome_novo, preco_novo = novo_valor.split(' - ')
+                    preco_novo = float(preco_novo)  # Converte o preço para float
+                except ValueError:
+                    return "Erro: Formato inválido. O novo valor deve estar no formato 'nome - preço'."
+
+                # Atualiza o nome e o preço do item
+                atual.valor['nome'] = nome_novo
+                atual.valor['preco'] = preco_novo
                 return True
-            atual = atual.prox # Move para o próximo nó
-        return False # Caso não encontrar o valor
+
+            atual = atual.prox  # Move para o próximo nó
+
+        print(f"Valor '{anterior}' não encontrado na lista.")  # Log se o valor não for encontrado
+        return False
+
 
     def imprimir(self):
         """Exibe os elementos da lista encadeada"""

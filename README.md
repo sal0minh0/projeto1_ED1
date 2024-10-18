@@ -16,15 +16,20 @@
 
 >>>  ***Um Projeto de implementação de várias estruturas de dados*** 
 
-<center>
+<h2 align = center>
 
-## 📽️Vídeozinho do projeto rodando
+ 📽️Vídeozinho do projeto rodando
 
-</center>
+</h2>
+
+<div align = center>
+
+[![Gif-Exemplo do Projeto](./assets/videozinho.gif "Gif do Video")]
+</div>
 
 <h6 align="center">
 
-[![Texto Alternativo](./assets/video_do_projeto.png)](#️vídeozinho-do-projeto-rodando)
+[![Vídeo do Projeto Imagem](./assets/video_do_projeto.png)]
 
 </h6>
 

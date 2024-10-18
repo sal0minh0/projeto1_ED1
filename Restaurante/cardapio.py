@@ -1,7 +1,7 @@
 import sys
 import os
 
-# Adicionando o diretorio "Restaurante" para a pasta Python
+# Adicionando o diretorio "Restaurante" para verificação no caminho de busca de módulos no Python
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Listas import lista_encadeada_simples
 
@@ -47,17 +47,17 @@ class Cardapio:
         atual = self.itens.cabeca
         anterior = None
         
-        # Normalize input by removing spaces and converting to lowercase
+        # Normaliza a entrada removendo espaços e convertendo para minúsculas
         nome_alimento = nome_alimento.strip().lower()
         
         while atual is not None:
-            # Check if current node has a valid dictionary with 'nome' key
+            # Verifica se o nó atual possui um dicionário válido com a chave 'nome'
             if isinstance(atual.valor, dict) and 'nome' in atual.valor:
-                # Normalize stored name same way as input
+                # Normaliza o nome armazenado da mesma forma que a entrada
                 nome_atual = atual.valor['nome'].strip().lower()
                 
                 if nome_atual == nome_alimento:
-                    # If it's the first node
+                    # Se for o primeiro nó
                     if anterior is None:
                         self.itens.cabeca = atual.prox
                     else:
@@ -72,7 +72,7 @@ class Cardapio:
 
     def atualizar_item(self, item_atual, novo_item):
         try:
-            # Parse the current item name and new item details
+            # Analisar o nome do item atual e os detalhes do novo item
             nome_atual = item_atual.split(' - ')[0].strip().lower()
             nome_novo, preco_novo = novo_item.split(' - ')
             preco_novo = float(preco_novo.strip())
@@ -81,7 +81,7 @@ class Cardapio:
             while atual:
                 if isinstance(atual.valor, dict) and 'nome' in atual.valor:
                     if atual.valor['nome'].lower() == nome_atual:
-                        # Update the item
+                        # Atualizar o item
                         atual.valor['nome'] = nome_novo.strip()
                         atual.valor['preco'] = preco_novo
                         return f"Item atualizado para: {nome_novo} - {preco_novo:.2f}"
@@ -95,27 +95,16 @@ class Cardapio:
             return f"Erro ao atualizar item: {str(e)}"
 
     def buscar_um_item(self, nome_alimento):
-        """
-        Busca um item no cardápio pelo nome.
-        
-        Args:
-            nome_alimento (str): Nome do alimento a ser buscado
-            
-        Returns:
-            str: Mensagem indicando se o item foi encontrado e seus detalhes
-        """
+        """Busca um item no cardápio pelo nome."""
         if not nome_alimento:
             return "Nome do item não pode estar vazio"
-            
         # Trata o caso onde o usuário pode ter inserido o nome com o preço
         try:
             nome_alimento = nome_alimento.split(' - ')[0]
         except:
             pass
-            
         # Normaliza o nome do alimento (remove espaços extras e converte para minúsculo)
         nome_alimento = nome_alimento.strip().lower()
-        
         atual = self.itens.cabeca
         posicao = 1
         

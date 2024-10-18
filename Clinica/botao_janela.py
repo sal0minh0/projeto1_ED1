@@ -5,7 +5,7 @@ from Clinica.instrumento import Instrumento
 from Clinica.paciente import Paciente
 
 class BaseInterface:
-    """Base class for all interfaces with common functionality"""
+    """Classe base para todas as interfaces com funcionalidades comuns"""
     def __init__(self, root, data_manager, title, title_plural, example_text):
         self.root = root
         self.data_manager = data_manager
@@ -93,7 +93,7 @@ class BaseInterface:
         self.refresh_display()
 
     def editar_item(self):
-        """Edit an existing item with a new value"""
+        """Editar um item existente com um novo valor"""
         item_atual = self.entry.get().strip()
         novo_item = self.new_value_entry.get().strip()
         
@@ -240,7 +240,7 @@ class Botao:
         self.paciente = Paciente()
         
     def center_window(self, window, width, height):
-            window.update_idletasks()  # Ensure window size is up to date
+            window.update_idletasks()  # Garantir que o tamanho da janela esteja atualizado
             screen_width = window.winfo_screenwidth()
             screen_height = window.winfo_screenheight()
             x = (screen_width - width) // 2

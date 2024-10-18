@@ -3,12 +3,14 @@ import os
 from tkinter import *
 from tkinter import Tk, Button
 
-# Add the parent directory to sys.path
+# Adicionar diretorio Pai para verificação no caminho de busca de módulos no Python
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from Clinica import Consulta, Instrumento, Paciente
 from Eventos import Convidado, Cronograma, Playlist
 from Restaurante import Cardapio, Faturamento, Restaurante
+
+# Tela Principal
 
 class Botao:
     def __init__(self, root):
@@ -30,19 +32,13 @@ class Botao:
         clinica_window = Toplevel(self.root)
         clinica_window.title("Emergência Clínica")
         
-        # Define the desired window size
-        window_width = 100  # Adjust as needed
-        window_height = 150  # Adjust as needed
-
-        # Get the screen width and height
+        # Tamanho da tela
+        window_width = 100  
+        window_height = 150  
         screen_width = clinica_window.winfo_screenwidth()
         screen_height = clinica_window.winfo_screenheight()
-
-        # Calculate x and y coordinates to center the window
         x = (screen_width - window_width) // 2
         y = (screen_height - window_height) // 2
-
-        # Set the geometry of the window
         clinica_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
         consulta_btn = Button(clinica_window, text="Consulta", command=self.abrir_consulta)
@@ -58,19 +54,13 @@ class Botao:
         evento_window = Toplevel(self.root)
         evento_window.title("O Evento")
         
-        # Define the desired window size
-        window_width = 100  # Adjust as needed
-        window_height = 150  # Adjust as needed
-
-        # Get the screen width and height
+        # Tamanho da tela
+        window_width = 100 
+        window_height = 150 
         screen_width = evento_window.winfo_screenwidth()
         screen_height = evento_window.winfo_screenheight()
-
-        # Calculate x and y coordinates to center the window
         x = (screen_width - window_width) // 2
         y = (screen_height - window_height) // 2
-
-        # Set the geometry of the window
         evento_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
         convidado_btn = Button(evento_window, text="Convidado", command=self.abrir_convidado)
@@ -86,22 +76,15 @@ class Botao:
         restaurante_window = Toplevel(self.root)
         restaurante_window.title("Restaurante")
 
-        # Define the desired window size
-        window_width = 100  # Adjust as needed
-        window_height = 150  # Adjust as needed
-
-        # Get the screen width and height
+        # Tamanho da tela
+        window_width = 100 
+        window_height = 150 
         screen_width = restaurante_window.winfo_screenwidth()
         screen_height = restaurante_window.winfo_screenheight()
-
-        # Calculate x and y coordinates to center the window
         x = (screen_width - window_width) // 2
         y = (screen_height - window_height) // 2
-
-        # Set the geometry of the window
         restaurante_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
-        # Create buttons for the Restaurante window
         cardapio_btn = Button(restaurante_window, text="Cardapio", command=self.abrir_cardapio)
         cardapio_btn.pack(pady=10)
 
@@ -111,24 +94,19 @@ class Botao:
         restaurante_btn = Button(restaurante_window, text="Restaurante", command=self.abrir_restaurante)
         restaurante_btn.pack(pady=10)
 
-    # Clinica methods
+    # Clinica metodos
     def abrir_consulta(self):
         consulta_window = Toplevel(self.root)
         consulta_window.title("Gerenciar Consultas")
         from Clinica.botao_janela import ConsultaInterface
-        # Define the desired window size
-        window_width = 650  # Adjust as needed
-        window_height = 400  # Adjust as needed
-
-        # Get the screen width and height
+        
+        # Tamanho da tela
+        window_width = 650 
+        window_height = 400  
         screen_width = consulta_window.winfo_screenwidth()
         screen_height = consulta_window.winfo_screenheight()
-
-        # Calculate x and y coordinates to center the window
         x = (screen_width - window_width) // 2
         y = (screen_height - window_height) // 2
-
-    # Set the geometry of the window
         consulta_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         ConsultaInterface(consulta_window, self.consulta)
 
@@ -136,19 +114,14 @@ class Botao:
         instrumento_window = Toplevel(self.root)
         instrumento_window.title("Gerenciar Instrumentos")
         from Clinica.botao_janela import InstrumentoInterface
-        # Define the desired window size
-        window_width = 650  # Adjust as needed
-        window_height = 400  # Adjust as needed
-
-        # Get the screen width and height
+        
+        # Tamanho da tela
+        window_width = 650 
+        window_height = 400 
         screen_width = instrumento_window.winfo_screenwidth()
         screen_height = instrumento_window.winfo_screenheight()
-
-        # Calculate x and y coordinates to center the window
         x = (screen_width - window_width) // 2
         y = (screen_height - window_height) // 2
-
-    # Set the geometry of the window
         instrumento_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         InstrumentoInterface(instrumento_window, self.instrumento)
 
@@ -156,40 +129,30 @@ class Botao:
         paciente_window = Toplevel(self.root)
         paciente_window.title("Gerenciar Pacientes")
         from Clinica.botao_janela import PacienteInterface
-        # Define the desired window size
-        window_width = 650  # Adjust as needed
-        window_height = 400  # Adjust as needed
-
-        # Get the screen width and height
+        
+        # Tamanho da tela
+        window_width = 650 
+        window_height = 400  
         screen_width = paciente_window.winfo_screenwidth()
         screen_height = paciente_window.winfo_screenheight()
-
-        # Calculate x and y coordinates to center the window
         x = (screen_width - window_width) // 2
         y = (screen_height - window_height) // 2
-
-    # Set the geometry of the window
         paciente_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         PacienteInterface(paciente_window, self.paciente)
 
-    # Eventos methods
+    # Eventos metodos
     def abrir_convidado(self):
         convidado_window = Toplevel(self.root)
         convidado_window.title("Gerenciar Convidados")
         from Eventos.botao_janela import ConvidadoInterface
-        # Define the desired window size
-        window_width = 650  # Adjust as needed
-        window_height = 400  # Adjust as needed
-
-        # Get the screen width and height
+        
+        # Tamanho da tela
+        window_width = 650 
+        window_height = 400  
         screen_width = convidado_window.winfo_screenwidth()
         screen_height = convidado_window.winfo_screenheight()
-
-        # Calculate x and y coordinates to center the window
         x = (screen_width - window_width) // 2
         y = (screen_height - window_height) // 2
-
-    # Set the geometry of the window
         convidado_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         ConvidadoInterface(convidado_window, self.convidado)
 
@@ -197,19 +160,14 @@ class Botao:
         cronograma_window = Toplevel(self.root)
         cronograma_window.title("Gerenciar Cronograma")
         from Eventos.botao_janela import CronogramaInterface
-        # Define the desired window size
-        window_width = 650  # Adjust as needed
-        window_height = 400  # Adjust as needed
-
-        # Get the screen width and height
+        
+        # Tamanho da tela
+        window_width = 650  
+        window_height = 400 
         screen_width = cronograma_window.winfo_screenwidth()
         screen_height = cronograma_window.winfo_screenheight()
-
-        # Calculate x and y coordinates to center the window
         x = (screen_width - window_width) // 2
         y = (screen_height - window_height) // 2
-
-    # Set the geometry of the window
         cronograma_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         CronogramaInterface(cronograma_window, self.cronograma)
 
@@ -217,40 +175,30 @@ class Botao:
         playlist_window = Toplevel(self.root)
         playlist_window.title("Gerenciar Playlist")
         from Eventos.botao_janela import PlaylistInterface
-        # Define the desired window size
-        window_width = 650  # Adjust as needed
-        window_height = 400  # Adjust as needed
-
-        # Get the screen width and height
+        
+        # Tamanho da tela
+        window_width = 650 
+        window_height = 400 
         screen_width = playlist_window.winfo_screenwidth()
         screen_height = playlist_window.winfo_screenheight()
-
-        # Calculate x and y coordinates to center the window
         x = (screen_width - window_width) // 2
         y = (screen_height - window_height) // 2
-
-    # Set the geometry of the window
         playlist_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         PlaylistInterface(playlist_window, self.playlist)
 
-    # Restaurante methods
+    # Restaurante metodos
     def abrir_cardapio(self):
         cardapio_window = Toplevel(self.root)
         cardapio_window.title("Gerenciar Cardápio")
         from Restaurante.botao_janela import CardapioInterface
-        # Define the desired window size
-        window_width = 650  # Adjust as needed
-        window_height = 500  # Adjust as needed
-
-        # Get the screen width and height
+        
+        # Tamanho da tela
+        window_width = 650  
+        window_height = 500  
         screen_width = cardapio_window.winfo_screenwidth()
         screen_height = cardapio_window.winfo_screenheight()
-
-        # Calculate x and y coordinates to center the window
         x = (screen_width - window_width) // 2
         y = (screen_height - window_height) // 2
-
-    # Set the geometry of the window
         cardapio_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         CardapioInterface(cardapio_window, self.cardapio)
 
@@ -258,19 +206,14 @@ class Botao:
         faturamento_window = Toplevel(self.root)
         faturamento_window.title("Gerenciar Faturamento")
         from Restaurante.botao_janela import FaturamentoInterface
-        # Define the desired window size
-        window_width = 650  # Adjust as needed
-        window_height = 400  # Adjust as needed
-
-        # Get the screen width and height
+        
+        # Tamanho da tela
+        window_width = 650 
+        window_height = 400
         screen_width = faturamento_window.winfo_screenwidth()
         screen_height = faturamento_window.winfo_screenheight()
-
-        # Calculate x and y coordinates to center the window
         x = (screen_width - window_width) // 2
         y = (screen_height - window_height) // 2
-
-    # Set the geometry of the window
         faturamento_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         FaturamentoInterface(faturamento_window, self.faturamento)
 
@@ -278,24 +221,20 @@ class Botao:
         restaurante_window = Toplevel(self.root)
         restaurante_window.title("Gerenciar Restaurante")
         from Restaurante.botao_janela import RestauranteInterface
-        # Define the desired window size
-        window_width = 650  # Adjust as needed
-        window_height = 400  # Adjust as needed
-
-        # Get the screen width and height
+        
+        # Tamanho da tela
+        window_width = 650 
+        window_height = 400
         screen_width = restaurante_window.winfo_screenwidth()
         screen_height = restaurante_window.winfo_screenheight()
-
-        # Calculate x and y coordinates to center the window
         x = (screen_width - window_width) // 2
         y = (screen_height - window_height) // 2
-
-    # Set the geometry of the window
         restaurante_window.geometry(f"{window_width}x{window_height}+{x}+{y}")
         RestauranteInterface(restaurante_window, self.restaurante)
 
 class Main:
     def __init__(self):
+        
         # Criar a janela principal
         self.janela_principal = Tk()
         self.janela_principal.title("Rock in Rio 2024")
@@ -308,7 +247,7 @@ class Main:
         y = (screen_height - window_height) // 2
         self.janela_principal.geometry(f"{window_width}x{window_height}+{x}+{y}")
         
-        # Create Botao instance with the main window as root
+        # Criar instância de Botao com a janela principal como root
         self.botao = Botao(self.janela_principal)
         
         self.criar_interface()
@@ -338,6 +277,7 @@ class Main:
     def run(self):
         self.janela_principal.mainloop()
 
+# Executar a aplicação
 if __name__ == '__main__':
     app = Main()
     app.run()

@@ -34,10 +34,10 @@ class ListaEncadeadaCircular:
         anterior = self.cauda
         
         while True:
-            # Modified comparison logic to handle both dictionary and simple values
+            # Lógica de comparação modificada para lidar com valores simples e dicionários
             encontrou = False
             if isinstance(atual.valor, dict) and isinstance(valor, str):
-                # If we're searching for a name in a dictionary
+                # Se estamos procurando por um nome em um dicionário
                 encontrou = atual.valor.get('nome') == valor
             else:
                 encontrou = atual.valor == valor

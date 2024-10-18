@@ -5,7 +5,7 @@ from Restaurante.faturamento import Faturamento
 from Restaurante.restaurante import Restaurante
 
 class BaseInterface:
-    """Base class for all interfaces with common functionality"""
+    """Classe base para todas as interfaces com funcionalidades comuns"""
     def __init__(self, root, data_manager, title, title_plural, example_text):
         self.root = root
         self.data_manager = data_manager
@@ -94,28 +94,28 @@ class BaseInterface:
         self.refresh_display()
 
     def editar_item(self):
-        """Override editar_item for Faturamento with debug prints"""
+        """Sobrescreve editar_item para Faturamento com prints de depuração"""
         item_atual = self.entry.get().strip()
         novo_item = self.new_value_entry.get().strip()
         
-        print(f": Tentando editar faturamento")
-        print(f": Novo item: {novo_item}")
-        print(f": Current item: {item_atual}")
-        print(f": New item: {novo_item}")
+        print(f":Tentando editar faturamento")
+        print(f":Novo item: {novo_item}")
+        print(f":Item atual: {item_atual}")
+        print(f":Novo item: {novo_item}")
         
         if item_atual and novo_item:
             try:
-                # Parse the current item
+                # Analisar o item atual
                 data_atual, valor_atual = item_atual.split('-')
                 data_atual = data_atual.strip()
                 valor_atual = float(valor_atual.strip().replace('R$', '').replace(',', '.'))
                 
-                # Parse the new item
+                # Analisar o novo item
                 nova_data, novo_valor = novo_item.split('-')
                 nova_data = nova_data.strip()
                 novo_valor = float(novo_valor.strip().replace('R$', '').replace(',', '.'))
                 
-                # Create dictionaries for current and new items
+                # Criar dicionários para itens atuais e novos
                 item_atual_dict = {'data': data_atual, 'valor': valor_atual}
                 novo_item_dict = {'data': nova_data, 'valor': novo_valor}
                 
@@ -176,43 +176,43 @@ class BaseInterface:
         self.root.update_idletasks()
 
     def adicionar_item(self):
-        print("Método adicionar_item chamado")  # Debug print
+        print("Método adicionar_item chamado")  
         item = self.entry.get().strip()
-        print(f"Item a ser adicionado: '{item}'")  # Debug print
+        print(f"Item a ser adicionado: '{item}'")  
         if item:
             try:
-                print("Chamando self.data_manager.adicionar_item")  # Debug print
+                print("Chamando self.data_manager.adicionar_item")  
                 result = self.data_manager.adicionar_item(item)
-                print(f"Resultado da adição: {result}")  # Debug print
+                print(f"Resultado da adição: {result}")  
                 self.entry.delete(0, END)
-                print("Chamando self.atualizar_output")  # Debug print
+                print("Chamando self.atualizar_output")  
                 self.atualizar_output(result)
-                print("Chamando self.refresh_display")  # Debug print
+                print("Chamando self.refresh_display")  
                 self.refresh_display()
             except Exception as e:
-                print(f"Erro ao adicionar item: {str(e)}")  # Debug print
+                print(f"Erro ao adicionar item: {str(e)}")  
                 messagebox.showerror("Erro", f"Erro ao adicionar item: {str(e)}")
         else:
-            print("Item vazio")  # Debug print
+            print("Item vazio")  
             messagebox.showerror("Erro", f"Por favor, insira um {self.title.lower()} válido.")
 
     def remover_item(self):
         item_texto = self.entry.get().strip().lower()  # Converte para minúsculas para evitar problemas de
-        print(f"Tentando remover o item: {item_texto}")  # Debug print
+        print(f"Tentando remover o item: {item_texto}")  
 
         if item_texto:
             try:
             # Verificar se o nome está presente na lista de itens (dicionário com chave 'nome')
                 if self.data_manager.itens.remover(item_texto):
-                    print(f"Item '{item_texto}' removido com sucesso!")  # Debug print
+                    print(f"Item '{item_texto}' removido com sucesso!")  
                     self.entry.delete(0, END)
                     self.atualizar_output(f"'{item_texto}' removido com sucesso!")
                     self.refresh_display()
                 else:
-                    print(f"Item '{item_texto}' não encontrado.")  # Debug print
+                    print(f"Item '{item_texto}' não encontrado.")  
                     messagebox.showerror("Erro", f"'{item_texto}' não encontrado.")
             except Exception as e:
-                print(f"Erro ao remover item: {str(e)}")  # Debug print
+                print(f"Erro ao remover item: {str(e)}")  
                 messagebox.showerror("Erro", f"Erro ao remover: {str(e)}")
         else:
             messagebox.showerror("Erro", "Por favor, insira um nome para remover.")
@@ -234,7 +234,7 @@ class BaseInterface:
 
         atual = self.cabeca
         while atual is not None:
-            print(f"Verificando nó com valor: {atual.valor}")  # Log de depuração
+            print(f"Verificando nó com valor: {atual.valor}")
 
             # Compara apenas o nome do item
             if atual.valor['nome'] == nome_item:
@@ -246,7 +246,7 @@ class BaseInterface:
 
             
     def atualizar_output(self, message):
-        print(f"Atualizando output com: '{message}'")  # Debug print
+        print(f"Atualizando output com: '{message}'")  
         self.output_text.config(state=NORMAL)
         self.output_text.insert(END, f"\n{message}\n")
         self.output_text.see(END)
@@ -374,7 +374,7 @@ class CardapioInterface(BaseInterface):
     def remover_item(self):
         item_nome = self.entry.get().strip().split(' - ')[0]  # Remove apenas pelo nome
         if item_nome:
-            print(f"Tentando remover item: '{item_nome}'")  # Debug print
+            print(f"Tentando remover item: '{item_nome}'")  
             result = self.data_manager.remover_item(item_nome)
             if "removido" in result:
                 self.entry.delete(0, END)
@@ -677,7 +677,7 @@ class Botao:
         self.cardapio = Cardapio()
         
     def center_window(self, window, width, height):
-        window.update_idletasks()  # Ensure window size is up to date
+        window.update_idletasks()  # Garantir que o tamanho da janela esteja atualizado
         screen_width = window.winfo_screenwidth()
         screen_height = window.winfo_screenheight()
         x = (screen_width - width) // 2

@@ -1,7 +1,7 @@
 import sys
 import os
 
-# Adicionando o diretorio "Restaurante" para a pasta Python
+# Adicionando o diretorio "Restaurante" para verificação no caminho de busca de módulos no Python
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Listas import lista_encadeada_simples
 
@@ -14,7 +14,7 @@ class Faturamento:
         """Adiciona um valor de vendas para calcular o faturamento
         Espera uma string no formato 'data - valor'"""
         try:
-            # Split the input string into data and valor
+            # Dividir a string de entrada em data e valor
             partes = item_str.split('-')
             if len(partes) != 2:
                 raise ValueError("Formato inválido. Use: 'data - valor'")
@@ -22,7 +22,7 @@ class Faturamento:
             data = partes[0].strip()
             valor = float(partes[1].strip().replace('R$', '').replace(',', '.'))
             
-            # Create a dictionary with the parsed values
+            # Criar um dicionário com os valores analisados
             item = {
                 'data': data,
                 'valor': valor
@@ -40,11 +40,11 @@ class Faturamento:
         try:
             data = data.strip()
             
-            # Define a custom comparison function for matching items
+            # Define uma função de comparação personalizada para correspondência de itens
             def compare_items(node_item, search_data):
                 return node_item.get('data') == search_data
             
-            # Try to remove the item
+            # Tentar remover o item
             if self.itens.remover(data, compare_func=compare_items):
                 return f"Faturamento removido: Data {data}"
             else:
@@ -57,8 +57,8 @@ class Faturamento:
         """Atualiza um valor de vendas do faturamento"""
         print(f"Tentando atualizar item no Faturamento")
         print(f"Novos dados do item: {novo_item}")
-        print(f"Current item to update: {item_atual}")
-        print(f"New item data: {novo_item}")
+        print(f"Item atual para atualizar: {item_atual}")
+        print(f"Valor do novo item: {novo_item}")
         
         atual = self.itens.cabeca
         while atual:

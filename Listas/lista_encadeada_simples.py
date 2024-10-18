@@ -44,7 +44,7 @@ class ListaEncadeadaSimples:
                         self.cabeca = atual.prox
                     return True
             elif isinstance(atual.valor, dict) and isinstance(valor_alvo, dict):
-                # Compare dictionaries
+                # Comparar dicionários
                 if all(atual.valor.get(k) == v for k, v in valor_alvo.items()):
                     if anterior:
                         anterior.prox = atual.prox
@@ -52,7 +52,7 @@ class ListaEncadeadaSimples:
                         self.cabeca = atual.prox
                     return True
             elif isinstance(atual.valor, dict) and chave_comparacao:
-                # Compare dictionary value with a specific key
+                # Comparar valor do dicionário com uma chave específica
                 if atual.valor.get(chave_comparacao) == valor_alvo:
                     if anterior:
                         anterior.prox = atual.prox
@@ -60,7 +60,7 @@ class ListaEncadeadaSimples:
                         self.cabeca = atual.prox
                     return True
             elif atual.valor == valor_alvo:
-                # Direct comparison for non-dictionary values
+                # Comparação direta para valores que não são dicionários
                 if anterior:
                     anterior.prox = atual.prox
                 else:

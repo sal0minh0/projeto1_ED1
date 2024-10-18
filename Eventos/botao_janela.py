@@ -5,7 +5,7 @@ from Eventos.cronograma import Cronograma
 from Eventos.playlist import Playlist
 
 class BaseInterface:
-    """Base class for all interfaces with common functionality"""
+    """Classe base para todas as interfaces com funcionalidades comuns"""
     def __init__(self, root, data_manager, title, title_plural, example_text):
         self.root = root
         self.data_manager = data_manager
@@ -93,7 +93,7 @@ class BaseInterface:
         self.refresh_display()
 
     def editar_item(self):
-        """Edit an existing item with a new value"""
+        """Editar um item existente com um novo valor"""
         item_atual = self.entry.get().strip()
         novo_item = self.new_value_entry.get().strip()
         
@@ -146,7 +146,7 @@ class BaseInterface:
         self.root.update_idletasks()
 
     def adicionar_item(self):
-        """Base method for adding an item. To be overridden by subclasses."""
+        """Método base para adicionar um item. Deve ser sobrescrito pelas subclasses."""
         item = self.entry.get().strip()
         if item:
             try:
@@ -202,13 +202,13 @@ class ConvidadoInterface(BaseInterface):
             example_text="(ex: Nome)"
         )
         
-        # Add the "Número de Inscrição" field below "Nome"
+        # Adicionar o campo "Número de Inscrição" abaixo de "Nome"
         self.label_numero_inscricao = Label(self.input_frame, text="Número de Inscrição:")
         self.label_numero_inscricao.pack(side=LEFT, padx=5)
         self.entry_numero_inscricao = Entry(self.input_frame, width=10)
         self.entry_numero_inscricao.pack(side=LEFT, padx=5)
         
-        # Add the "Evento" field below "Número de Inscrição"
+        # Adicionar o campo "Evento" abaixo de "Número de Inscrição"
         self.label_evento = Label(self.input_frame, text="Evento:")
         self.label_evento.pack(side=LEFT, padx=5)
         self.entry_evento = Entry(self.input_frame, width=10)
@@ -328,7 +328,7 @@ class Botao:
         self.playlist = Playlist()
         
     def center_window(self, window, width, height):
-            window.update_idletasks()  # Ensure window size is up to date
+            window.update_idletasks()  # Garantir que o tamanho da janela esteja atualizado
             screen_width = window.winfo_screenwidth()
             screen_height = window.winfo_screenheight()
             x = (screen_width - width) // 2

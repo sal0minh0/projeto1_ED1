@@ -1,20 +1,22 @@
-<div style="
-text-align: center; 
-font-family: Sixtyfour Convergence, 
-sans-serif; 
-font-weight: 100;">
+<html lang="pt-BR">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exemplo de fontes</title>
 
+  <!-- Preconexão e carregamento das fontes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Sixtyfour+Convergence&display=swap" rel="stylesheet">
-
-
-  <h6>
-    <a href="#️vídeozinho-do-projeto-rodando" style="text-decoration: underline;">
-      <strong>video do projeto</strong>
-    </a>
-  </h6>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@100&family=Sixtyfour+Convergence&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Div com fonte personalizada -->
+  <div style="text-align: center; font-family: 'Sixtyfour Convergence', sans-serif; font-weight: 100;">
+    <h6>
+      <a href="#️vídeozinho-do-projeto-rodando" style="text-decoration: underline;">
+        <strong>video do projeto</strong>
+      </a>
+    </h6>
 </div>
 
 

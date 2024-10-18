@@ -27,6 +27,7 @@ class Paciente:
     
     def remover_item(self, nome):
         paciente = self.buscar_paciente_por_nome(nome)
+        
         if paciente:
             self.itens.remover(paciente)
             return f"'{nome}' removido da lista."

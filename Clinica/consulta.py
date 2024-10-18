@@ -30,9 +30,11 @@ class Consulta:
         """Busca uma consulta na clínica"""
         _, posicao = self.itens.buscar(consulta)
         if posicao != -1:
+            
             result = f"'{consulta}' encontrado na consulta {posicao+1}."
             print(result)
             return result
+        
         else:
             result = f"'{consulta}' não está marcada."
             print(result)

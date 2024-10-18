@@ -18,6 +18,7 @@ class Instrumento:
         return f"'{instrumento}' removido dos instrumentos."
         
     def atualizar_item(self, instrumento_atual, novo_instrumento):
+        
         if self.itens.atualizar(instrumento_atual, novo_instrumento):
             return f"'{instrumento_atual}' atualizado para '{novo_instrumento}'."
         else:
@@ -25,6 +26,7 @@ class Instrumento:
             
     def buscar_um_item(self, instrumento):
         _, posicao = self.itens.buscar(instrumento)
+        
         if posicao != -1:
             return f"'{instrumento}' encontrado na posição {posicao+1} da clínica."
         else:

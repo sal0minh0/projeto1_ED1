@@ -98,6 +98,7 @@ class BaseInterface:
         novo_item = self.new_value_entry.get().strip()
         
         if item_atual and novo_item:
+            
             try:
                 self.data_manager.atualizar_item(item_atual, novo_item) 
                 self.entry.delete(0, END)

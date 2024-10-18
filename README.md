@@ -1,6 +1,6 @@
 <h6 align="center">
 
-[![Texto Alternativo](./assets/video_do_projeto.png)](#videozinho-do-projeto-rodando)
+[![Texto Alternativo](./assets/video_do_projeto.png)](#videozinho-do-projeto-rodando-)
 
 </h6>
 

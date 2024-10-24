@@ -85,7 +85,7 @@ Soma do Salário na classe Restaurante também ao vivo;
 
 
 ````python
-# Dê dois cliques em Rock in Rio.ink
+# Dê dois cliques em Rock in Rio.ink ou vá na pasta "dist" e dê dois cliques em main.exe
 ````
 ````python
 # Ou com python instalado rode com terminal nesta pasta

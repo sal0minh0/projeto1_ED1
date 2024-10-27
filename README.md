@@ -123,7 +123,6 @@ Soma do Salário na classe Restaurante também ao vivo;
 ````
 4) Como melhorar o fluxo de acompanhamento de histórico dos meus pacientes?
 
-<<<<<<< HEAD
 •	Utilize Paciente (lista_encadeada_dupla) para facilitar a visualização dos pacientes presentes e assim melhor qualidade e agilidade no atendimento e consequentemente uma precisão diagnóstica. 	
 •	Operações: “adicionar_item()” para novos pacientes, “buscar_um_item()” para  consultar o nome do paciente, “atualizar_item()” para mudar o prontuário.
 ````
@@ -133,8 +132,4 @@ Soma do Salário na classe Restaurante também ao vivo;
 •	Use o Cronograma (lista_encadeada_circular) para relacionar atividades e então melhorar o planejamento do evento, assim reduzindo de atraso
 •	Operações: “adicionar_item()” para novas atividades, “buscar_um_item()” para verificar anteriores, “atualizar_item()” para ajustes de cronograma
 ````
-=======
-5) Esqueci o nome daquela música do show, como posso achar? 
-- Verifique na tela de output todas as músicas do show.
-````
->>>>>>> e04dc5693e9b67cf08734e757ddb275a01a1a7a6
+

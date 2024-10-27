@@ -105,31 +105,57 @@ Soma do Salário na classe Restaurante também ao vivo;
 ````
 1) Qual a eficiência na gestão de inventários rotativos dos materiais da Clínica?
 
-•	Com o Instrumento (lista_encadeada_dupla), podemos rastrear produtos no inventário rotativo de instrumentos para a Clínica, otimizando o estoque dos materiais e redução de custos operacionais.
-•	Operações: “adicionar_item()” para adicionar produtos novos, “remover_item()” para retirar produtos antigos, “contar_itens()” para saber e manter controle do total de itens.
+Com o Instrumento (lista_encadeada_dupla), 
+podemos rastrear produtos no inventário rotativo 
+de instrumentos para a Clínica, otimizando o estoque dos materiais 
+e redução de custos operacionais.
+
+Operações: “adicionar_item()” para adicionar produtos novos, 
+“remover_item()” para retirar produtos antigos, 
+“contar_itens()” para saber e manter controle do total de itens.
 ````
 ````
 2) Como podemos rastrear o histórico de mudanças de preços de produtos do Cardápio?
 
-•	O Cardapio (lista_encadeada_simples) permite navegação no histórico, ajudando na Análise/Tomadas de decisão comparando com as tendências de preços do mercado.
-•	Operações: “adicionar_item()” para registrar nova alteração de preço, “buscar_um_item()” para consultar histórico de um item no cardápio, “atualizar_item()” para corrigir se necessitar.
+O Cardapio (lista_encadeada_simples) permite navegação no histórico, 
+ajudando na Análise/Tomadas de decisão 
+comparando com as tendências de preços do mercado.
+
+Operações: “adicionar_item()” para registrar nova alteração de preço, 
+“buscar_um_item()” para consultar histórico de um item no cardápio, 
+“atualizar_item()” para corrigir se necessitar.
 ````
 ````
 3) Como melhorar o rastreamento de vendas mensais?
 
-•	Faturamento (lista_encadeada_simples) para faturamento financeiro do Restaurante e assim temos melhor controle financeiro e tomadas de decisão.
-•	Operações: “adicionar_item()” para novas vendas, “buscar_um_item()” para verificar, “atualizar_item()” em correções, "somar_e_faturamento" para o faturamento atualizado na tela.
+Faturamento (lista_encadeada_simples) 
+para faturamento financeiro do Restaurante 
+e assim temos melhor controle financeiro e tomadas de decisão.
+
+Operações: “adicionar_item()” para novas vendas, 
+“buscar_um_item()” para verificar, 
+“atualizar_item()” em correções, 
+"somar_e_faturamento" para ter o faturamento atualizado na tela.
 ````
 ````
 4) Como melhorar o fluxo de acompanhamento de histórico dos meus pacientes?
 
-•	Utilize Paciente (lista_encadeada_dupla) para facilitar a visualização dos pacientes presentes e assim melhor qualidade e agilidade no atendimento e consequentemente uma precisão diagnóstica. 	
-•	Operações: “adicionar_item()” para novos pacientes, “buscar_um_item()” para  consultar o nome do paciente, “atualizar_item()” para mudar o prontuário.
+Utilize Paciente (lista_encadeada_dupla) para facilitar 
+a visualização dos pacientes presentes e assim melhor qualidade e 
+agilidade no atendimento e consequentemente uma precisão diagnóstica.
+
+Operações: “adicionar_item()” para novos pacientes, 
+“buscar_um_item()” para  consultar o nome do paciente, 
+“atualizar_item()” para mudar o prontuário.
 ````
 ````
 5) Como melhorar a gestão dos horários entre as atividades do evento?
 
-•	Use o Cronograma (lista_encadeada_circular) para relacionar atividades e então melhorar o planejamento do evento, assim reduzindo de atraso
-•	Operações: “adicionar_item()” para novas atividades, “buscar_um_item()” para verificar anteriores, “atualizar_item()” para ajustes de cronograma
+Use o Cronograma (lista_encadeada_circular) para relacionar atividades 
+e então melhorar o planejamento do evento, assim reduzindo o atraso.
+
+Operações: “adicionar_item()” para novas atividades, 
+“buscar_um_item()” para verificar anteriores, 
+“atualizar_item()” para ajustes de cronograma.
 ````
 

@@ -3,6 +3,8 @@ from tkinter import messagebox
 from Eventos.convidado import Convidado
 from Eventos.cronograma import Cronograma
 from Eventos.playlist import Playlist
+from tkinter import simpledialog
+from datetime import datetime, timedelta
 
 class BaseInterface:
     """Classe base para todas as interfaces com funcionalidades comuns"""
@@ -240,8 +242,188 @@ class CronogramaInterface(BaseInterface):
             data_manager=cronograma,
             title="Cronograma",
             title_plural="cronogramas",
-            example_text="(ex: Atividade - Horário)"
+            example_text="(ex: Atividade)"
         )
+        
+        # Adicionar campo para horário
+        self.time_frame = Frame(self.input_frame)
+        self.time_frame.pack(side=LEFT)
+        
+        self.time_label = Label(self.input_frame, text="Horário (HH:MM):")
+        self.time_label.pack(side=LEFT, padx=5)
+        
+        self.time_entry = Entry(self.input_frame, width=8)
+        self.time_entry.pack(side=LEFT, padx=5)
+        
+        # Adicionar campo para novo horário (para edição)
+        self.new_time_label = Label(self.new_value_frame, text="Novo Horário (HH:MM):")
+        self.new_time_label.pack(side=LEFT, padx=5)
+        
+        self.new_time_entry = Entry(self.new_value_frame, width=8)
+        self.new_time_entry.pack(side=LEFT, padx=5)
+
+        # Frame para cálculo de intervalo
+        self.interval_frame = Frame(root)
+        self.interval_frame.pack(pady=5)
+
+        self.start_label = Label(self.interval_frame, text="Início:")
+        self.start_label.pack(side=LEFT, padx=5)
+        self.start_entry = Entry(self.interval_frame, width=5)
+        self.start_entry.pack(side=LEFT, padx=5)
+
+        self.end_label = Label(self.interval_frame, text="Fim:")
+        self.end_label.pack(side=LEFT, padx=5)
+        self.end_entry = Entry(self.interval_frame, width=5)
+        self.end_entry.pack(side=LEFT, padx=5)
+
+        self.interval_button = Button(
+            self.action_frame,
+            text="Calcular Intervalo",
+            command=self.calcular_intervalo
+        )
+        self.interval_button.pack(side=LEFT, padx=5)
+
+    def adicionar_item(self):
+        """Adiciona uma atividade com seu horário ao cronograma"""
+        atividade = self.entry.get().strip()
+        horario = self.time_entry.get().strip()
+        
+        if atividade and horario:
+            try:
+                # Validar formato do horário
+                datetime.strptime(horario, "%H:%M")
+                
+                self.data_manager.adicionar_item(atividade, horario)
+                self.entry.delete(0, END)
+                self.time_entry.delete(0, END)
+                self.atualizar_output(f"Atividade '{atividade}' ({horario}) adicionada ao cronograma com sucesso!")
+                self.refresh_display()
+            except ValueError:
+                messagebox.showerror("Erro", "Por favor, insira o horário no formato HH:MM (ex: 14:30)")
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao adicionar atividade: {str(e)}")
+        else:
+            messagebox.showerror("Erro", "Por favor, insira tanto a atividade quanto o horário.")
+
+    def remover_item(self):
+        """Remove uma atividade do cronograma"""
+        atividade = self.entry.get().strip()
+        
+        if atividade:
+            try:
+                if self.data_manager.remover_item(atividade):
+                    self.entry.delete(0, END)
+                    self.atualizar_output(f"Atividade '{atividade}' removida do cronograma com sucesso!")
+                    self.refresh_display()
+                else:
+                    messagebox.showerror("Erro", "Atividade não encontrada no cronograma.")
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao remover atividade: {str(e)}")
+        else:
+            messagebox.showerror("Erro", "Por favor, insira uma atividade para remover.")
+
+    def editar_item(self):
+        """Editar uma atividade existente com novo nome e horário"""
+        atividade_atual = self.entry.get().strip()
+        nova_atividade = self.new_value_entry.get().strip()
+        novo_horario = self.new_time_entry.get().strip()
+        
+        if atividade_atual and nova_atividade and novo_horario:
+            try:
+                # Validar formato do horário
+                datetime.strptime(novo_horario, "%H:%M")
+                
+                if self.data_manager.atualizar_item(atividade_atual, nova_atividade, novo_horario):
+                    self.entry.delete(0, END)
+                    self.new_value_entry.delete(0, END)
+                    self.new_time_entry.delete(0, END)
+                    self.atualizar_output(f"Atividade '{atividade_atual}' atualizada para '{nova_atividade}' ({novo_horario})!")
+                    self.refresh_display()
+                else:
+                    messagebox.showerror("Erro", "Atividade não encontrada no cronograma.")
+            except ValueError:
+                messagebox.showerror("Erro", "Por favor, insira o horário no formato HH:MM (ex: 14:30)")
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao editar atividade: {str(e)}")
+        else:
+            messagebox.showerror("Erro", "Por favor, preencha todos os campos (atividade atual, nova atividade e novo horário).")
+
+    def buscar_item(self):
+        """Busca uma atividade no cronograma"""
+        atividade = self.entry.get().strip()
+        
+        if atividade:
+            try:
+                result = self.data_manager.buscar_um_item(atividade)
+                self.atualizar_output(result)
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao buscar atividade: {str(e)}")
+        else:
+            messagebox.showerror("Erro", "Por favor, insira uma atividade para buscar.")
+
+    def editar_item(self):
+        """Editar uma atividade existente com novo nome e horário"""
+        atividade_atual = self.entry.get().strip()
+        nova_atividade = self.new_value_entry.get().strip()
+        novo_horario = self.time_entry.get().strip()
+        
+        if atividade_atual and nova_atividade and novo_horario:
+            try:
+                # Validar formato do horário
+                datetime.strptime(novo_horario, "%H:%M")
+                
+                self.data_manager.atualizar_item(atividade_atual, nova_atividade, novo_horario)
+                self.entry.delete(0, END)
+                self.new_value_entry.delete(0, END)
+                self.time_entry.delete(0, END)
+                self.atualizar_output(f"Atividade '{atividade_atual}' atualizada para '{nova_atividade}' ({novo_horario})!")
+                self.refresh_display()
+            except ValueError:
+                messagebox.showerror("Erro", "Por favor, insira o horário no formato HH:MM (ex: 14:30)")
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao editar atividade: {str(e)}")
+        else:
+            messagebox.showerror("Erro", "Por favor, preencha todos os campos (atividade atual, nova atividade e novo horário).")
+
+    def get_items_list(self):
+        if self.data_manager.verificar_lista_vazia():
+            return []
+        items = []
+        if self.data_manager.itens.cauda is not None:
+            atual = self.data_manager.itens.cauda.proximo
+            while True:
+                items.append((atual.valor[0], atual.valor[1]))  # Retorna tupla com (atividade, horario)
+                atual = atual.proximo
+                if atual == self.data_manager.itens.cauda.proximo:
+                    break
+        return items
+
+    def calcular_intervalo(self):
+        try:
+            items = self.get_items_list()
+            if items:
+                self.output_text.config(state=NORMAL)
+                self.output_text.delete(1.0, END)
+
+                for i, item in enumerate(items, 1):
+                    self.output_text.insert(END, f"{i}. {item[0]} ({item[1]})\n")
+
+                start_index = int(self.start_entry.get()) - 1
+                end_index = int(self.end_entry.get()) - 1
+
+                if 0 <= start_index < len(items) and 0 <= end_index < len(items):
+                    time1 = datetime.strptime(items[start_index][1], "%H:%M")
+                    time2 = datetime.strptime(items[end_index][1], "%H:%M")
+                    interval = time2 - time1
+                    self.output_text.insert(END, f"\nO intervalo entre '{items[start_index][0]}' e '{items[end_index][0]}' é de {interval}")
+                else:
+                    messagebox.showerror("Erro", "Índices de eventos inválidos.")
+
+                self.output_text.config(state=DISABLED)
+            else:
+                messagebox.showerror("Erro", "Não há eventos no cronograma.")
+        except Exception as e:
+            messagebox.showerror("Erro", f"Erro ao calcular intervalo: {str(e)}")
 
 class PlaylistInterface(BaseInterface):
     def __init__(self, root, playlist):

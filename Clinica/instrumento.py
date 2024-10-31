@@ -42,7 +42,30 @@ class Instrumento:
     def contar_itens(self):
         quantidade_instrumentos = self.itens.contar_elementos()
         return f"A clínica tem {quantidade_instrumentos} instrumentos cadastrados."
-    
+    def get_quantidade_from_string(self, instrumento_str):
+        """Extrai a quantidade do formato 'Nome - Quantidade'"""
+        try:
+            return int(instrumento_str.split('-')[1].strip())
+        except:
+            return 0
+
+    def get_instrumento_menor_quantidade(self):
+        """Retorna o instrumento com menor quantidade"""
+        if self.itens.verificar_lista_vazia():
+            return None
+
+        current = self.itens.cabeca
+        menor_quantidade = float('inf')
+        instrumento_menor = None
+
+        while current:
+            quantidade = self.get_quantidade_from_string(current.valor)
+            if quantidade < menor_quantidade:
+                menor_quantidade = quantidade
+                instrumento_menor = current.valor
+            current = current.prox
+
+        return instrumento_menor
 """
 # Exemplo de uso do instrumento
 

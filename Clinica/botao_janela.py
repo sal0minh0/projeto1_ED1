@@ -198,6 +198,28 @@ class InstrumentoInterface(BaseInterface):
             title_plural="instrumentos",
             example_text="(ex: Bisturi - Quantidade)"
         )
+        
+        # Adicionar botão para verificar menor quantidade
+        self.check_quantity_button = Button(
+            self.action_frame,
+            text="Está acabando",
+            command=self.mostrar_menor_quantidade
+        )
+        self.check_quantity_button.pack(side=LEFT, padx=5)
+
+    def mostrar_menor_quantidade(self):
+        """Mostra o instrumento com menor quantidade em um popup"""
+        instrumento_menor = self.data_manager.get_instrumento_menor_quantidade()
+        if instrumento_menor:
+            messagebox.showwarning(
+                "Atenção para Baixo Estoque",
+                f"Instrumento que vai faltar:\n{instrumento_menor}"
+            )
+        else:
+            messagebox.showinfo(
+                "Informação",
+                "Não há instrumentos cadastrados."
+            )
 
 class PacienteInterface(BaseInterface):
     def __init__(self, root, paciente):

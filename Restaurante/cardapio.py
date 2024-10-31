@@ -20,26 +20,53 @@ class Cardapio:
     def __init__(self):
         self.itens = lista_encadeada_simples.ListaEncadeadaSimples()
         self.mesas = lista_encadeada_simples.ListaEncadeadaSimples()
+        self.contador_pedidos = {} 
 
     def adicionar_item(self, item_string):
-        print(f"Cardapio.adicionar_item chamado com: '{item_string}'")
-        
         try:
             nome, preco = item_string.split('-')
             nome = nome.strip()
             preco = float(preco.strip())
             item = {'nome': nome, 'preco': preco}
-            print(f"Item a ser inserido: {item}")
             self.itens.inserir_no_fim(item)
+            self.contador_pedidos[nome] = 0  
             resultado = f"'{nome}' adicionado ao cardápio por R${preco:.2f}."
-            print(f"Resultado: {resultado}")
             return resultado
         except ValueError as e:
-            print(f"Erro de valor: {str(e)}")
             return "Formato inválido. Use: Nome do Item - Preço"
         except Exception as e:
-            print(f"Erro inesperado: {str(e)}")
             return f"Erro ao adicionar item: {str(e)}"
+    def registrar_pedido(self, nome_item):
+        """Registra um pedido para um item específico."""
+        nome_item = nome_item.strip()
+        if nome_item in self.contador_pedidos:
+            self.contador_pedidos[nome_item] += 1
+            return f"Pedido registrado para {nome_item}"
+        return f"Item {nome_item} não encontrado no cardápio"
+    
+    def obter_item_menos_pedido(self):
+        """Retorna o item menos pedido do cardápio com seu preço promocional (20% de desconto)."""
+        if not self.contador_pedidos:
+            return None
+
+        # Encontra o item com menor número de pedidos
+        item_menos_pedido = min(self.contador_pedidos.items(), key=lambda x: x[1])
+        nome_item = item_menos_pedido[0]
+
+        # Busca o preço original do item
+        atual = self.itens.cabeca
+        while atual:
+            if isinstance(atual.valor, dict) and atual.valor['nome'] == nome_item:
+                preco_original = atual.valor['preco']
+                preco_promocional = preco_original * 0.8  # 20% de desconto
+                return {
+                    'nome': nome_item,
+                    'preco_original': preco_original,
+                    'preco_promocional': preco_promocional,
+                    'quantidade_pedidos': item_menos_pedido[1]
+                }
+            atual = atual.prox
+        return None
 
     def remover_item(self, nome_alimento):
         if not nome_alimento:
@@ -50,6 +77,9 @@ class Cardapio:
         
         # Normaliza a entrada removendo espaços e convertendo para minúsculas
         nome_alimento = nome_alimento.strip().lower()
+        
+        if nome_alimento in self.contador_pedidos:
+            del self.contador_pedidos[nome_alimento]
         
         while atual is not None:
             # Verifica se o nó atual possui um dicionário válido com a chave 'nome'

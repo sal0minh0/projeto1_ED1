@@ -263,7 +263,52 @@ class CardapioInterface(BaseInterface):
             example_text="(ex: Nome do Prato - Preço)"
         )
         self.create_additional_widgets()
+        self.create_promocao_widgets()
+    def create_promocao_widgets(self):
+        # Frame para promoção
+        self.promocao_frame = Frame(self.root)
+        self.promocao_frame.pack(pady=10)
 
+        # Botão para mostrar promoção do dia
+        self.promocao_btn = Button(
+            self.promocao_frame, 
+            text="Promoção do Dia", 
+            command=self.mostrar_promocao_dia,
+            bg="#FFFF00", 
+            fg="black"
+        )
+        self.promocao_btn.pack(side=LEFT, padx=5)
+
+        # Botão para registrar pedido
+        self.registrar_pedido_btn = Button(
+            self.promocao_frame,
+            text="Registrar Pedido",
+            command=self.registrar_pedido
+        )
+        self.registrar_pedido_btn.pack(side=LEFT, padx=5)
+
+    def mostrar_promocao_dia(self):
+        promocao = self.data_manager.obter_item_menos_pedido()
+        if promocao:
+            mensagem = (f"⭐ PROMOÇÃO DO DIA ⭐\n"
+                        f"Item: {promocao['nome']}\n"
+                        f"Preço Original: R${promocao['preco_original']:.2f}\n"
+                        f"Preço Promocional: R${promocao['preco_promocional']:.2f}\n"
+                        f"Pedidos até agora: {promocao['quantidade_pedidos']}")
+            self.atualizar_output(mensagem)
+        else:
+            self.atualizar_output("Não há itens disponíveis para promoção.")
+
+    def registrar_pedido(self):
+        item = self.entry.get().strip()
+        if item:
+            # Se o item foi inserido com preço, pega só o nome
+            nome_item = item.split('-')[0].strip()
+            result = self.data_manager.registrar_pedido(nome_item)
+            self.atualizar_output(result)
+            self.entry.delete(0, END)
+        else:
+            messagebox.showerror("Erro", "Por favor, insira o nome do item pedido.")
     def create_additional_widgets(self):
         self.mesa_frame = Frame(self.root)
         self.mesa_frame.pack(pady=10)

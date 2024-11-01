@@ -4,6 +4,7 @@ from Restaurante.cardapio import Cardapio
 from Restaurante.faturamento import Faturamento
 from Restaurante.restaurante import Restaurante
 
+
 class BaseInterface:
     """Classe base para todas as interfaces com funcionalidades comuns"""
     def __init__(self, root, data_manager, title, title_plural, example_text):
@@ -155,6 +156,7 @@ class BaseInterface:
         return items
 
     def refresh_display(self):
+        
         self.output_text.config(state=NORMAL)
         self.output_text.delete(1.0, END)
 
@@ -465,7 +467,8 @@ class CardapioInterface(BaseInterface):
         self.output_text.config(state=DISABLED)
 
 class FaturamentoInterface(BaseInterface):
-    def __init__(self, root, faturamento):
+    def __init__(self, root, faturamento, restaurante_interface=None):
+        self.restaurante_interface = restaurante_interface
         self.total_frame = Frame(root)
         self.total_frame.pack(pady=5)
         
@@ -509,6 +512,11 @@ class FaturamentoInterface(BaseInterface):
                 self.entry.delete(0, END)
                 self.atualizar_output(f"Faturamento adicionado: {item}")
                 self.refresh_display()
+                
+                # Atualiza a interface do restaurante se ela existir
+                if self.restaurante_interface:
+                    self.restaurante_interface.refresh_display()
+                    
             except ValueError as e:
                 messagebox.showerror("Erro", str(e))
         else:
@@ -572,58 +580,208 @@ class FaturamentoInterface(BaseInterface):
             messagebox.showerror("Erro", "Por favor, insira valores válidos para atualização.")
 
 class RestauranteInterface(BaseInterface):
-    def __init__(self, root, restaurante):
-        # Cria o quadro de salário total antes de chamar super().__init__
+    def __init__(self, root, data_manager):
+        # Create revenue input frame
+        self.revenue_frame = Frame(root)
+        self.revenue_frame.pack(pady=5)
+        
+        self.revenue_label = Label(
+            self.revenue_frame,
+            text="Faturamento (Data - Valor): "
+        )
+        self.revenue_label.pack(side=LEFT)
+        
+        self.revenue_entry = Entry(self.revenue_frame, width=20)
+        self.revenue_entry.pack(side=LEFT, padx=5)
+        
+        self.add_revenue_button = Button(
+            self.revenue_frame,
+            text="Adicionar Faturamento",
+            command=self.adicionar_faturamento
+        )
+        self.add_revenue_button.pack(side=LEFT, padx=5)
+        # Create tax input frame
+        self.tax_frame = Frame(root)
+        self.tax_frame.pack(pady=5)
+        
+        self.tax_label = Label(
+            self.tax_frame,
+            text="Taxa (%): "
+        )
+        self.tax_label.pack(side=LEFT)
+        
+        self.tax_entry = Entry(self.tax_frame, width=10)
+        self.tax_entry.pack(side=LEFT, padx=5)
+        self.tax_entry.insert(0, "0")  # Default value
+        
+        self.apply_tax_button = Button(
+            self.tax_frame,
+            text="Aplicar Taxa",
+            command=self.apply_tax
+        )
+        self.apply_tax_button.pack(side=LEFT, padx=5)
+
+        # Create total frame for financial information
         self.total_frame = Frame(root)
         self.total_frame.pack(pady=5)
-        
+
         self.total_salary_label = Label(
-            self.total_frame, 
+            self.total_frame,
             text="Total em Salários: R$ 0.00"
         )
         self.total_salary_label.pack()
-        
-        # Chama a inicialização da classe pai
+
+        # Add faturamento label
+        self.faturamento_label = Label(
+            self.total_frame,
+            text="Faturamento Total: R$ 0.00"
+        )
+        self.faturamento_label.pack()
+
+        self.profit_before_tax_label = Label(
+            self.total_frame,
+            text="Lucro (Antes dos Impostos): R$ 0.00"
+        )
+        self.profit_before_tax_label.pack()
+
+        self.tax_amount_label = Label(
+            self.total_frame,
+            text="Impostos: R$ 0.00"
+        )
+        self.tax_amount_label.pack()
+
+        self.profit_after_tax_label = Label(
+            self.total_frame,
+            text="Lucro (Após Impostos): R$ 0.00"
+        )
+        self.profit_after_tax_label.pack()
+
+        # Call parent class initialization
         super().__init__(
             root=root,
-            data_manager=restaurante,
+            data_manager=data_manager,
             title="Funcionário",
             title_plural="funcionários",
             example_text="(ex: Nome, Cargo na Empresa, Salário)"
         )
+        self.data_manager.faturamento.adicionar_observador(self.refresh_display)
+        
+    def adicionar_faturamento(self):
+        """Add new revenue entry"""
+        entrada = self.revenue_entry.get().strip()
+        if entrada:
+            try:
+                self.data_manager.faturamento.adicionar_item(entrada)
+                self.revenue_entry.delete(0, END)
+                self.atualizar_output(f"Faturamento adicionado com sucesso!")
+                self.refresh_display()
+            except ValueError as e:
+                messagebox.showerror("Erro", str(e))
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao adicionar faturamento: {str(e)}")
+        else:
+            messagebox.showerror("Erro", "Por favor, insira os dados do faturamento no formato 'data - valor'")
 
     def refresh_display(self):
-        """Sobrescreve refresh_display para mostrar funcionários e atualizar salário total"""
+        """Override refresh_display to show employees and update financial information"""
+        print("\n=== Debug refresh_display ===")
+        print("Instância do faturamento:", id(self.data_manager.faturamento))
+        faturamento_items = self.data_manager.faturamento.exibir_itens()
+        print("Faturamento encontrado:", faturamento_items)
+        
+        print("Estado atual do faturamento:")
+        print(self.data_manager.faturamento.exibir_itens())
         self.output_text.config(state=NORMAL)
         self.output_text.delete(1.0, END)
-    
-        try:
-            items = self.get_items_list()
-            total_salary = 0
-            
-            if items:
-                for i, item in enumerate(items, 1):
+        
+        # 1. Exibir lista de funcionários
+        items = self.get_items_list()
+        total_salary = 0
+
+        if items:
+            for i, item in enumerate(items, 1):
+                try:
                     nome = item.get('nome', '')
                     cargo = item.get('cargo', '')
                     salario = float(item.get('salario', 0))
                     total_salary += salario
-                    
+
                     formatted_item = f"Nome: {nome}, Cargo: {cargo}, Salário: R$ {salario:.2f}"
                     self.output_text.insert(END, f"{i}. {formatted_item}\n")
-            else:
-                self.output_text.insert(END, f"Não há {self.title_plural} cadastrados.")
-            
-            # Atualiza o rótulo do salário total
-            self.total_salary_label.config(
-                text=f"Total em Salários: R$ {total_salary:.2f}"
-            )
+                except (ValueError, TypeError) as e:
+                    print(f"Erro ao processar funcionário {i}: {e}")
+                    continue
+        else:
+            self.output_text.insert(END, f"Não há {self.title_plural} cadastrados.")
+
+        # 2. Atualizar label de total de salários
+        self.total_salary_label.config(
+            text=f"Total em Salários: R$ {total_salary:.2f}"
+        )
         
+        # 3. Obter e exibir faturamento
+        try:
+            faturamento_total = self.data_manager.set_faturamento_total_bruto()
+            print(f"Total calculado: R$ {faturamento_total:.2f}")
+            if faturamento_total is None:
+                print("Faturamento não está definido ou está retornando None.")
+                faturamento_total = 0
+            else:
+                print(f"Faturamento total: R$ {faturamento_total}")
+                self.faturamento_label.config(
+                    text=f"Faturamento Total: R$ {faturamento_total:.2f}"
+                )
+                 
+            # Debug print
+            print("Items de faturamento:")
+            atual = self.data_manager.faturamento.itens.cabeca
+            while atual:
+                print(f"- {atual.valor}")
+                atual = atual.prox
         except Exception as e:
-            self.output_text.insert(END, f"Erro ao carregar {self.title_plural}.")
-            print(f"Error: {e}")
-    
+            print(f"Erro ao calcular faturamento: {e}")
+            faturamento_total = 0
+        
+        # 4. Calcular e exibir lucros e impostos
+        try:
+            # Calcula lucro antes dos impostos
+            lucro_before_tax = faturamento_total - total_salary
+            
+            # Processa taxa de imposto
+            tax_rate = float(self.tax_entry.get()) / 100
+            tax_amount = lucro_before_tax * tax_rate
+            lucro_after_tax = lucro_before_tax - tax_amount
+        except ValueError:
+            # Se houver erro na conversão da taxa de imposto
+            tax_rate = 0
+            tax_amount = 0
+            lucro_after_tax = lucro_before_tax
+        
+        # 5. Atualizar labels financeiros
+        self.profit_before_tax_label.config(
+            text=f"Lucro (Antes dos Impostos): R$ {lucro_before_tax:.2f}"
+        )
+        self.tax_amount_label.config(
+            text=f"Impostos ({tax_rate*100:.1f}%): R$ {tax_amount:.2f}"
+        )
+        self.profit_after_tax_label.config(
+            text=f"Lucro (Após Impostos): R$ {lucro_after_tax:.2f}"
+        )
+
         self.output_text.config(state=DISABLED)
         self.root.update_idletasks()
+        print(f"Faturamento total: {faturamento_total}")
+    
+    def apply_tax(self):
+        """Calculate and apply tax to profit"""
+        try:
+            tax_rate = float(self.tax_entry.get()) / 100  # Convert percentage to decimal
+            if tax_rate < 0 or tax_rate > 1:
+                messagebox.showerror("Erro", "Taxa deve estar entre 0 e 100%")
+                return
+            self.refresh_display()
+        except ValueError:
+            messagebox.showerror("Erro", "Por favor, insira uma taxa válida")
 
     def adicionar_item(self):
         entrada = self.entry.get().strip()
@@ -714,49 +872,26 @@ class RestauranteInterface(BaseInterface):
         else:
             messagebox.showerror("Erro", "Por favor, insira valores válidos para atualização.")
 
-
 class Botao:
     def __init__(self, root):
         self.root = root
         self.restaurante = Restaurante()
         self.faturamento = Faturamento()
         self.cardapio = Cardapio()
-        
-    def center_window(self, window, width, height):
-        window.update_idletasks()  # Garantir que o tamanho da janela esteja atualizado
-        screen_width = window.winfo_screenwidth()
-        screen_height = window.winfo_screenheight()
-        x = (screen_width - width) // 2
-        y = (screen_height - height) // 2
-        window.geometry(f"{width}x{height}+{x}+{y}")
-        
-    def botao_restaurante(self):
-        restaurante_window = Toplevel(self.root)
-        restaurante_window.title("O Restaurante")
-        
-        restaurante_btn = Button(restaurante_window, text="Funcionários", command=self.abrir_restaurante)
-        restaurante_btn.pack(pady=10)
-
-        faturamento_btn = Button(restaurante_window, text="Faturamento", command=self.abrir_faturamento)
-        faturamento_btn.pack(pady=10)
-
-        cardapio_btn = Button(restaurante_window, text="Cardápio", command=self.abrir_cardapio)
-        cardapio_btn.pack(pady=10)
+        self.restaurante_interface = None
 
     def abrir_restaurante(self):
-        restaurante = Restaurante()
         restaurante_window = Toplevel(self.root)
         restaurante_window.title("Gerenciar Funcionários")
-        RestauranteInterface(restaurante_window, restaurante)
+        self.restaurante_interface = RestauranteInterface(restaurante_window, self.restaurante)
 
     def abrir_faturamento(self):
         faturamento_window = Toplevel(self.root)
         faturamento_window.title("Gerenciar Faturamento")
-        FaturamentoInterface(faturamento_window, self.faturamento)
+        FaturamentoInterface(faturamento_window, self.faturamento, self.restaurante_interface)
 
     def abrir_cardapio(self):
         cardapio_window = Toplevel(self.root)
         cardapio_window.title("Gerenciar Cardápio")
         CardapioInterface(cardapio_window, self.cardapio)
-
         

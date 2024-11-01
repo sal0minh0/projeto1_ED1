@@ -9,6 +9,16 @@ class Faturamento:
     """Representa o faturamento usando lista encadeada simples"""
     def __init__(self):
         self.itens = lista_encadeada_simples.ListaEncadeadaSimples()
+        self.observadores = []  # Lista para armazenar observadores
+        
+    def adicionar_observador(self, callback):
+        """Adiciona um observador que será notificado quando o faturamento mudar"""
+        self.observadores.append(callback)
+
+    def notificar_observadores(self):
+        """Notifica todos os observadores registrados sobre mudanças no faturamento"""
+        for observador in self.observadores:
+            observador()
         
     def adicionar_item(self, item_str):
         """Adiciona um valor de vendas para calcular o faturamento
@@ -31,6 +41,9 @@ class Faturamento:
             
             self.itens.inserir_no_fim(item)
             print(f"Faturamento adicionado: Data {data}, Valor R$ {valor:.2f}")
+            
+            # Notifica observadores após adicionar item
+            self.notificar_observadores()
             return True
         except ValueError as e:
             print(f"Erro ao adicionar faturamento: {str(e)}")
@@ -47,6 +60,8 @@ class Faturamento:
             
             # Tentar remover o item
             if self.itens.remover(data, compare_func=compare_items):
+                # Notifica observadores após remover item
+                self.notificar_observadores()
                 return f"Faturamento removido: Data {data}"
             else:
                 return f"Faturamento não encontrado: Data {data}"
@@ -68,6 +83,8 @@ class Faturamento:
                 atual.valor = novo_item
                 print(f"Item atualizado com sucesso")
                 print(f"Faturamento atualizado: Data {novo_item['data']}, Valor R$ {novo_item['valor']:.2f}")
+                # Notifica observadores após atualizar item
+                self.notificar_observadores()
                 return True
             atual = atual.prox
         print("Faturamento não encontrado para atualização.")
@@ -102,6 +119,20 @@ class Faturamento:
     
     def exibir_itens(self):
         """Retorna uma string formatada com os valores do faturamento"""
+        print("=== Debug exibir_itens ===")
+        print(f"Verificando lista vazia: {self.itens.verificar_lista_vazia()}")
+        
+        atual = self.itens.cabeca
+        items_count = 0
+        
+        while atual:
+            print(f"Item encontrado: {atual.valor}")
+            items_count += 1
+            atual = atual.prox
+        
+        print(f"Total de itens encontrados: {items_count}")
+        print("========================")
+        
         if self.itens.verificar_lista_vazia():
             return "Não há itens de faturamento registrados."
         
@@ -122,51 +153,10 @@ class Faturamento:
         """Calcula o faturamento bruto somando todos os valores dos nós."""
         total = 0.0
         atual = self.itens.cabeca
+        print("Calculando faturamento total...")  # Debug print
         while atual:
+            print(f"Processando item: {atual.valor}")
             if isinstance(atual.valor, dict) and 'valor' in atual.valor:
                 total += atual.valor['valor']
             atual = atual.prox
         return total
-"""     
-# Exemplo de uso do faturamento
-        
-# Criar objeto faturamento
-f = Faturamento()
-        
-# Adicionar vendas
-f.adicionar_vendas(10.0)
-f.adicionar_vendas(20.0)
-f.adicionar_vendas(30.0)
-print("")
-        
-# Remover vendas
-f.remover_vendas(10.0)
-print("")
-        
-# Exibir faturamento atualizado
-f.exibir_faturamento()
-print("")
-        
-# Atualizar vendas
-f.atualizar_vendas(20.0, 25.0)
-print("")
-        
-# Exibir faturamento
-f.exibir_faturamento()
-print("")
-        
-# Verificar se o faturamento está vazio
-f.verificar_vazio()
-print("")
-        
-# Buscar uma venda
-f.buscar_uma_venda(25.0)
-print("")
-
-#Calcular o faturamento
-f.somar_e_faturamento()
-print("")
-"""       
-        
-        
-        

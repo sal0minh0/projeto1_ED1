@@ -684,13 +684,8 @@ class RestauranteInterface(BaseInterface):
 
     def refresh_display(self):
         """Override refresh_display to show employees and update financial information"""
-        print("\n=== Debug refresh_display ===")
-        print("Instância do faturamento:", id(self.data_manager.faturamento))
         faturamento_items = self.data_manager.faturamento.exibir_itens()
-        print("Faturamento encontrado:", faturamento_items)
         
-        print("Estado atual do faturamento:")
-        print(self.data_manager.faturamento.exibir_itens())
         self.output_text.config(state=NORMAL)
         self.output_text.delete(1.0, END)
         
@@ -722,18 +717,14 @@ class RestauranteInterface(BaseInterface):
         # 3. Obter e exibir faturamento
         try:
             faturamento_total = self.data_manager.set_faturamento_total_bruto()
-            print(f"Total calculado: R$ {faturamento_total:.2f}")
             if faturamento_total is None:
                 print("Faturamento não está definido ou está retornando None.")
                 faturamento_total = 0
             else:
-                print(f"Faturamento total: R$ {faturamento_total}")
                 self.faturamento_label.config(
                     text=f"Faturamento Total: R$ {faturamento_total:.2f}"
                 )
                  
-            # Debug print
-            print("Items de faturamento:")
             atual = self.data_manager.faturamento.itens.cabeca
             while atual:
                 print(f"- {atual.valor}")
@@ -770,7 +761,6 @@ class RestauranteInterface(BaseInterface):
 
         self.output_text.config(state=DISABLED)
         self.root.update_idletasks()
-        print(f"Faturamento total: {faturamento_total}")
     
     def apply_tax(self):
         """Calculate and apply tax to profit"""

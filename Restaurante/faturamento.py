@@ -119,9 +119,6 @@ class Faturamento:
     
     def exibir_itens(self):
         """Retorna uma string formatada com os valores do faturamento"""
-        print("=== Debug exibir_itens ===")
-        print(f"Verificando lista vazia: {self.itens.verificar_lista_vazia()}")
-        
         atual = self.itens.cabeca
         items_count = 0
         
@@ -129,10 +126,7 @@ class Faturamento:
             print(f"Item encontrado: {atual.valor}")
             items_count += 1
             atual = atual.prox
-        
-        print(f"Total de itens encontrados: {items_count}")
-        print("========================")
-        
+
         if self.itens.verificar_lista_vazia():
             return "Não há itens de faturamento registrados."
         
@@ -153,7 +147,6 @@ class Faturamento:
         """Calcula o faturamento bruto somando todos os valores dos nós."""
         total = 0.0
         atual = self.itens.cabeca
-        print("Calculando faturamento total...")  # Debug print
         while atual:
             print(f"Processando item: {atual.valor}")
             if isinstance(atual.valor, dict) and 'valor' in atual.valor:

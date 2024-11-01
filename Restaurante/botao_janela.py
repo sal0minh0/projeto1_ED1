@@ -581,7 +581,7 @@ class FaturamentoInterface(BaseInterface):
 
 class RestauranteInterface(BaseInterface):
     def __init__(self, root, data_manager):
-        # Create revenue input frame
+        # Criar quadro de entrada de faturamento
         self.revenue_frame = Frame(root)
         self.revenue_frame.pack(pady=5)
         
@@ -600,7 +600,8 @@ class RestauranteInterface(BaseInterface):
             command=self.adicionar_faturamento
         )
         self.add_revenue_button.pack(side=LEFT, padx=5)
-        # Create tax input frame
+
+        # Criar quadro de entrada de taxa
         self.tax_frame = Frame(root)
         self.tax_frame.pack(pady=5)
         
@@ -612,7 +613,7 @@ class RestauranteInterface(BaseInterface):
         
         self.tax_entry = Entry(self.tax_frame, width=10)
         self.tax_entry.pack(side=LEFT, padx=5)
-        self.tax_entry.insert(0, "0")  # Default value
+        self.tax_entry.insert(0, "0") 
         
         self.apply_tax_button = Button(
             self.tax_frame,
@@ -621,7 +622,7 @@ class RestauranteInterface(BaseInterface):
         )
         self.apply_tax_button.pack(side=LEFT, padx=5)
 
-        # Create total frame for financial information
+        # Criar quadro para exibir informações financeiras totais
         self.total_frame = Frame(root)
         self.total_frame.pack(pady=5)
 
@@ -631,7 +632,7 @@ class RestauranteInterface(BaseInterface):
         )
         self.total_salary_label.pack()
 
-        # Add faturamento label
+        # Adicionar rótulo de faturamento
         self.faturamento_label = Label(
             self.total_frame,
             text="Faturamento Total: R$ 0.00"
@@ -656,7 +657,7 @@ class RestauranteInterface(BaseInterface):
         )
         self.profit_after_tax_label.pack()
 
-        # Call parent class initialization
+        # Chamar inicialização da classe pai
         super().__init__(
             root=root,
             data_manager=data_manager,
@@ -667,7 +668,7 @@ class RestauranteInterface(BaseInterface):
         self.data_manager.faturamento.adicionar_observador(self.refresh_display)
         
     def adicionar_faturamento(self):
-        """Add new revenue entry"""
+        """Adicionar nova entrada de faturamento"""
         entrada = self.revenue_entry.get().strip()
         if entrada:
             try:
@@ -683,7 +684,7 @@ class RestauranteInterface(BaseInterface):
             messagebox.showerror("Erro", "Por favor, insira os dados do faturamento no formato 'data - valor'")
 
     def refresh_display(self):
-        """Override refresh_display to show employees and update financial information"""
+        """Substituir refresh_display para mostrar funcionários e atualizar informações financeiras"""
         faturamento_items = self.data_manager.faturamento.exibir_itens()
         
         self.output_text.config(state=NORMAL)
@@ -709,7 +710,7 @@ class RestauranteInterface(BaseInterface):
         else:
             self.output_text.insert(END, f"Não há {self.title_plural} cadastrados.")
 
-        # 2. Atualizar label de total de salários
+        # 2. Atualizar rótulo de total de salários
         self.total_salary_label.config(
             text=f"Total em Salários: R$ {total_salary:.2f}"
         )
@@ -748,7 +749,7 @@ class RestauranteInterface(BaseInterface):
             tax_amount = 0
             lucro_after_tax = lucro_before_tax
         
-        # 5. Atualizar labels financeiros
+        # 5. Atualizar rótulos financeiros
         self.profit_before_tax_label.config(
             text=f"Lucro (Antes dos Impostos): R$ {lucro_before_tax:.2f}"
         )
@@ -763,9 +764,9 @@ class RestauranteInterface(BaseInterface):
         self.root.update_idletasks()
     
     def apply_tax(self):
-        """Calculate and apply tax to profit"""
+        """Calcular e aplicar imposto ao lucro"""
         try:
-            tax_rate = float(self.tax_entry.get()) / 100  # Convert percentage to decimal
+            tax_rate = float(self.tax_entry.get()) / 100  # Converte porcentagem para decimal
             if tax_rate < 0 or tax_rate > 1:
                 messagebox.showerror("Erro", "Taxa deve estar entre 0 e 100%")
                 return
@@ -774,6 +775,7 @@ class RestauranteInterface(BaseInterface):
             messagebox.showerror("Erro", "Por favor, insira uma taxa válida")
 
     def adicionar_item(self):
+        """Adicionar novo funcionário"""
         entrada = self.entry.get().strip()
         if entrada:
             try:
@@ -799,6 +801,7 @@ class RestauranteInterface(BaseInterface):
             messagebox.showerror("Erro", "Por favor, insira os dados do funcionário.")
 
     def remover_item(self):
+        """Remover funcionário"""
         entrada = self.entry.get().strip()
         if entrada:
             try:
@@ -815,6 +818,7 @@ class RestauranteInterface(BaseInterface):
             messagebox.showerror("Erro", "Por favor, insira o nome do funcionário para remover.")
 
     def buscar_item(self):
+        """Buscar funcionário pelo nome"""
         entrada = self.entry.get().strip()
         if entrada:
             try:
@@ -835,6 +839,7 @@ class RestauranteInterface(BaseInterface):
             messagebox.showerror("Erro", "Por favor, insira o nome do funcionário para buscar.")
 
     def editar_item(self):
+        """Editar informações de um funcionário existente"""
         item_atual = self.entry.get().strip()
         novo_item = self.new_value_entry.get().strip()
         
@@ -871,17 +876,19 @@ class Botao:
         self.restaurante_interface = None
 
     def abrir_restaurante(self):
+        """Abrir interface de gerenciamento de funcionários"""
         restaurante_window = Toplevel(self.root)
         restaurante_window.title("Gerenciar Funcionários")
         self.restaurante_interface = RestauranteInterface(restaurante_window, self.restaurante)
 
     def abrir_faturamento(self):
+        """Abrir interface de gerenciamento de faturamento"""
         faturamento_window = Toplevel(self.root)
         faturamento_window.title("Gerenciar Faturamento")
         FaturamentoInterface(faturamento_window, self.faturamento, self.restaurante_interface)
 
     def abrir_cardapio(self):
+        """Abrir interface de gerenciamento de cardápio"""
         cardapio_window = Toplevel(self.root)
         cardapio_window.title("Gerenciar Cardápio")
         CardapioInterface(cardapio_window, self.cardapio)
-        
